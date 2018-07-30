@@ -3,6 +3,7 @@ package smoovie.apps.com.kayatech.smoovie;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     GridLayoutManager gridLayoutManager;
 
     private TMDBMovies movieList;
+    private String sortBy = TMDBMovies.POPULAR;
 
     //TODO TITLEBAR TEXT
     //TODO SCROLL UP DISSAPEAR
@@ -43,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         getMovies(currentPage);
         //RecyclerViewScrollListener();
         mMoviesRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -68,18 +72,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-    //
-    private void RecyclerViewScrollListener() {
-        ;
-
-
-    }
-
     private void getMovies(int page) {
         //checks if state is checking or not
         isFetchingMovies = true;
-        movieList.getMovies(page, new OnMoviesCallback() {
+        movieList.getMovies(page,sortBy, new OnMoviesCallback() {
             @Override
             public void onSuccess(int page, List<Movie> movies) {
 
@@ -87,6 +83,9 @@ public class MainActivity extends AppCompatActivity {
                     mMoviesAdapter = new MoviesAdapter(getApplicationContext(), movies);
                     mMoviesRecyclerView.setAdapter(mMoviesAdapter);
                 } else {
+                    if (page == 1) {
+                        mMoviesAdapter.clearMovies();
+                    }
                     //appends movie results to list and updates recycler view
                     mMoviesAdapter.setMovieList(movies);
                 }
@@ -110,46 +109,40 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.action_sort_high_rating) {
-
-//            //methods
-//            ApiGetServices service = retrofit.create(ApiGetServices.class);
-//            Call<MovieListResponse> movieCall = service.getHighRatedMovies();
-//            movieCall.enqueue(new Callback<MovieListResponse>() {
-//                @Override
-//                public void onResponse(Call<MovieListResponse> call, Response<MovieListResponse> response) {
-//                    mMoviesAdapter.setMovieList(response.body().getMoviesResult());
-//                }
-//
-//                @Override
-//                public void onFailure(Call<MovieListResponse> call, Throwable t) {
-//                   Log.d(TAG,"Fail to retrieve high rated");
-//                }
-//            });
-//
-//           // Toast.makeText(MainActivity.this,"Highest Rating Movies",Toast.LENGTH_LONG).show();
-
-
-        } else if (itemId == R.id.action_sort_most_popular) {
-
-//            //methods
-//            ApiGetServices service = retrofit.create(ApiGetServices.class);
-//            Call<MovieListResponse> movieCall = service.getPopularMovies();
-//            movieCall.enqueue(new Callback<MovieListResponse>() {
-//                @Override
-//                public void onResponse(Call<MovieListResponse> call, Response<MovieListResponse> response) {
-//                    mMoviesAdapter.setMovieList(response.body().getMoviesResult());
-//                }
-//
-//                @Override
-//                public void onFailure(Call<MovieListResponse> call, Throwable t) {
-//                    Log.d(TAG,"Fail to retrieve popular");
-//                }
-//            });
-//
-//          //  Toast.makeText(MainActivity.this,"Most Popualar Movies",Toast.LENGTH_LONG).show();
-
+        if (itemId == R.id.action_sort) {
+            showSortPopUpMenu();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+
+    }
+
+    private void showSortPopUpMenu() {
+        PopupMenu sortMenu = new PopupMenu(this, findViewById(R.id.action_sort));
+        sortMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                /*
+                 * Every time we sort, we need to go back to page 1
+                        */
+                currentPage = 1;
+
+                switch (item.getItemId()) {
+                    case R.id.action_sort_most_popular:
+                        sortBy = TMDBMovies.POPULAR;
+                        getMovies(currentPage);
+                        return true;
+                    case R.id.action_sort_high_rating:
+                        sortBy = TMDBMovies.TOP_RATED;
+                        getMovies(currentPage);
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+        sortMenu.inflate(R.menu.main_menu_items_sort);//What is being inflated
+        sortMenu.show();
     }
 }

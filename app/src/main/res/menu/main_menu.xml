@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
-        android:id="@+id/action_sort_high_rating"
-        android:title="@string/action_sort_high_ratings"
-        android:orderInCategory="1"
-        app:showAsAction="never"/>
-    <item
-        android:id="@+id/action_sort_most_popular"
-        android:title="@string/action_sort_most_popular"
-        android:orderInCategory="2"
-        app:showAsAction="never"/>
+        android:id="@+id/action_sort"
+        android:enabled="true"
+        android:icon="@drawable/baseline_filter_list_24"
+        android:title="@string/action_sort_label"
+        app:showAsAction="ifRoom" />
 </menu>

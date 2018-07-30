@@ -34,6 +34,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         //gets change in movie list
         notifyDataSetChanged();
     }
+    public void clearMovies() {
+        MovieList.clear();
+        notifyDataSetChanged();
+    }
 
     @NonNull
     @Override
@@ -62,7 +66,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     // you provide access to all the views for a data item in a view holder
     public static class MoviesViewHolder extends RecyclerView.ViewHolder {
         private Context ctx;
-        private String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w500";
+        private String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w342";
         TextView mMovieTitle;
         ImageView mPosterImage;
         TextView mMovieRatings;
