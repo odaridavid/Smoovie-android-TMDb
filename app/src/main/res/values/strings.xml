@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Smoovie</string>
+    <!--Main Menu Sort By-->
+    <string name="action_sort_most_popular">Most Popular</string>
+    <string name="action_sort_high_ratings">High Ratings</string>
+
+    <string name="label_text_placeholder">Movie Title</string>
+    <string name="label_content_desc">Poster Image</string>
+
+    <string name="api_key">//put your api key here</string>
 </resources>

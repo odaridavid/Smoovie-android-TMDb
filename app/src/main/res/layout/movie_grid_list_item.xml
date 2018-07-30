@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="150dp"
+    android:layout_height="220dp"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentStart="true"
+    android:layout_margin="@dimen/size_medium"
+    android:backgroundTint="#ffff"
+    app:cardCornerRadius="@dimen/size_small"
+    app:cardElevation="@dimen/size_medium">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:padding="@dimen/size_small"
+            android:id="@+id/poster_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/label_content_desc"
+            android:src="@drawable/test" />
+
+
+        <FrameLayout
+            android:padding="@dimen/size_default"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/colorPrimary"
+            android:backgroundTint="@color/colorAccent"
+            android:backgroundTintMode="src_over"
+            android:layout_alignBottom="@+id/poster_image_view">
+
+            <TextView
+                android:id="@+id/movie_title_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="textStart"
+                android:text="@string/label_text_placeholder"
+                android:textColor="#ffff" />
+        </FrameLayout>
+
+    </RelativeLayout>
+
+
+</android.support.v7.widget.CardView>
+
