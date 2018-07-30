@@ -11,7 +11,7 @@ public class MovieListResponse {
 
     //@expose serialises as variable name
     //@serialized name uses name params key
-    //Retrieves movies by page
+    //Retrieves movies page by page
 
     @SerializedName("page")
     @Expose

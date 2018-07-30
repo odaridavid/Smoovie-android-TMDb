@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -21,41 +20,85 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     MoviesAdapter mMoviesAdapter;
     RecyclerView mMoviesRecyclerView;
+    private boolean isFetchingMovies;
+    private int currentPage = 1;
+    GridLayoutManager gridLayoutManager;
 
     private TMDBMovies movieList;
+
+    //TODO TITLEBAR TEXT
+    //TODO SCROLL UP DISSAPEAR
+    //TODO ON ROTATE MOVIE VOTE AVERAGE VOTE COUNT
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         movieList = TMDBMovies.getInstance();
-
         //Reference
         mMoviesRecyclerView = findViewById(R.id.movie_recycler_view);
         mMoviesRecyclerView.setHasFixedSize(true);
-
-
-        //Grid Layout For Main View
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
+        gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
         mMoviesRecyclerView.setLayoutManager(gridLayoutManager);
-
-        movieList.getMovies(new OnMoviesCallback() {
+        getMovies(currentPage);
+        //RecyclerViewScrollListener();
+        mMoviesRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onSuccess(List<Movie> movies) {
-                // Loads Movie Data
-                mMoviesAdapter = new MoviesAdapter(getApplicationContext(), movies);
-                mMoviesRecyclerView.setAdapter(mMoviesAdapter);
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+            }
+
+            // Scroll to half of the list we increment it by one which is the next page.
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                //TODO 2.THESE METHODS
+                //TODO SMOOTH SCROLLING
+                int totalItemCount = gridLayoutManager.getItemCount();
+                int visibleItemCount = gridLayoutManager.getChildCount();
+                int firstVisibleItem = gridLayoutManager.findFirstVisibleItemPosition();
+                if (firstVisibleItem + visibleItemCount >= totalItemCount / 2) {
+                    if (!isFetchingMovies) {
+                        getMovies(currentPage + 1);
+                    }
+                }
+            }
+        });
+
+    }
+
+
+    //
+    private void RecyclerViewScrollListener() {
+        ;
+
+
+    }
+
+    private void getMovies(int page) {
+        //checks if state is checking or not
+        isFetchingMovies = true;
+        movieList.getMovies(page, new OnMoviesCallback() {
+            @Override
+            public void onSuccess(int page, List<Movie> movies) {
+
+                if (mMoviesAdapter == null) {
+                    mMoviesAdapter = new MoviesAdapter(getApplicationContext(), movies);
+                    mMoviesRecyclerView.setAdapter(mMoviesAdapter);
+                } else {
+                    //appends movie results to list and updates recycler view
+                    mMoviesAdapter.setMovieList(movies);
+                }
+                currentPage = page;
+                isFetchingMovies = false;
             }
 
             @Override
             public void onFailure() {
-                Toast.makeText(MainActivity.this, "Please check your internet connection.", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "Fail to Load");
+                Log.d(TAG, "getMovies Failure");
             }
         });
-
-
     }
 
     @Override

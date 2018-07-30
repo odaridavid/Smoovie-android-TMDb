@@ -12,34 +12,64 @@
     app:cardCornerRadius="@dimen/size_small"
     app:cardElevation="@dimen/size_medium">
 
+    <FrameLayout
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAlternate"
+        android:backgroundTint="@color/colorAlternate"
+        android:backgroundTintMode="src_over"
+        android:elevation="@dimen/size_large"
+        android:fadingEdge="vertical"
+        android:fadingEdgeLength="@dimen/size_medium"
+        android:rotation="6"
+        android:animateLayoutChanges="true"
+        android:requiresFadingEdge="horizontal"
+        >
+
+        <TextView
+            android:id="@+id/rating_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="7.4"
+            android:textAlignment="center"
+            android:textColor="#ffff"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+
     <RelativeLayout
+        android:id="@+id/rl_parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageView
-            android:padding="@dimen/size_small"
             android:id="@+id/poster_image_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:contentDescription="@string/label_content_desc"
+            android:padding="@dimen/size_small"
             android:src="@drawable/test" />
 
 
         <FrameLayout
-            android:padding="@dimen/size_default"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_alignBottom="@+id/poster_image_view"
             android:background="@color/colorPrimary"
             android:backgroundTint="@color/colorAccent"
             android:backgroundTintMode="src_over"
-            android:layout_alignBottom="@+id/poster_image_view">
+            android:padding="@dimen/size_medium">
 
             <TextView
                 android:id="@+id/movie_title_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAlignment="textStart"
                 android:text="@string/label_text_placeholder"
+                android:textAlignment="textStart"
                 android:textColor="#ffff" />
         </FrameLayout>
 

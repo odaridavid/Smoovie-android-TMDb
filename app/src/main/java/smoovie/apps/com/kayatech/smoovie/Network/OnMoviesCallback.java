@@ -5,8 +5,9 @@ import java.util.List;
 import smoovie.apps.com.kayatech.smoovie.Model.Movie;
 
 public interface OnMoviesCallback {
+    //TODO 1.WHAT IS A CALLBACK
     //On Success Gets Movie List
-    void onSuccess(List<Movie> movies);
+    void onSuccess(int page,List<Movie> movies);
 
     void onFailure();
 }

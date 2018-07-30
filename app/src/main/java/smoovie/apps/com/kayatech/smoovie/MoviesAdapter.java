@@ -32,7 +32,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     public void setMovieList(List<Movie> movieList) {
         this.MovieList = movieList;
         //gets change in movie list
-
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -65,18 +65,21 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         private String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w500";
         TextView mMovieTitle;
         ImageView mPosterImage;
+        TextView mMovieRatings;
 
         public MoviesViewHolder(View itemView) {
             super(itemView);
             // get the reference of item view's
             mMovieTitle = itemView.findViewById(R.id.movie_title_text_view);
             mPosterImage = itemView.findViewById(R.id.poster_image_view);
+            mMovieRatings = itemView.findViewById(R.id.rating_text_view);
         }
 
         public void bind(Movie movie) {
             ctx = itemView.getContext();
             mMovieTitle.setText(movie.getMovieTitle());
             Picasso.with(ctx).load(IMAGE_BASE_URL + movie.getMoviePoster()).error(R.drawable.test).into(mPosterImage);
+            mMovieRatings.setText(" "+Float.toString(movie.getVoterAverage())+" ");
 
         }
     }

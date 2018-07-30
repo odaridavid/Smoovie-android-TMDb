@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class Movie {
     //model class to map json data to pojo
+    //Movie GET Class objects from tmdb
     @SerializedName("original_title")
     private String MovieTitle;
 
