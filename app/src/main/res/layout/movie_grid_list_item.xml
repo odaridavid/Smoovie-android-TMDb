@@ -57,7 +57,7 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:layout_alignBottom="@+id/poster_image_view"
             android:background="@color/colorPrimary"
             android:backgroundTint="@color/colorAccent"
@@ -67,7 +67,8 @@
             <TextView
                 android:id="@+id/movie_title_text_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="12sp"
                 android:text="@string/label_text_placeholder"
                 android:textAlignment="textStart"
                 android:textColor="#ffff" />

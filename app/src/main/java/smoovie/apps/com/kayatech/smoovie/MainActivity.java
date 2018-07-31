@@ -1,13 +1,16 @@
 package smoovie.apps.com.kayatech.smoovie;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.util.List;
 
@@ -37,11 +40,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         movieList = TMDBMovies.getInstance();
+
+        Toolbar toolbarMainPage = findViewById(R.id.action_toolbar_main);
+        setSupportActionBar(toolbarMainPage);
+
+
         //Reference
         mMoviesRecyclerView = findViewById(R.id.movie_recycler_view);
         mMoviesRecyclerView.setHasFixedSize(true);
         gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
         mMoviesRecyclerView.setLayoutManager(gridLayoutManager);
+
+        mMoviesRecyclerView.setItemViewCacheSize(20);
+        mMoviesRecyclerView.setDrawingCacheEnabled(true);
+        mMoviesRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         getMovies(currentPage);
         //RecyclerViewScrollListener();
         mMoviesRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -59,10 +71,17 @@ public class MainActivity extends AppCompatActivity {
                 super.onScrolled(recyclerView, dx, dy);
                 //TODO 2.THESE METHODS
                 //TODO SMOOTH SCROLLING
+
+                //on ui and cached
                 int totalItemCount = gridLayoutManager.getItemCount();
+
+                //in cache
                 int visibleItemCount = gridLayoutManager.getChildCount();
+
+                //on ui
                 int firstVisibleItem = gridLayoutManager.findFirstVisibleItemPosition();
                 if (firstVisibleItem + visibleItemCount >= totalItemCount / 2) {
+                    //if reached the end fetch more movies
                     if (!isFetchingMovies) {
                         getMovies(currentPage + 1);
                     }
@@ -80,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(int page, List<Movie> movies) {
 
                 if (mMoviesAdapter == null) {
-                    mMoviesAdapter = new MoviesAdapter(getApplicationContext(), movies);
+                    mMoviesAdapter = new MoviesAdapter(getApplicationContext(), movies,clickHandler);
                     mMoviesRecyclerView.setAdapter(mMoviesAdapter);
                 } else {
                     if (page == 1) {
@@ -91,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 currentPage = page;
                 isFetchingMovies = false;
+
+                setTitleBar();
             }
 
             @Override
@@ -99,6 +120,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    //Set Title Bar on action Bar depending on get request from Singleton Class
+    private void setTitleBar() {
+        switch (sortBy) {
+            case TMDBMovies.POPULAR:
+                setTitle(getString(R.string.action_sort_most_popular));
+                break;
+            case TMDBMovies.TOP_RATED:
+                setTitle(getString(R.string.action_sort_high_ratings));
+                break;
+        }
+    }
+
+    MovieClickHandler clickHandler = new MovieClickHandler() {
+        @Override
+        public void onClick(Movie movie) {
+            Intent openDetailsActivity = new Intent(MainActivity.this, DetailActivity.class);
+            openDetailsActivity.putExtra(DetailActivity.MOVIE_ID, movie.getMovieId());
+            startActivity(openDetailsActivity);
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -144,5 +186,17 @@ public class MainActivity extends AppCompatActivity {
         });
         sortMenu.inflate(R.menu.main_menu_items_sort);//What is being inflated
         sortMenu.show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        movieList = TMDBMovies.getInstance();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        movieList = TMDBMovies.getInstance();
     }
 }

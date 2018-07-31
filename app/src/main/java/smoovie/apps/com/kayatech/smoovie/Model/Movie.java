@@ -19,10 +19,13 @@ public class Movie {
     private String MoviePoster;
 
     @SerializedName("vote_average")
-    private float VoterAverage;
+    private  float  VoterAverage;
 
     @SerializedName("backdrop_path")
     private String Backdrop;
+
+    @SerializedName("id")
+    private int MovieId;
 
     Movie() {
     }
@@ -40,47 +43,35 @@ public class Movie {
         return MovieTitle;
     }
 
-    public void setMovieTitle(String movieTitle) {
-        MovieTitle = movieTitle;
-    }
 
     public String getMovieOverview() {
         return MovieOverview;
     }
 
-    public void setMovieOverview(String movieOverview) {
-        MovieOverview = movieOverview;
-    }
+
 
     public String getMovieReleaseDate() {
         return MovieReleaseDate;
     }
 
-    public void setMovieReleaseDate(String movieReleaseDate) {
-        MovieReleaseDate = movieReleaseDate;
-    }
 
     public String getMoviePoster() {
         return MoviePoster;
     }
 
-    public void setMoviePoster(String moviePoster) {
-        MoviePoster = moviePoster;
-    }
 
     public float getVoterAverage() {
         return VoterAverage;
     }
 
-    public void setVoterAverage(float voterAverage) {
-        VoterAverage = voterAverage;
-    }
 
     public String getBackdrop() {
         return Backdrop;
     }
 
-    public void setBackdrop(String backdrop) {
-        Backdrop = backdrop;
+
+    public int getMovieId() {
+        return MovieId;
     }
+
 }

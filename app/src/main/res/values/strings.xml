@@ -11,4 +11,8 @@
     <string name="api_key">//put your api key here</string>
 
     <string name="action_sort_label">Sort</string>
+    <string name="label_rate">Rating</string>
+    <string name="label_overview">Overview</string>
+    <string name="label_released">Released On:</string>
+    <string name="label_movie_title_view">Movie Title</string>
 </resources>

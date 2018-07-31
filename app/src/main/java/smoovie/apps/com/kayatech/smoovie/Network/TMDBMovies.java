@@ -10,6 +10,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import smoovie.apps.com.kayatech.smoovie.Model.Movie;
+import smoovie.apps.com.kayatech.smoovie.Model.MovieDetailsCallback;
 
 public class TMDBMovies {
     private static final String TMDB_BASE_URL = "https://api.themoviedb.org/3/";
@@ -50,31 +52,33 @@ public class TMDBMovies {
 
         return tmdbMoviesRepo;
     }
-   //Takes in page parameter to enable loading of multiple pages as user scrolls
-    public void getMovies(int page,String sortBy,final OnMoviesCallback moviesCallback) {
+
+    //Takes in page parameter to enable loading of multiple pages as user scrolls
+    public void getMovies(int page, String sortBy, final OnMoviesCallback moviesCallback) {
         //Put Your Api Key Here
-      Callback<MovieListResponse> call  = new Callback<MovieListResponse>() {
+        Callback<MovieListResponse> call = new Callback<MovieListResponse>() {
             @Override
             public void onResponse(Call<MovieListResponse> call, Response<MovieListResponse> response) {
                 if (response.isSuccessful()) {
                     MovieListResponse moviesResponse = response.body();
                     if (moviesResponse != null && moviesResponse.getMoviesResult() != null) {
                         //Gets Movies List
-                        moviesCallback.onSuccess(moviesResponse.getPage(),moviesResponse.getMoviesResult());
+                        moviesCallback.onSuccess(moviesResponse.getPage(), moviesResponse.getMoviesResult());
                     } else {
                         moviesCallback.onFailure();
                     }
                 } else {
-                    moviesCallback.onFailure();
+                        moviesCallback.onFailure();
                 }
             }
 
             @Override
             public void onFailure(Call<MovieListResponse> call, Throwable t) {
-                Log.d(TAG,"Movies Could Not Be Loaded:No Result");
+                Log.d(TAG, "Movies Could Not Be Loaded:No Result");
             }
         };
 
+        //Default
         TMDBService.getUpcomingMovies(API_KEY, LANGUAGE, page).enqueue(call);
 
 
@@ -89,5 +93,33 @@ public class TMDBMovies {
                 TMDBService.getPopularMoviesLoaded(API_KEY, LANGUAGE, page)
                         .enqueue(call);
                 break;
-    }
-}}
+        }
+
+
+        }
+    //Method Overload for getMovie Details
+    public void getMovie(int movieId,final MovieDetailsCallback movieDetailsCallback){
+        TMDBService
+                .getMovie(movieId, API_KEY, LANGUAGE)
+                .enqueue(new Callback<Movie>() {
+                    @Override
+                    public void onResponse(Call<Movie> call, Response<Movie> response) {
+                        if (response.isSuccessful()) {
+                            Movie movie = response.body();
+                            if (movie != null) {
+                                movieDetailsCallback.onSuccess(movie);
+                            } else {
+                                movieDetailsCallback.onError();
+                            }
+                        } else {
+                            movieDetailsCallback.onError();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Movie> call, Throwable t) {
+                        movieDetailsCallback.onError();
+                    }
+                });
+
+    }}

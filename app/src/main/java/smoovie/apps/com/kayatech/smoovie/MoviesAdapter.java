@@ -1,6 +1,8 @@
 package smoovie.apps.com.kayatech.smoovie;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,11 +22,13 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     //Adapter Class
     private Context context;
     private List<Movie> MovieList;
+    private static MovieClickHandler mMovieClickHandler;
 
 
-    MoviesAdapter(Context context, List<Movie> movies) {
+    MoviesAdapter(Context context, List<Movie> movies,MovieClickHandler mMovieClickHandler) {
         this.context = context;
         this.MovieList = movies;
+        this.mMovieClickHandler = mMovieClickHandler;
 
 
     }
@@ -39,7 +43,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         notifyDataSetChanged();
     }
 
-    @NonNull
+
     @Override
     public MoviesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
@@ -65,6 +69,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public static class MoviesViewHolder extends RecyclerView.ViewHolder {
+
+        Movie movies;
         private Context ctx;
         private String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w342";
         TextView mMovieTitle;
@@ -77,10 +83,24 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
             mMovieTitle = itemView.findViewById(R.id.movie_title_text_view);
             mPosterImage = itemView.findViewById(R.id.poster_image_view);
             mMovieRatings = itemView.findViewById(R.id.rating_text_view);
+
+
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mMovieClickHandler.onClick(movies);
+                }
+            });
         }
 
         public void bind(Movie movie) {
+
+            this.movies = movie;
             ctx = itemView.getContext();
+            final Typeface custom_font = Typeface.createFromAsset(ctx.getAssets(),"fonts/Roboto-Thin.ttf");
+            mMovieTitle.setTypeface(custom_font);
+
             mMovieTitle.setText(movie.getMovieTitle());
             Picasso.with(ctx).load(IMAGE_BASE_URL + movie.getMoviePoster()).error(R.drawable.test).into(mPosterImage);
             mMovieRatings.setText(" "+Float.toString(movie.getVoterAverage())+" ");
