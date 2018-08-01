@@ -31,8 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private TMDBMovies movieList;
     private String sortBy = TMDBMovies.POPULAR;
 
-    //TODO TITLEBAR TEXT
-    //TODO SCROLL UP DISSAPEAR
+
     //TODO ON ROTATE MOVIE VOTE AVERAGE VOTE COUNT
 
     @Override
@@ -192,11 +191,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         movieList = TMDBMovies.getInstance();
+        getMovies(currentPage);
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
         movieList = TMDBMovies.getInstance();
+        getMovies(currentPage);
     }
 }

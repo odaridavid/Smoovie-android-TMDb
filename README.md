@@ -12,3 +12,8 @@ An Api key is required to run GET Responses
 #### Authors
 
 - David Odari
+
+
+### Screenshots
+
+![screenshots](Q:\NanoDegree\Project 2 Popular Movies\Screenshot_2.png)

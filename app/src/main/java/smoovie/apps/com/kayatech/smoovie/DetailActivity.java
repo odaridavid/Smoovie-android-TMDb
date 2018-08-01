@@ -4,6 +4,8 @@ import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -34,6 +36,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private TMDBMovies mMoviesList;
     CollapsingToolbarLayout cbTitle;
+    CoordinatorLayout cdDet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,7 @@ public class DetailActivity extends AppCompatActivity {
         mMoviesList = TMDBMovies.getInstance();
 
         cbTitle = findViewById(R.id.collapsingToolbar);
+        cdDet = findViewById(R.id.coordinator_main);
         mMovieBackdrop = findViewById(R.id.backdrop_image_view);
        // mMoviePoster = findViewById(R.id.poster_image_view);
         mMovieTitle = findViewById(R.id.movie_title_details_text_view);
@@ -118,7 +122,11 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onError() {
                 Log.d(TAG, "Internet Connection Error: ");
-                Toast.makeText(DetailActivity.this, "Please check your internet connection.", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(DetailActivity.this, ".", Toast.LENGTH_SHORT).show();
+                Snackbar snackbar = Snackbar
+                        .make(cdDet, "Please check your internet connection", Snackbar.LENGTH_LONG);
+
+                snackbar.show();
                 finish();
             }
         });
