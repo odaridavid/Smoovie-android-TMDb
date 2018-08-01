@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,14 +23,15 @@ import smoovie.apps.com.kayatech.smoovie.Network.TMDBMovies;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    MoviesAdapter mMoviesAdapter;
-    RecyclerView mMoviesRecyclerView;
     private boolean isFetchingMovies;
     private int currentPage = 1;
-    GridLayoutManager gridLayoutManager;
-
     private TMDBMovies movieList;
     private String sortBy = TMDBMovies.POPULAR;
+    MoviesAdapter mMoviesAdapter;
+    RecyclerView mMoviesRecyclerView;
+    GridLayoutManager gridLayoutManager;
+
+
 
 
     //TODO ON ROTATE MOVIE VOTE AVERAGE VOTE COUNT
@@ -38,23 +40,30 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        movieList = TMDBMovies.getInstance();
 
         Toolbar toolbarMainPage = findViewById(R.id.action_toolbar_main);
         setSupportActionBar(toolbarMainPage);
 
+        movieList = TMDBMovies.getInstance();
 
         //Reference
         mMoviesRecyclerView = findViewById(R.id.movie_recycler_view);
         mMoviesRecyclerView.setHasFixedSize(true);
+
+        //Grid Layout Setup
         gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
         mMoviesRecyclerView.setLayoutManager(gridLayoutManager);
 
-        mMoviesRecyclerView.setItemViewCacheSize(20);
+
+
+        mMoviesRecyclerView.setItemViewCacheSize(6);
         mMoviesRecyclerView.setDrawingCacheEnabled(true);
-        mMoviesRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        mMoviesRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
+
+        //Start on Page 1
         getMovies(currentPage);
-        //RecyclerViewScrollListener();
+
+        //Set Pagination , On Scroll Continues to load Items
         mMoviesRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
 
@@ -64,12 +73,10 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
-            // Scroll to half of the list we increment it by one which is the next page.
+            // Scroll to half of the list it increments by one which is the next page.
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                //TODO 2.THESE METHODS
-                //TODO SMOOTH SCROLLING
 
                 //on ui and cached
                 int totalItemCount = gridLayoutManager.getItemCount();
@@ -80,8 +87,9 @@ public class MainActivity extends AppCompatActivity {
                 //on ui
                 int firstVisibleItem = gridLayoutManager.findFirstVisibleItemPosition();
                 if (firstVisibleItem + visibleItemCount >= totalItemCount / 2) {
-                    //if reached the end fetch more movies
+                    //if reached the end fetch more movies move to next page
                     if (!isFetchingMovies) {
+
                         getMovies(currentPage + 1);
                     }
                 }
@@ -190,14 +198,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        movieList = TMDBMovies.getInstance();
-        getMovies(currentPage);
+
+
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        movieList = TMDBMovies.getInstance();
-        getMovies(currentPage);
+
     }
 }

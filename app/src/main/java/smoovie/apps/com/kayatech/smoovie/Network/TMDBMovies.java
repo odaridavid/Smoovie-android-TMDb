@@ -20,7 +20,7 @@ public class TMDBMovies {
     private static TMDBMovies tmdbMoviesRepo;
     public static final String POPULAR = "popular";
     public static final String TOP_RATED = "top_rated";
-    private static final String API_KEY = "6141807ba2f6a6767a84014c1f732c1d";
+    private static final String API_KEY = "";
     private ApiGetServices TMDBService;
 
     //Singleton-one instance of class at a time
