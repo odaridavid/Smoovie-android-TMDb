@@ -53,6 +53,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         return new MoviesViewHolder(view);
     }
 
+
+
     @Override
     public void onBindViewHolder(@NonNull MoviesViewHolder holder, int position) {
         holder.bind(MovieList.get(position));
@@ -60,14 +62,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
 
     @Override
     public int getItemCount() {
-        //chek for null
+        //check for null
         return (MovieList == null) ? 0 : MovieList.size();
     }
 
 
     // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
     public static class MoviesViewHolder extends RecyclerView.ViewHolder {
 
         Movie movies;
@@ -97,12 +97,19 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         public void bind(Movie movie) {
 
             this.movies = movie;
+
+            //Main Activity UI
+
+            //Movie Title and Typeface
             ctx = itemView.getContext();
             final Typeface custom_font = Typeface.createFromAsset(ctx.getAssets(),"fonts/Roboto-Thin.ttf");
             mMovieTitle.setTypeface(custom_font);
-
             mMovieTitle.setText(movie.getMovieTitle());
+
+            //Poster Image
             Picasso.with(ctx).load(IMAGE_BASE_URL + movie.getMoviePoster()).error(R.drawable.test).into(mPosterImage);
+
+            //Movie Rating
             mMovieRatings.setText(" "+Float.toString(movie.getVoterAverage())+" ");
 
         }

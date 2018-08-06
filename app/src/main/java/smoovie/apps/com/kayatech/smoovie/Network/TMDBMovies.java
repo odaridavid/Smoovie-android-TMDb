@@ -23,7 +23,7 @@ public class TMDBMovies {
     private static final String API_KEY = "";
     private ApiGetServices TMDBService;
 
-    //Singleton-one instance of class at a time
+    //Singleton-one instance of class
     //No multiple instances of TMDB.
 
     private TMDBMovies(ApiGetServices TMDBService) {
@@ -33,7 +33,7 @@ public class TMDBMovies {
     public static TMDBMovies getInstance() {
         if (tmdbMoviesRepo == null) {
 
-            //OKHTTP CLIENT
+            //OKHTTP CLIENT-handles http requests
             final OkHttpClient client = new OkHttpClient.Builder()
                     .addInterceptor(new LoggingInterceptor())
                     .connectTimeout(15, TimeUnit.SECONDS)
@@ -55,7 +55,7 @@ public class TMDBMovies {
 
     //Takes in page parameter to enable loading of multiple pages as user scrolls
     public void getMovies(int page, String sortBy, final OnMoviesCallback moviesCallback) {
-        //Put Your Api Key Here
+
         Callback<MovieListResponse> call = new Callback<MovieListResponse>() {
             @Override
             public void onResponse(Call<MovieListResponse> call, Response<MovieListResponse> response) {
@@ -68,7 +68,7 @@ public class TMDBMovies {
                         moviesCallback.onFailure();
                     }
                 } else {
-                        moviesCallback.onFailure();
+                    moviesCallback.onFailure();
                 }
             }
 
@@ -83,22 +83,27 @@ public class TMDBMovies {
 
 
         switch (sortBy) {
+            //called when menu option selected
             case TOP_RATED:
                 TMDBService.getTopRatedMovies(API_KEY, LANGUAGE, page)
                         .enqueue(call);
                 break;
 
             case POPULAR:
-            default:
                 TMDBService.getPopularMoviesLoaded(API_KEY, LANGUAGE, page)
                         .enqueue(call);
                 break;
+            default:
+                TMDBService.getUpcomingMovies(API_KEY, LANGUAGE, page).enqueue(call);
+               break;
+
         }
 
 
-        }
+    }
+
     //Method Overload for getMovie Details
-    public void getMovie(int movieId,final MovieDetailsCallback movieDetailsCallback){
+    public void getMovie(int movieId, final MovieDetailsCallback movieDetailsCallback) {
         TMDBService
                 .getMovie(movieId, API_KEY, LANGUAGE)
                 .enqueue(new Callback<Movie>() {
@@ -119,7 +124,9 @@ public class TMDBMovies {
                     @Override
                     public void onFailure(Call<Movie> call, Throwable t) {
                         movieDetailsCallback.onError();
+                        Log.d(TAG,"Movie Details Error");
                     }
                 });
 
-    }}
+    }
+}

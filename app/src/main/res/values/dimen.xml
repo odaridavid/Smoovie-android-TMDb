@@ -5,7 +5,10 @@
     <dimen name="size_default">8dp</dimen>
     <dimen name="size_medium">16dp</dimen>
     <dimen name="size_large">32dp</dimen>
+    <dimen name="size_extra_large">72dp</dimen>
 
-
+    <dimen name="size_width">168dp</dimen>
+    <dimen name="size_height">240dp</dimen>
+    <dimen name="size_layout">180dp</dimen>
 
 </resources>

@@ -27,7 +27,7 @@ public class Movie {
     @SerializedName("id")
     private int MovieId;
 
-    Movie() {
+   public Movie() {
     }
 
     Movie(String movieTitle, String movieOverview, String movieReleaseDate, String moviePoster, float voterAverage) {

@@ -19,6 +19,7 @@ public interface ApiGetServices {
             @Query("api_key") String apiKey,
             @Query("language") String language,
             @Query("page") int page
+
     );
 
     //Highest Rated
@@ -27,6 +28,7 @@ public interface ApiGetServices {
             @Query("api_key") String apiKey,
             @Query("language") String language,
             @Query("page") int page
+
     );
 
     //upcoming
@@ -35,6 +37,7 @@ public interface ApiGetServices {
             @Query("api_key") String apiKey,
             @Query("language") String language,
             @Query("page") int page
+
     );
 
     @GET("movie/latest")

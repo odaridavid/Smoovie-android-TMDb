@@ -12,7 +12,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.ProgressBar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import smoovie.apps.com.kayatech.smoovie.Model.Movie;
@@ -23,18 +26,16 @@ import smoovie.apps.com.kayatech.smoovie.Network.TMDBMovies;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private boolean isFetchingMovies;
+    private boolean isFetchingMovies = false;
     private int currentPage = 1;
     private TMDBMovies movieList;
     private String sortBy = TMDBMovies.POPULAR;
     MoviesAdapter mMoviesAdapter;
     RecyclerView mMoviesRecyclerView;
     GridLayoutManager gridLayoutManager;
+    ProgressBar mProgressBar;
+    MovieClickHandler movieClickHandler;
 
-
-
-
-    //TODO ON ROTATE MOVIE VOTE AVERAGE VOTE COUNT
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
         movieList = TMDBMovies.getInstance();
 
+
+        mProgressBar = findViewById(R.id.movie_progress);
         //Reference
         mMoviesRecyclerView = findViewById(R.id.movie_recycler_view);
         mMoviesRecyclerView.setHasFixedSize(true);
@@ -56,16 +59,30 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        mMoviesRecyclerView.setItemViewCacheSize(6);
+        mMoviesRecyclerView.setItemViewCacheSize(20);
         mMoviesRecyclerView.setDrawingCacheEnabled(true);
         mMoviesRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
+
+        mMoviesRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mMoviesRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                int viewWidth = mMoviesRecyclerView.getMeasuredWidth();
+                float cardViewWidth = getApplication().getResources().getDimension(R.dimen.size_layout);
+                int newSpanCunt = (int) Math.floor(viewWidth/cardViewWidth);
+                gridLayoutManager.setSpanCount(newSpanCunt);
+                gridLayoutManager.requestLayout();
+            }
+        });
 
         //Start on Page 1
         getMovies(currentPage);
 
+
+
+
         //Set Pagination , On Scroll Continues to load Items
         mMoviesRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -73,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
-            // Scroll to half of the list it increments by one which is the next page.
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -86,10 +102,12 @@ public class MainActivity extends AppCompatActivity {
 
                 //on ui
                 int firstVisibleItem = gridLayoutManager.findFirstVisibleItemPosition();
-                if (firstVisibleItem + visibleItemCount >= totalItemCount / 2) {
+
+                if (firstVisibleItem + visibleItemCount >= totalItemCount ) {
+                    mProgressBar.setVisibility(View.VISIBLE);
                     //if reached the end fetch more movies move to next page
                     if (!isFetchingMovies) {
-
+                        mProgressBar.setVisibility(View.GONE);
                         getMovies(currentPage + 1);
                     }
                 }
@@ -99,19 +117,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getMovies(int page) {
+
         //checks if state is checking or not
         isFetchingMovies = true;
+        movieClickHandler = new MovieClickHandler() {
+            @Override
+            public void onClick(Movie movie) {
+                Intent openDetailsActivity = new Intent(MainActivity.this, DetailActivity.class);
+                openDetailsActivity.putExtra(DetailActivity.MOVIE_ID, movie.getMovieId());
+                startActivity(openDetailsActivity);
+            }
+        };
+
+
         movieList.getMovies(page,sortBy, new OnMoviesCallback() {
             @Override
             public void onSuccess(int page, List<Movie> movies) {
 
                 if (mMoviesAdapter == null) {
-                    mMoviesAdapter = new MoviesAdapter(getApplicationContext(), movies,clickHandler);
+                    mMoviesAdapter = new MoviesAdapter(getApplicationContext(), movies,movieClickHandler);
                     mMoviesRecyclerView.setAdapter(mMoviesAdapter);
                 } else {
                     if (page == 1) {
                         mMoviesAdapter.clearMovies();
                     }
+                    mProgressBar.setVisibility(View.GONE);
                     //appends movie results to list and updates recycler view
                     mMoviesAdapter.setMovieList(movies);
                 }
@@ -137,17 +167,12 @@ public class MainActivity extends AppCompatActivity {
             case TMDBMovies.TOP_RATED:
                 setTitle(getString(R.string.action_sort_high_ratings));
                 break;
+
+
         }
     }
 
-    MovieClickHandler clickHandler = new MovieClickHandler() {
-        @Override
-        public void onClick(Movie movie) {
-            Intent openDetailsActivity = new Intent(MainActivity.this, DetailActivity.class);
-            openDetailsActivity.putExtra(DetailActivity.MOVIE_ID, movie.getMovieId());
-            startActivity(openDetailsActivity);
-        }
-    };
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -172,9 +197,9 @@ public class MainActivity extends AppCompatActivity {
         sortMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                /*
-                 * Every time we sort, we need to go back to page 1
-                        */
+
+                 //* Every time we sort, we go back to page 1
+
                 currentPage = 1;
 
                 switch (item.getItemId()) {
@@ -191,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        sortMenu.inflate(R.menu.main_menu_items_sort);//What is being inflated
+        sortMenu.inflate(R.menu.main_menu_items_sort);
         sortMenu.show();
     }
 
