@@ -11,4 +11,5 @@
     <dimen name="size_height">240dp</dimen>
     <dimen name="size_layout">180dp</dimen>
 
+    <dimen name="size_default_10">10dp</dimen>
 </resources>

@@ -31,7 +31,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private int mMovieId;
     ImageView mMovieBackdrop, mMoviePoster;
-    TextView mMovieTitle, mMovieOverview, mMovieReleaseDate,mLabelRating,mLabelOverview,mLabelReleased;
+    TextView mMovieTitle, mMovieOverview, mMovieReleaseDate,mLabelRating,mLabelOverview,mLabelReleased,mRatingValue;
     private  RatingBar mMovieRating;
 
     private TMDBMovies mMoviesList;
@@ -50,15 +50,17 @@ public class DetailActivity extends AppCompatActivity {
         cbTitle = findViewById(R.id.collapsingToolbar);
         cdDet = findViewById(R.id.coordinator_main);
         mMovieBackdrop = findViewById(R.id.backdrop_image_view);
-       // mMoviePoster = findViewById(R.id.poster_image_view);
-        mMovieTitle = findViewById(R.id.movie_title_details_text_view);
+        mMoviePoster = findViewById(R.id.poster_image_view);
+        mMovieTitle = findViewById(R.id.label_movie_text_view);
         mMovieOverview = findViewById(R.id.movie_overview_details_text_view);
         mMovieReleaseDate = findViewById(R.id.movie_release_details_text_view);
         mMovieRating = findViewById(R.id.movie_rating_rating_bar);
+        mRatingValue = findViewById(R.id.label_rate_text_view_value);
 
         mLabelOverview =findViewById(R.id.label_overview_text_view) ;
-        mLabelRating =findViewById(R.id.label_rate_text_view) ;
+        mLabelRating =findViewById(R.id.label_rating_text_view) ;
         mLabelReleased = findViewById(R.id.label_release_text_view);
+
 
 
         Typeface custom_font_thin = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Light.ttf");
@@ -88,8 +90,8 @@ public class DetailActivity extends AppCompatActivity {
             public void onSuccess(Movie movie) {
 
                 mMovieTitle.setText(movie.getMovieTitle());
-                mMovieTitle.setTypeface(custom_font);
-                mMovieTitle.setVisibility(View.GONE);
+               mMovieTitle.setTypeface(custom_font);
+
 
                 //Collapse Bar
 
@@ -103,6 +105,12 @@ public class DetailActivity extends AppCompatActivity {
                 mMovieRating.setVisibility(View.VISIBLE);
                 mMovieRating.setRating(movie.getVoterAverage() / 2);
 
+               float movieavg =  movie.getVoterAverage();
+               String movieAvgString = Float.toString(movieavg);
+
+                mRatingValue.setText(movieAvgString);
+
+
                 mMovieReleaseDate.setText(movie.getMovieReleaseDate());
                 mMovieReleaseDate.setTypeface(custom_font);
                 if (!isFinishing()) {
@@ -111,12 +119,12 @@ public class DetailActivity extends AppCompatActivity {
                             .error(R.color.colorPrimary)
                             .into(mMovieBackdrop);
                 }
-//                if (!isFinishing()) {
-//                    Picasso.with(DetailActivity.this)
-//                            .load(IMAGE_BASE_URL_POSTER + movie.getMoviePoster())
-//                            .error(R.color.colorPrimary)
-//                            .into(mMoviePoster);
-//                }
+                if (!isFinishing()) {
+                    Picasso.with(DetailActivity.this)
+                            .load(IMAGE_BASE_URL_POSTER + movie.getMoviePoster())
+                            .error(R.color.colorPrimary)
+                            .into(mMoviePoster);
+                }
             }
 
             @Override
