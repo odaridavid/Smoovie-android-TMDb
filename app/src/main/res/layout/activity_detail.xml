@@ -10,7 +10,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="@dimen/size_app_bar_height"
         android:elevation="@dimen/size_large"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -23,8 +23,7 @@
             android:fitsSystemWindows="true"
             android:textAlignment="gravity"
             app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleMarginEnd="64dp"
-            app:expandedTitleMarginStart="48dp"
+
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
@@ -60,7 +59,7 @@
 
             <ImageView
                 android:id="@+id/poster_image_view"
-                android:layout_width="120dp"
+                android:layout_width="@dimen/size_image_view_poster"
                 android:layout_height="@dimen/size_width"
                 android:contentDescription="@string/label_content_desc"
                 android:scaleType="centerCrop"
@@ -69,42 +68,40 @@
 
             <TextView
                 android:id="@+id/label_movie_text_view"
-                android:layout_width="220dp"
-                android:layout_height="52dp"
+                android:layout_width="@dimen/size_text_view_height"
+                android:layout_height="@dimen/size_text_view_width"
+                android:layout_marginEnd="@dimen/size_default"
                 android:layout_marginTop="@dimen/size_medium"
-                android:text="@string/label_rate"
-                android:textSize="20sp"
-                app:layout_constraintTop_toTopOf="parent"
+                android:text="@string/label_movie_title_view"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/poster_image_view"
-                android:layout_marginStart="@dimen/size_default"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                />
             <TextView
                 android:id="@+id/label_rating_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/size_medium"
-                android:layout_marginTop="@dimen/size_medium"
+                android:layout_marginEnd="@dimen/size_default"
                 android:text="@string/label_rate"
-                android:textSize="18sp"
-                app:layout_constraintTop_toBottomOf="@id/label_movie_text_view"
-                app:layout_constraintLeft_toRightOf="@id/poster_image_view"
-                android:layout_marginStart="@dimen/size_default"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
 
-                />
+                app:layout_constraintLeft_toRightOf="@id/poster_image_view"
+                app:layout_constraintTop_toBottomOf="@id/label_movie_text_view" />
 
             <RatingBar
                 android:id="@+id/movie_rating_rating_bar"
                 style="?android:attr/ratingBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/size_medium"
+                android:layout_marginEnd="@dimen/size_default"
                 android:layout_marginTop="@dimen/size_default"
                 android:padding="@dimen/size_small"
                 android:requiresFadingEdge="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/poster_image_view"
-                app:layout_constraintTop_toBottomOf="@id/label_rating_text_view"
-                android:layout_marginStart="@dimen/size_small"/>
+                app:layout_constraintTop_toBottomOf="@id/label_rating_text_view" />
 
 
             <TextView
@@ -112,11 +109,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/size_default"
+                android:layout_marginStart="@dimen/size_default_10"
                 android:layout_marginTop="@dimen/size_default"
                 android:textSize="14sp"
-                app:layout_constraintLeft_toRightOf="@id/poster_image_view"
+               app:layout_constraintRight_toLeftOf="@id/label_rate_text_view_five"
                 app:layout_constraintTop_toBottomOf="@id/movie_rating_rating_bar"
-                android:layout_marginStart="@dimen/size_default_10"
 
                 />
 
@@ -124,14 +121,14 @@
                 android:id="@+id/label_rate_text_view_five"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/size_medium"
+                android:layout_marginEnd="@dimen/size_default"
                 android:layout_marginTop="@dimen/size_default"
-                android:text="/10"
+                android:text="@string/label_text_view_rating_total"
                 android:textSize="14sp"
-                app:layout_constraintLeft_toRightOf="@id/label_rate_text_view_value"
-                app:layout_constraintTop_toBottomOf="@id/movie_rating_rating_bar"
+                app:layout_constraintEnd_toEndOf="parent"
 
-                />
+                app:layout_constraintLeft_toRightOf="@id/label_rate_text_view_value"
+                app:layout_constraintTop_toBottomOf="@id/movie_rating_rating_bar" />
 
             <TextView
                 android:id="@+id/label_overview_text_view"

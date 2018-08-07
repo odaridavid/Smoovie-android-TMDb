@@ -11,7 +11,7 @@
     android:layout_marginBottom="@dimen/size_medium"
     android:layout_marginStart="@dimen/size_default"
 
-    android:backgroundTint="#ffff"
+    android:backgroundTint="@color/colorWhite"
     app:cardCornerRadius="@dimen/size_small"
     app:cardElevation="@dimen/size_medium">
 
@@ -37,7 +37,7 @@
             android:layout_gravity="center"
             android:text="7.4"
             android:textAlignment="center"
-            android:textColor="#ffff"
+            android:textColor="@color/colorWhite"
             android:textSize="15sp"
             android:textStyle="bold" />
     </FrameLayout>
@@ -60,7 +60,7 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/size_frame_layout"
             android:layout_alignBottom="@+id/poster_image_view"
             android:background="@color/colorPrimary"
             android:backgroundTint="@color/colorAccent"
@@ -76,7 +76,7 @@
                 android:textSize="12sp"
                 android:text="@string/label_text_placeholder"
                 android:textAlignment="textStart"
-                android:textColor="#ffff" />
+                android:textColor="@color/colorWhite" />
         </FrameLayout>
 
     </RelativeLayout>

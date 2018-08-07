@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/movie_recycler_view"
+        android:id="@+id/rv_movies"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/size_extra_large"
@@ -28,8 +28,17 @@
         app:layout_constraintTop_toBottomOf="@+id/action_toolbar_main" />
 
     <ProgressBar
-        android:id="@+id/movie_progress"
+        android:id="@+id/pb_getmovie_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center" />
+    <TextView
+        android:id="@+id/tv_error_message_display"
+        android:textSize="22sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:layout_gravity="center"
+        android:text="@string/error_network"
+        android:visibility="invisible" />
 </android.support.design.widget.CoordinatorLayout>
