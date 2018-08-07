@@ -20,6 +20,5 @@ Use in TMDB Class
 
 <img src="https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/Screenshot1.png" width="200">
 
-![screenshots](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/Screenshot1.png )
+<img src="https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/Screenshot_5.png" width="200">
 
-![screenshots](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/Screenshot_5.png)
