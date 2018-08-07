@@ -9,6 +9,8 @@ TMDb Api Key
 
 An Api key is required to run GET Responses
 
+Use in TMDB Class
+
 #### Authors
 
 - David Odari
