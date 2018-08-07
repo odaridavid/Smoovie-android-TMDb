@@ -7,15 +7,14 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Layout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import smoovie.apps.com.kayatech.smoovie.Model.Movie;
@@ -29,12 +28,13 @@ public class MainActivity extends AppCompatActivity {
     private boolean isFetchingMovies = false;
     private int currentPage = 1;
     private TMDBMovies movieList;
-    private String sortBy = TMDBMovies.POPULAR;
+    private String sortBy = TMDBMovies.UPCOMING;
     MoviesAdapter mMoviesAdapter;
     RecyclerView mMoviesRecyclerView;
     GridLayoutManager gridLayoutManager;
     ProgressBar mProgressBar;
     MovieClickHandler movieClickHandler;
+    private TextView mErrorMessageTextView;
 
 
     @Override
@@ -45,12 +45,16 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbarMainPage = findViewById(R.id.action_toolbar_main);
         setSupportActionBar(toolbarMainPage);
 
+
         movieList = TMDBMovies.getInstance();
 
 
-        mProgressBar = findViewById(R.id.movie_progress);
+
+
+        mProgressBar = findViewById(R.id.pb_getmovie_progress);
+        mErrorMessageTextView = findViewById(R.id.tv_error_message_display);
         //Reference
-        mMoviesRecyclerView = findViewById(R.id.movie_recycler_view);
+        mMoviesRecyclerView = findViewById(R.id.rv_movies);
         mMoviesRecyclerView.setHasFixedSize(true);
 
         //Grid Layout Setup
@@ -78,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
 
         //Start on Page 1
         getMovies(currentPage);
-
 
 
 
@@ -138,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
                 if (mMoviesAdapter == null) {
                     mMoviesAdapter = new MoviesAdapter(getApplicationContext(), movies,movieClickHandler);
                     mMoviesRecyclerView.setAdapter(mMoviesAdapter);
+
                 } else {
                     if (page == 1) {
                         mMoviesAdapter.clearMovies();
@@ -145,16 +149,19 @@ public class MainActivity extends AppCompatActivity {
                     mProgressBar.setVisibility(View.GONE);
                     //appends movie results to list and updates recycler view
                     mMoviesAdapter.setMovieList(movies);
+
                 }
                 currentPage = page;
                 isFetchingMovies = false;
+
 
                 setTitleBar();
             }
 
             @Override
             public void onFailure() {
-                Log.d(TAG, "getMovies Failure");
+                Log.d(TAG, getString(R.string.error_network));
+
             }
         });
     }

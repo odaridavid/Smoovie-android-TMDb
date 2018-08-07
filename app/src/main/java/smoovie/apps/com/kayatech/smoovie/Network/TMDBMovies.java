@@ -16,11 +16,12 @@ import smoovie.apps.com.kayatech.smoovie.Model.MovieDetailsCallback;
 public class TMDBMovies {
     private static final String TMDB_BASE_URL = "https://api.themoviedb.org/3/";
     private static final String LANGUAGE = "en-US";
-    private static final String TAG = TMDBMovies.class.getSimpleName();
+    private final String TAG = TMDBMovies.class.getSimpleName();
     private static TMDBMovies tmdbMoviesRepo;
     public static final String POPULAR = "popular";
     public static final String TOP_RATED = "top_rated";
-    private static final String API_KEY = "6141807ba2f6a6767a84014c1f732c1d";
+    public static final String UPCOMING = "upcoming";
+    private static final String API_KEY = "";
     private ApiGetServices TMDBService;
 
     //Singleton-one instance of class
@@ -78,10 +79,6 @@ public class TMDBMovies {
             }
         };
 
-        //Default
-        TMDBService.getUpcomingMovies(API_KEY, LANGUAGE, page).enqueue(call);
-
-
         switch (sortBy) {
             //called when menu option selected
             case TOP_RATED:
@@ -93,9 +90,9 @@ public class TMDBMovies {
                 TMDBService.getPopularMoviesLoaded(API_KEY, LANGUAGE, page)
                         .enqueue(call);
                 break;
-            default:
+            case UPCOMING:
                 TMDBService.getUpcomingMovies(API_KEY, LANGUAGE, page).enqueue(call);
-               break;
+                break;
 
         }
 
@@ -107,26 +104,32 @@ public class TMDBMovies {
         TMDBService
                 .getMovie(movieId, API_KEY, LANGUAGE)
                 .enqueue(new Callback<Movie>() {
-                    @Override
-                    public void onResponse(Call<Movie> call, Response<Movie> response) {
-                        if (response.isSuccessful()) {
-                            Movie movie = response.body();
-                            if (movie != null) {
-                                movieDetailsCallback.onSuccess(movie);
-                            } else {
-                                movieDetailsCallback.onError();
-                            }
-                        } else {
-                            movieDetailsCallback.onError();
-                        }
-                    }
+                             @Override
+                             public void onResponse(Call<Movie> call, Response<Movie> response) {
+                                 if (response.isSuccessful()) {
+                                     Movie movie = response.body();
+                                     if (movie != null) {
+                                         movieDetailsCallback.onSuccess(movie);
+                                     } else {
+                                         movieDetailsCallback.onError();
+                                     }
+                                 } else {
+                                     movieDetailsCallback.onError();
+                                 }
+                             }
 
-                    @Override
-                    public void onFailure(Call<Movie> call, Throwable t) {
-                        movieDetailsCallback.onError();
-                        Log.d(TAG,"Movie Details Error");
-                    }
-                });
+                             @Override
+                             public void onFailure(Call<Movie> call, Throwable t) {
+
+
+                                 movieDetailsCallback.onError();
+                                 Log.d(TAG, "Movie Details Error");
+
+
+                             }
+                         }
+                );
 
     }
+
 }

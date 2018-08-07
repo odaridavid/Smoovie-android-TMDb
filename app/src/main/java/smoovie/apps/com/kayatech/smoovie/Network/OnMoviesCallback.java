@@ -10,4 +10,5 @@ public interface OnMoviesCallback {
     void onSuccess(int page,List<Movie> movies);
 
     void onFailure();
+
 }

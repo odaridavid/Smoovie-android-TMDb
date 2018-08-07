@@ -35,10 +35,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
 
     public void setMovieList(List<Movie> movieList) {
         this.MovieList = movieList;
-        //gets change in movie list
         notifyDataSetChanged();
     }
     public void clearMovies() {
+        //called when user sorts list starting from page 1
         MovieList.clear();
         notifyDataSetChanged();
     }

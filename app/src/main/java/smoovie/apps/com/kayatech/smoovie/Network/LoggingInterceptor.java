@@ -9,7 +9,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class LoggingInterceptor implements Interceptor {
-    public static String TAG = LoggingInterceptor.class.getSimpleName();
+    private final String TAG = LoggingInterceptor.class.getSimpleName();
 
     //logs the outgoing request and the incoming response.
     @Override
