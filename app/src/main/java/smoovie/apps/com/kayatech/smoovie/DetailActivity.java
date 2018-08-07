@@ -47,6 +47,19 @@ public class DetailActivity extends AppCompatActivity {
 
         mMoviesList = TMDBMovies.getInstance();
 
+        createIds();
+
+        Typeface custom_font_thin = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Light.ttf");
+        mLabelReleased.setTypeface(custom_font_thin);
+        mLabelRating.setTypeface(custom_font_thin);
+        mLabelOverview.setTypeface(custom_font_thin);
+
+        setupToolbar();
+        getMovie();
+    }
+
+    private void createIds(){
+
         cbTitle = findViewById(R.id.collapsingToolbar);
         cdDet = findViewById(R.id.coordinator_main);
         mMovieBackdrop = findViewById(R.id.backdrop_image_view);
@@ -60,17 +73,9 @@ public class DetailActivity extends AppCompatActivity {
         mLabelOverview =findViewById(R.id.label_overview_text_view) ;
         mLabelRating =findViewById(R.id.label_rating_text_view) ;
         mLabelReleased = findViewById(R.id.label_release_text_view);
-
-
-
-        Typeface custom_font_thin = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Light.ttf");
-        mLabelReleased.setTypeface(custom_font_thin);
-        mLabelRating.setTypeface(custom_font_thin);
-        mLabelOverview.setTypeface(custom_font_thin);
-
-        setupToolbar();
-        getMovie();
     }
+
+
 
     private void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.details_toolbar);
@@ -130,11 +135,11 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onError() {
                 Log.d(TAG, "Internet Connection Error: ");
-                //Toast.makeText(DetailActivity.this, ".", Toast.LENGTH_SHORT).show();
-                Snackbar snackbar = Snackbar
-                        .make(cdDet, "Please check your internet connection", Snackbar.LENGTH_LONG);
-
-                snackbar.show();
+                Toast.makeText(DetailActivity.this, getString(R.string.error_network), Toast.LENGTH_SHORT).show();
+//                Snackbar snackbar = Snackbar
+//                        .make(cdDet, , Snackbar.LENGTH_LONG);
+//
+//                snackbar.show();
                 finish();
             }
         });

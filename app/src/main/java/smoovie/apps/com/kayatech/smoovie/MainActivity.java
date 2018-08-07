@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         mMoviesRecyclerView.setDrawingCacheEnabled(true);
         mMoviesRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
 
+        //Gets Recycler width and card width and arranges elements in layout as per screen size
         mMoviesRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
