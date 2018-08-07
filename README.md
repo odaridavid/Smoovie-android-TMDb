@@ -18,4 +18,4 @@ Use in TMDB Class
 
 ### Screenshots
 
-![screenshots](Q:\NanoDegree\Project 2 Popular Movies\Screenshot_2.png)
+![screenshots](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/Screenshot1.png)
