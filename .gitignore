@@ -9,3 +9,5 @@
 /captures
 .externalNativeBuild
 codealike.json
+/gradle.properties
+gradle.properties
