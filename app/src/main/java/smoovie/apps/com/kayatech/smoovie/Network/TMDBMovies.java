@@ -10,6 +10,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import smoovie.apps.com.kayatech.smoovie.BuildConfig;
 import smoovie.apps.com.kayatech.smoovie.Model.Movie;
 import smoovie.apps.com.kayatech.smoovie.Model.MovieDetailsCallback;
 
@@ -21,7 +22,7 @@ public class TMDBMovies {
     public static final String POPULAR = "popular";
     public static final String TOP_RATED = "top_rated";
     public static final String UPCOMING = "upcoming";
-    private static final String API_KEY = "";
+    private static final String API_KEY = BuildConfig.API_KEY;
     private ApiGetServices TMDBService;
 
     //Singleton-one instance of class
