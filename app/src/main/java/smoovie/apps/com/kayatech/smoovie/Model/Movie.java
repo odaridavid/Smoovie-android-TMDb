@@ -3,31 +3,34 @@ package smoovie.apps.com.kayatech.smoovie.Model;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
+@Parcel
 public class Movie {
     //model class to map json data to pojo
     //Movie GET Class objects from tmdb
     @SerializedName("original_title")
-    private String MovieTitle;
+    String MovieTitle;
 
     @SerializedName("overview")
-    private String MovieOverview;
+    String MovieOverview;
 
     @SerializedName("release_date")
-    private String MovieReleaseDate;
+    String MovieReleaseDate;
 
     @SerializedName("poster_path")
-    private String MoviePoster;
+    String MoviePoster;
 
     @SerializedName("vote_average")
-    private  float  VoterAverage;
+    float VoterAverage;
 
     @SerializedName("backdrop_path")
-    private String Backdrop;
+    String Backdrop;
 
     @SerializedName("id")
-    private int MovieId;
+    int MovieId;
 
-   public Movie() {
+    public Movie() {
     }
 
     Movie(String movieTitle, String movieOverview, String movieReleaseDate, String moviePoster, float voterAverage) {
@@ -47,7 +50,6 @@ public class Movie {
     public String getMovieOverview() {
         return MovieOverview;
     }
-
 
 
     public String getMovieReleaseDate() {
