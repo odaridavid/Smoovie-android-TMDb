@@ -15,8 +15,12 @@ import android.view.ViewTreeObserver;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.parceler.Parcels;
+
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import smoovie.apps.com.kayatech.smoovie.Model.Movie;
 import smoovie.apps.com.kayatech.smoovie.Network.OnMoviesCallback;
 import smoovie.apps.com.kayatech.smoovie.Network.TMDBMovies;
@@ -30,31 +34,26 @@ public class MainActivity extends AppCompatActivity {
     private TMDBMovies movieList;
     private String sortBy = TMDBMovies.UPCOMING;
     MoviesAdapter mMoviesAdapter;
-    RecyclerView mMoviesRecyclerView;
     GridLayoutManager gridLayoutManager;
-    ProgressBar mProgressBar;
     MovieClickHandler movieClickHandler;
-    private TextView mErrorMessageTextView;
 
+
+    @BindView(R.id.pb_getmovie_progress)  ProgressBar mProgressBar;
+    @BindView(R.id.rv_movies) RecyclerView mMoviesRecyclerView;
+    @BindView(R.id.tv_error_message_display)  TextView mErrorMessageTextView;
+    @BindView(R.id.action_toolbar_main) Toolbar toolbarMainPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Toolbar toolbarMainPage = findViewById(R.id.action_toolbar_main);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbarMainPage);
 
 
         movieList = TMDBMovies.getInstance();
 
-
-
-
-        mProgressBar = findViewById(R.id.pb_getmovie_progress);
-        mErrorMessageTextView = findViewById(R.id.tv_error_message_display);
         //Reference
-        mMoviesRecyclerView = findViewById(R.id.rv_movies);
         mMoviesRecyclerView.setHasFixedSize(true);
 
         //Grid Layout Setup
@@ -121,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getMovies(int page) {
+        Movie movie = new Movie();
 
         //checks if state is checking or not
         isFetchingMovies = true;

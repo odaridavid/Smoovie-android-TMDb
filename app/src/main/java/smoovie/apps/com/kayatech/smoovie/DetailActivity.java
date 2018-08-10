@@ -1,11 +1,8 @@
 package smoovie.apps.com.kayatech.smoovie;
 
-import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -17,6 +14,8 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import smoovie.apps.com.kayatech.smoovie.Model.Movie;
 import smoovie.apps.com.kayatech.smoovie.Model.MovieDetailsCallback;
 import smoovie.apps.com.kayatech.smoovie.Network.TMDBMovies;
@@ -27,55 +26,37 @@ public class DetailActivity extends AppCompatActivity {
     public static String MOVIE_ID = "movie_id";
     private static String IMAGE_BASE_URL_BACKDROP = "http://image.tmdb.org/t/p/w780";
     private static String IMAGE_BASE_URL_POSTER = "http://image.tmdb.org/t/p/w185";
-
-
     private int mMovieId;
-    ImageView mMovieBackdrop, mMoviePoster;
-    TextView mMovieTitle, mMovieOverview, mMovieReleaseDate,mLabelRating,mLabelOverview,mLabelReleased,mRatingValue;
-    private  RatingBar mMovieRating;
-
     private TMDBMovies mMoviesList;
-    CollapsingToolbarLayout cbTitle;
-    CoordinatorLayout cdDet;
+
+    @BindView(R.id.collapsingToolbar)CollapsingToolbarLayout cbTitle;
+    @BindView(R.id.tv_rating_value)TextView mRatingValue;
+    @BindView(R.id.tv_label_release_date)TextView mLabelReleased;
+    @BindView(R.id.tv_label_overview)TextView mLabelOverview;
+    @BindView(R.id.tv_release_date)TextView mMovieReleaseDate;
+    @BindView(R.id.tv_overview)TextView mMovieOverview;
+    @BindView(R.id.tv_label_movie_title)TextView mMovieTitle;
+    @BindView(R.id.rb_movie_rating) RatingBar mMovieRating;
+    @BindView(R.id.iv_backdrop)  ImageView mMovieBackdrop;
+    @BindView(R.id.iv_poster_image)  ImageView mMoviePoster;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        ButterKnife.bind(this);
 
         mMovieId = getIntent().getIntExtra(MOVIE_ID, mMovieId);
 
         mMoviesList = TMDBMovies.getInstance();
 
-        createIds();
-
         Typeface custom_font_thin = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Light.ttf");
         mLabelReleased.setTypeface(custom_font_thin);
-        mLabelRating.setTypeface(custom_font_thin);
         mLabelOverview.setTypeface(custom_font_thin);
 
         setupToolbar();
         getMovie();
     }
-
-    private void createIds(){
-
-        cbTitle = findViewById(R.id.collapsingToolbar);
-        cdDet = findViewById(R.id.coordinator_main);
-        mMovieBackdrop = findViewById(R.id.backdrop_image_view);
-        mMoviePoster = findViewById(R.id.poster_image_view);
-        mMovieTitle = findViewById(R.id.label_movie_text_view);
-        mMovieOverview = findViewById(R.id.movie_overview_details_text_view);
-        mMovieReleaseDate = findViewById(R.id.movie_release_details_text_view);
-        mMovieRating = findViewById(R.id.movie_rating_rating_bar);
-        mRatingValue = findViewById(R.id.label_rate_text_view_value);
-
-        mLabelOverview =findViewById(R.id.label_overview_text_view) ;
-        mLabelRating =findViewById(R.id.label_rating_text_view) ;
-        mLabelReleased = findViewById(R.id.label_release_text_view);
-    }
-
-
 
     private void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.details_toolbar);
@@ -95,7 +76,7 @@ public class DetailActivity extends AppCompatActivity {
             public void onSuccess(Movie movie) {
 
                 mMovieTitle.setText(movie.getMovieTitle());
-               mMovieTitle.setTypeface(custom_font);
+                mMovieTitle.setTypeface(custom_font);
 
 
                 //Collapse Bar

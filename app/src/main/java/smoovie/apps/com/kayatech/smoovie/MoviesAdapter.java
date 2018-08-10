@@ -1,7 +1,6 @@
 package smoovie.apps.com.kayatech.smoovie;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +14,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import smoovie.apps.com.kayatech.smoovie.Model.Movie;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder> {
@@ -73,17 +74,14 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         Movie movies;
         private Context ctx;
         private String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w342";
-        TextView mMovieTitle;
-        ImageView mPosterImage;
-        TextView mMovieRatings;
+        @BindView(R.id.tv_movie_card_title) TextView mMovieTitle;
+        @BindView(R.id.iv_poster_image) ImageView mPosterImage;
+        @BindView(R.id.rating_text_view) TextView mMovieRatings;
 
         public MoviesViewHolder(View itemView) {
             super(itemView);
             // get the reference of item view's
-            mMovieTitle = itemView.findViewById(R.id.movie_title_text_view);
-            mPosterImage = itemView.findViewById(R.id.poster_image_view);
-            mMovieRatings = itemView.findViewById(R.id.rating_text_view);
-
+            ButterKnife.bind(this, itemView);
 
 
             itemView.setOnClickListener(new View.OnClickListener() {
