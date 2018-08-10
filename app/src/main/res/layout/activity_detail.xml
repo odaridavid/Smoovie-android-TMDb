@@ -27,7 +27,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
-                android:id="@+id/backdrop_image_view"
+                android:id="@+id/iv_backdrop"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/label_content_desc"
@@ -58,7 +58,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/poster_image_view"
+                android:id="@+id/iv_poster_image"
                 android:layout_width="@dimen/size_image_view_poster"
                 android:layout_height="@dimen/size_width"
                 android:contentDescription="@string/label_content_desc"
@@ -66,72 +66,59 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+
+            <android.support.constraint.Group
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="tv_label_movie_title,rb_movie_rating,tv_rating_value,tv_rating_total" />
+
             <TextView
-                android:id="@+id/label_movie_text_view"
+                android:id="@+id/tv_label_movie_title"
                 android:layout_width="@dimen/size_text_view_height"
                 android:layout_height="@dimen/size_text_view_width"
-                android:layout_marginEnd="@dimen/size_default"
                 android:layout_marginTop="@dimen/size_medium"
-                android:text="@string/label_movie_title_view"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/poster_image_view"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/rb_movie_rating"/>
 
-            <TextView
-                android:id="@+id/label_rating_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/size_default"
-                android:text="@string/label_rate"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
 
-                app:layout_constraintLeft_toRightOf="@id/poster_image_view"
-                app:layout_constraintTop_toBottomOf="@id/label_movie_text_view" />
 
             <RatingBar
-                android:id="@+id/movie_rating_rating_bar"
+                android:id="@+id/rb_movie_rating"
                 style="?android:attr/ratingBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/size_default"
                 android:layout_marginTop="@dimen/size_default"
-                android:padding="@dimen/size_small"
                 android:requiresFadingEdge="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/poster_image_view"
-                app:layout_constraintTop_toBottomOf="@id/label_rating_text_view" />
+                app:layout_constraintLeft_toRightOf="@id/iv_poster_image"
+                app:layout_constraintTop_toBottomOf="@id/tv_label_movie_title" />
 
 
             <TextView
-                android:id="@+id/label_rate_text_view_value"
+                android:id="@+id/tv_rating_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/size_default"
-                android:layout_marginStart="@dimen/size_default_10"
                 android:layout_marginTop="@dimen/size_default"
                 android:textSize="14sp"
-               app:layout_constraintRight_toLeftOf="@id/label_rate_text_view_five"
-                app:layout_constraintTop_toBottomOf="@id/movie_rating_rating_bar"
-
+                app:layout_constraintTop_toBottomOf="@id/rb_movie_rating"
+                app:layout_constraintLeft_toRightOf="@id/iv_poster_image"
                 />
 
             <TextView
-                android:id="@+id/label_rate_text_view_five"
+                android:id="@+id/tv_rating_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/size_default"
                 android:layout_marginTop="@dimen/size_default"
                 android:text="@string/label_text_view_rating_total"
                 android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-
-                app:layout_constraintLeft_toRightOf="@id/label_rate_text_view_value"
-                app:layout_constraintTop_toBottomOf="@id/movie_rating_rating_bar" />
+                app:layout_constraintLeft_toRightOf="@id/tv_rating_value"
+                app:layout_constraintTop_toBottomOf="@id/rb_movie_rating" />
 
             <TextView
-                android:id="@+id/label_overview_text_view"
+                android:id="@+id/tv_label_overview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_default"
@@ -139,10 +126,10 @@
                 android:textSize="18sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/poster_image_view" />
+                app:layout_constraintTop_toBottomOf="@id/iv_poster_image" />
 
             <TextView
-                android:id="@+id/movie_overview_details_text_view"
+                android:id="@+id/tv_overview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/size_medium"
@@ -150,10 +137,10 @@
                 android:layout_marginStart="@dimen/size_default"
                 android:layout_marginTop="@dimen/size_medium"
                 android:textSize="18sp"
-                app:layout_constraintTop_toBottomOf="@id/label_overview_text_view" />
+                app:layout_constraintTop_toBottomOf="@id/tv_label_overview" />
 
             <TextView
-                android:id="@+id/label_release_text_view"
+                android:id="@+id/tv_label_release_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/size_medium"
@@ -163,10 +150,10 @@
                 android:text="@string/label_released"
                 android:textSize="18sp"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/movie_overview_details_text_view" />
+                app:layout_constraintTop_toBottomOf="@id/tv_overview" />
 
             <TextView
-                android:id="@+id/movie_release_details_text_view"
+                android:id="@+id/tv_release_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/size_medium"
@@ -176,7 +163,7 @@
                 android:textSize="18sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/label_release_text_view" />
+                app:layout_constraintTop_toBottomOf="@id/tv_label_release_date" />
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>
 

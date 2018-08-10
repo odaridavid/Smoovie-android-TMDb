@@ -20,5 +20,5 @@
     <dimen name="size_app_bar_height">300dp</dimen>
     <dimen name="size_image_view_poster">120dp</dimen>
     <dimen name="size_text_view_height">240dp</dimen>
-    <dimen name="size_text_view_width">52dp</dimen>
+    <dimen name="size_text_view_width">48dp</dimen>
 </resources>
