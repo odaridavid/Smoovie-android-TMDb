@@ -18,11 +18,10 @@ Use in TMDB Class
 
 ### Screenshots
 
-<img src="https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/Screenshot1.png" width="200"><img src="https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/Screenshot_2.png" margin="20" width="200"><img src="https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/Screenshot_5.png" align="right" width="200">
 
 | [![Screen1](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/Screenshot1.png)](http://videoblocks.com)  | [![Screen2](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/Screenshot_2.png)](http://audioblocks.com) | [![Screen3](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/Screenshot_5.png)](http://graphicstock.com) |
 |:---:|:---:|:---:|
-| http://videoblocks.com | http://audioblocks.com | http://graphicstock.com |
+| Detail Activity | Main Activity | Detail Activity |
 
 ## License
 
