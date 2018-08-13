@@ -11,6 +11,39 @@ An Api key is required to run GET Responses
 
 Use in TMDB Class
 
+###### Setting Up API Key
+
+Find the `.gradle` file in the following directory
+
+* Windows: C:\Users\<Your Username>\.gradle
+* Mac: /Users/<Your Username>/.gradle
+* Linux: /home/<Your Username>/.gradle
+
+In the `gradle.properties` file add your Api Key(Create One if there is none)
+
+```
+API_KEY = "Your API KEY"
+```
+
+In the `app` module `build.gradle` setup the Api Key 
+
+
+  debug { 
+   
+    ...
+    buildConfigField ("String", "ApiKey", API_KEY)
+    ...
+    
+  }
+  
+  release {
+  
+     ...
+    buildConfigField ("String", "ApiKey", API_KEY)
+    ...
+    
+  } 
+
 #### Authors
 
 - David Odari
