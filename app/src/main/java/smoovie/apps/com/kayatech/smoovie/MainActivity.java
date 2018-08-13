@@ -2,6 +2,7 @@ package smoovie.apps.com.kayatech.smoovie;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -38,10 +39,18 @@ public class MainActivity extends AppCompatActivity {
     MovieClickHandler movieClickHandler;
 
 
-    @BindView(R.id.pb_getmovie_progress)  ProgressBar mProgressBar;
-    @BindView(R.id.rv_movies) RecyclerView mMoviesRecyclerView;
-    @BindView(R.id.tv_error_message_display)  TextView mErrorMessageTextView;
-    @BindView(R.id.action_toolbar_main) Toolbar toolbarMainPage;
+    @BindView(R.id.pb_getmovie_progress)
+    ProgressBar mProgressBar;
+
+    @BindView(R.id.rv_movies)
+    RecyclerView mMoviesRecyclerView;
+
+    @BindView(R.id.tv_error_message_display)
+    TextView mErrorMessageTextView;
+
+    @BindView(R.id.action_toolbar_main)
+    Toolbar toolbarMainPage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
         mMoviesRecyclerView.setLayoutManager(gridLayoutManager);
 
 
-
         mMoviesRecyclerView.setItemViewCacheSize(20);
         mMoviesRecyclerView.setDrawingCacheEnabled(true);
         mMoviesRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
@@ -73,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 mMoviesRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 int viewWidth = mMoviesRecyclerView.getMeasuredWidth();
                 float cardViewWidth = getApplication().getResources().getDimension(R.dimen.size_layout);
-                int newSpanCunt = (int) Math.floor(viewWidth/cardViewWidth);
+                int newSpanCunt = (int) Math.floor(viewWidth / cardViewWidth);
                 gridLayoutManager.setSpanCount(newSpanCunt);
                 gridLayoutManager.requestLayout();
             }
@@ -81,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
 
         //Start on Page 1
         getMovies(currentPage);
-
 
 
         //Set Pagination , On Scroll Continues to load Items
@@ -106,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 //on ui
                 int firstVisibleItem = gridLayoutManager.findFirstVisibleItemPosition();
 
-                if (firstVisibleItem + visibleItemCount >= totalItemCount ) {
+                if (firstVisibleItem + visibleItemCount >= totalItemCount) {
                     mProgressBar.setVisibility(View.VISIBLE);
                     //if reached the end fetch more movies move to next page
                     if (!isFetchingMovies) {
@@ -121,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getMovies(int page) {
         Movie movie = new Movie();
-
+        final Parcelable wrapped = Parcels.wrap(movie.getMovieId());
         //checks if state is checking or not
         isFetchingMovies = true;
         movieClickHandler = new MovieClickHandler() {
@@ -134,12 +141,12 @@ public class MainActivity extends AppCompatActivity {
         };
 
 
-        movieList.getMovies(page,sortBy, new OnMoviesCallback() {
+        movieList.getMovies(page, sortBy, new OnMoviesCallback() {
             @Override
             public void onSuccess(int page, List<Movie> movies) {
 
                 if (mMoviesAdapter == null) {
-                    mMoviesAdapter = new MoviesAdapter(getApplicationContext(), movies,movieClickHandler);
+                    mMoviesAdapter = new MoviesAdapter(getApplicationContext(), movies, movieClickHandler);
                     mMoviesRecyclerView.setAdapter(mMoviesAdapter);
 
                 } else {
@@ -175,11 +182,15 @@ public class MainActivity extends AppCompatActivity {
             case TMDBMovies.TOP_RATED:
                 setTitle(getString(R.string.action_sort_high_ratings));
                 break;
+            case TMDBMovies.UPCOMING:
+                setTitle(getString(R.string.action_sort_upcoming));
+
+
+                break;
 
 
         }
     }
-
 
 
     @Override
@@ -206,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
 
-                 //* Every time we sort, we go back to page 1
+                //* Every time we sort, we go back to page 1
 
                 currentPage = 1;
 
@@ -219,6 +230,9 @@ public class MainActivity extends AppCompatActivity {
                         sortBy = TMDBMovies.TOP_RATED;
                         getMovies(currentPage);
                         return true;
+                    case R.id.action_sort_upcoming:
+                        sortBy = TMDBMovies.UPCOMING;
+                        getMovies(currentPage);
                     default:
                         return false;
                 }

@@ -3,6 +3,7 @@
     <!--Main Menu Sort By-->
     <string name="action_sort_most_popular">Most Popular</string>
     <string name="action_sort_high_ratings">High Ratings</string>
+    <string name="action_sort_upcoming">Upcoming</string>
     <string name="action_sort_latest">Latest Movies</string>
 
     <string name="label_text_placeholder">Movie Title</string>
@@ -21,7 +22,7 @@
     <!--Detail Screen-->
     <string name="label_rate">Rating</string>
     <string name="label_overview">Overview</string>
-    <string name="label_released">Released On:</string>
+    <string name="label_released">Released On</string>
     <string name="label_movie_title_view">Movie Title</string>
     <string name="label_text_view_rating_total">/10</string>
 </resources>
