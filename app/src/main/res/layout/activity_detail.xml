@@ -2,7 +2,7 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/coordinator_layout"
+    android:id="@+id/cl_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DetailActivity">
@@ -61,6 +61,9 @@
                 android:id="@+id/iv_poster_image"
                 android:layout_width="@dimen/size_image_view_poster"
                 android:layout_height="@dimen/size_width"
+                android:layout_marginEnd="@dimen/size_smallest"
+                android:layout_marginStart="@dimen/size_default"
+                android:layout_marginTop="@dimen/size_default"
                 android:contentDescription="@string/label_content_desc"
                 android:scaleType="centerCrop"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -74,13 +77,14 @@
 
             <TextView
                 android:id="@+id/tv_label_movie_title"
-                android:layout_width="@dimen/size_text_view_height"
-                android:layout_height="@dimen/size_text_view_width"
-                android:layout_marginTop="@dimen/size_medium"
+                android:layout_width="@dimen/size_layout"
+                android:layout_height="@dimen/size_title_height"
+                android:padding="@dimen/size_default"
+                android:textColor="@color/colorAccent"
                 android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/rb_movie_rating"/>
+                app:layout_constraintBottom_toTopOf="@id/rb_movie_rating"
+                app:layout_constraintLeft_toRightOf="@id/iv_poster_image"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
 
@@ -89,6 +93,8 @@
                 style="?android:attr/ratingBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/size_smallest"
+                android:layout_marginStart="@dimen/size_default"
                 android:layout_marginTop="@dimen/size_default"
                 android:requiresFadingEdge="vertical"
                 app:layout_constraintLeft_toRightOf="@id/iv_poster_image"
@@ -100,11 +106,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/size_default"
+                android:layout_marginEnd="@dimen/size_smallest"
+                android:layout_marginStart="@dimen/size_default"
                 android:layout_marginTop="@dimen/size_default"
                 android:textSize="14sp"
-                app:layout_constraintTop_toBottomOf="@id/rb_movie_rating"
                 app:layout_constraintLeft_toRightOf="@id/iv_poster_image"
-                />
+                app:layout_constraintTop_toBottomOf="@id/rb_movie_rating" />
 
             <TextView
                 android:id="@+id/tv_rating_total"
@@ -121,11 +128,14 @@
                 android:id="@+id/tv_label_overview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/size_default"
+                android:layout_marginBottom="@dimen/size_medium"
+                android:layout_marginEnd="@dimen/size_small"
+                android:layout_marginStart="@dimen/size_small"
+                android:layout_marginTop="@dimen/size_medium"
                 android:text="@string/label_overview"
                 android:textSize="18sp"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/iv_poster_image" />
 
             <TextView
@@ -136,6 +146,7 @@
                 android:layout_marginEnd="@dimen/size_default"
                 android:layout_marginStart="@dimen/size_default"
                 android:layout_marginTop="@dimen/size_medium"
+                android:textAlignment="center"
                 android:textSize="18sp"
                 app:layout_constraintTop_toBottomOf="@id/tv_label_overview" />
 
@@ -150,6 +161,7 @@
                 android:text="@string/label_released"
                 android:textSize="18sp"
                 app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_overview" />
 
             <TextView
@@ -160,10 +172,12 @@
                 android:layout_marginEnd="@dimen/size_default"
                 android:layout_marginStart="@dimen/size_default"
                 android:layout_marginTop="@dimen/size_medium"
+                android:textAlignment="center"
                 android:textSize="18sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_label_release_date" />
+
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>
 

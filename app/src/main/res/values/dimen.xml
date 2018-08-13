@@ -17,8 +17,9 @@
     <dimen name="size_frame_layout">56dp</dimen>
 
     <!--Detail Activity-->
-    <dimen name="size_app_bar_height">300dp</dimen>
+    <dimen name="size_app_bar_height">200dp</dimen>
     <dimen name="size_image_view_poster">120dp</dimen>
     <dimen name="size_text_view_height">240dp</dimen>
     <dimen name="size_text_view_width">48dp</dimen>
+    <dimen name="size_title_height">64dp</dimen>
 </resources>
