@@ -105,7 +105,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
             mMovieTitle.setText(movie.getMovieTitle());
 
             //Poster Image
-            Picasso.with(ctx).load(IMAGE_BASE_URL + movie.getMoviePoster()).error(R.drawable.test).into(mPosterImage);
+            Picasso.with(ctx)
+                    .load(IMAGE_BASE_URL + movie.getMoviePoster())
+                    .error(R.drawable.test)
+                    .into(mPosterImage);
 
             //Movie Rating
             mMovieRatings.setText(" "+Float.toString(movie.getVoterAverage())+" ");

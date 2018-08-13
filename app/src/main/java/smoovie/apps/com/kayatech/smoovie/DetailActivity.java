@@ -29,16 +29,27 @@ public class DetailActivity extends AppCompatActivity {
     private int mMovieId;
     private TMDBMovies mMoviesList;
 
-    @BindView(R.id.collapsingToolbar)CollapsingToolbarLayout cbTitle;
-    @BindView(R.id.tv_rating_value)TextView mRatingValue;
-    @BindView(R.id.tv_label_release_date)TextView mLabelReleased;
-    @BindView(R.id.tv_label_overview)TextView mLabelOverview;
-    @BindView(R.id.tv_release_date)TextView mMovieReleaseDate;
-    @BindView(R.id.tv_overview)TextView mMovieOverview;
-    @BindView(R.id.tv_label_movie_title)TextView mMovieTitle;
-    @BindView(R.id.rb_movie_rating) RatingBar mMovieRating;
-    @BindView(R.id.iv_backdrop)  ImageView mMovieBackdrop;
-    @BindView(R.id.iv_poster_image)  ImageView mMoviePoster;
+    @BindView(R.id.collapsingToolbar)
+    CollapsingToolbarLayout cbTitle;
+    @BindView(R.id.tv_rating_value)
+    TextView mRatingValue;
+    @BindView(R.id.tv_label_release_date)
+    TextView mLabelReleased;
+    @BindView(R.id.tv_label_overview)
+    TextView mLabelOverview;
+    @BindView(R.id.tv_release_date)
+    TextView mMovieReleaseDate;
+    @BindView(R.id.tv_overview)
+    TextView mMovieOverview;
+    @BindView(R.id.tv_label_movie_title)
+    TextView mMovieTitle;
+    @BindView(R.id.rb_movie_rating)
+    RatingBar mMovieRating;
+    @BindView(R.id.iv_backdrop)
+    ImageView mMovieBackdrop;
+    @BindView(R.id.iv_poster_image)
+    ImageView mMoviePoster;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,31 +57,40 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
 
-        mMovieId = getIntent().getIntExtra(MOVIE_ID, mMovieId);
-
-        mMoviesList = TMDBMovies.getInstance();
 
         Typeface custom_font_thin = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Light.ttf");
         mLabelReleased.setTypeface(custom_font_thin);
         mLabelOverview.setTypeface(custom_font_thin);
 
+        Bundle extras = getIntent().getExtras();
+        if (extras == null) {
+            return;
+        }
+        mMovieId = getIntent().getIntExtra(MOVIE_ID, mMovieId);
+
+
+        mMoviesList = TMDBMovies.getInstance();
         setupToolbar();
         getMovie();
+
+
     }
 
     private void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.details_toolbar);
         setSupportActionBar(toolbar);
 
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         }
     }
+
     private void getMovie() {
         final Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
-        final Typeface custom_font2 = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Bold.ttf");
-        //TODO SNACKBAR ON NO CONNECTION
+
         mMoviesList.getMovie(mMovieId, new MovieDetailsCallback() {
             @Override
             public void onSuccess(Movie movie) {
@@ -79,11 +99,6 @@ public class DetailActivity extends AppCompatActivity {
                 mMovieTitle.setTypeface(custom_font);
 
 
-                //Collapse Bar
-
-                cbTitle.setTitle(movie.getMovieTitle());
-                cbTitle.setCollapsedTitleTypeface(custom_font);
-                cbTitle.setExpandedTitleTypeface(custom_font2);
 
 
                 mMovieOverview.setText(movie.getMovieOverview());
@@ -91,8 +106,8 @@ public class DetailActivity extends AppCompatActivity {
                 mMovieRating.setVisibility(View.VISIBLE);
                 mMovieRating.setRating(movie.getVoterAverage() / 2);
 
-               float movieavg =  movie.getVoterAverage();
-               String movieAvgString = Float.toString(movieavg);
+                float movieavg = movie.getVoterAverage();
+                String movieAvgString = Float.toString(movieavg);
 
                 mRatingValue.setText(movieAvgString);
 
@@ -102,7 +117,8 @@ public class DetailActivity extends AppCompatActivity {
                 if (!isFinishing()) {
                     Picasso.with(DetailActivity.this)
                             .load(IMAGE_BASE_URL_BACKDROP + movie.getBackdrop())
-                            .error(R.color.colorPrimary)
+                            .error(R.color.colorAccent)
+                            .placeholder(R.color.colorAccent)
                             .into(mMovieBackdrop);
                 }
                 if (!isFinishing()) {
@@ -117,10 +133,6 @@ public class DetailActivity extends AppCompatActivity {
             public void onError() {
                 Log.d(TAG, "Internet Connection Error: ");
                 Toast.makeText(DetailActivity.this, getString(R.string.error_network), Toast.LENGTH_SHORT).show();
-//                Snackbar snackbar = Snackbar
-//                        .make(cdDet, , Snackbar.LENGTH_LONG);
-//
-//                snackbar.show();
                 finish();
             }
         });
