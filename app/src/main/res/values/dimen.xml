@@ -8,7 +8,7 @@
     <dimen name="size_extra_large">72dp</dimen>
 
     <dimen name="size_width">168dp</dimen>
-    <dimen name="size_height">240dp</dimen>
+    <dimen name="size_height">200dp</dimen>
     <dimen name="size_layout">180dp</dimen>
 
     <dimen name="size_default_10">10dp</dimen>
