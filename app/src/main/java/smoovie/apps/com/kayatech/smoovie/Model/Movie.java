@@ -33,12 +33,13 @@ public class Movie {
     public Movie() {
     }
 
-    Movie(String movieTitle, String movieOverview, String movieReleaseDate, String moviePoster, float voterAverage) {
+    Movie(String movieTitle, String movieOverview, String movieReleaseDate, String moviePoster, float voterAverage, String backdrop) {
         MovieTitle = movieTitle;
         MovieOverview = movieOverview;
         MovieReleaseDate = movieReleaseDate;
         MoviePoster = moviePoster;
         VoterAverage = voterAverage;
+        Backdrop = backdrop;
     }
 
 
