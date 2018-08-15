@@ -1,8 +1,8 @@
 package smoovie.apps.com.kayatech.smoovie;
 
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -15,8 +15,6 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -52,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     Toolbar toolbarMainPage;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
         mMoviesRecyclerView.setItemViewCacheSize(20);
         mMoviesRecyclerView.setDrawingCacheEnabled(true);
         mMoviesRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
+
+     ;
 
         //Gets Recycler width and card width and arranges elements in layout as per screen size
         mMoviesRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -127,8 +128,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getMovies(int page) {
-        Movie movie = new Movie();
-        final Parcelable wrapped = Parcels.wrap(movie.getMovieId());
         //checks if state is checking or not
         isFetchingMovies = true;
         movieClickHandler = new MovieClickHandler() {
@@ -184,8 +183,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case TMDBMovies.UPCOMING:
                 setTitle(getString(R.string.action_sort_upcoming));
-
-
                 break;
 
 
