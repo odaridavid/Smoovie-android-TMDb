@@ -26,6 +26,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     private static MovieClickHandler mMovieClickHandler;
 
 
+
     MoviesAdapter(Context context, List<Movie> movies,MovieClickHandler mMovieClickHandler) {
         this.context = context;
         this.MovieList = movies;
@@ -58,6 +59,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
 
     @Override
     public void onBindViewHolder(@NonNull MoviesViewHolder holder, int position) {
+
         holder.bind(MovieList.get(position));
     }
 
@@ -73,10 +75,13 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
 
         Movie movies;
         private Context ctx;
-        private String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w342";
-        @BindView(R.id.tv_movie_card_title) TextView mMovieTitle;
-        @BindView(R.id.iv_poster_image) ImageView mPosterImage;
-        @BindView(R.id.rating_text_view) TextView mMovieRatings;
+        private String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w185";
+        @BindView(R.id.tv_movie_card_title)
+        TextView mMovieTitle;
+        @BindView(R.id.iv_poster_image)
+        ImageView mPosterImage;
+        @BindView(R.id.tv_rating_cardlabel)
+        TextView mMovieRatings;
 
         public MoviesViewHolder(View itemView) {
             super(itemView);
@@ -97,7 +102,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
             this.movies = movie;
 
             //Main Activity UI
-
             //Movie Title and Typeface
             ctx = itemView.getContext();
             final Typeface custom_font = Typeface.createFromAsset(ctx.getAssets(),"fonts/Roboto-Thin.ttf");
@@ -111,7 +115,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
                     .into(mPosterImage);
 
             //Movie Rating
-            mMovieRatings.setText(" "+Float.toString(movie.getVoterAverage())+" ");
+            String rating = " "+Float.toString(movie.getVoterAverage())+" ";
+            mMovieRatings.setText(rating);
 
         }
     }
