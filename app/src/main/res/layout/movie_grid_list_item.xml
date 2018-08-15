@@ -60,6 +60,7 @@
             android:layout_alignParentTop="true"
             android:contentDescription="@string/label_content_desc"
             android:padding="@dimen/size_small"
+            android:scaleType="fitXY"
             android:src="@drawable/test" />
 
 
