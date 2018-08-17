@@ -1,7 +1,7 @@
 language: android
 android:
      before_install:
-     - chmod +x gradlew
+     - chmod +x ./gradlew build connectedCheck
      components:
       - tools
       - platform-tools
@@ -12,3 +12,4 @@ android:
       - android-27
 
       - sys-img-armeabi-v7a-android-22
+
