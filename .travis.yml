@@ -13,3 +13,10 @@ android:
 
       - sys-img-armeabi-v7a-android-22
 
+      sudo: required
+
+      jdk:
+          - oraclejdk8
+
+      install: true
+
