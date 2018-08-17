@@ -1,7 +1,10 @@
 package smoovie.apps.com.kayatech.smoovie;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -50,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
     Toolbar toolbarMainPage;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,35 +63,21 @@ public class MainActivity extends AppCompatActivity {
 
         movieList = TMDBMovies.getInstance();
 
-        //Reference
-        mMoviesRecyclerView.setHasFixedSize(true);
 
-        //Grid Layout Setup
-        gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
-        mMoviesRecyclerView.setLayoutManager(gridLayoutManager);
+        setUpRecyclerView();
 
 
-        mMoviesRecyclerView.setItemViewCacheSize(20);
-        mMoviesRecyclerView.setDrawingCacheEnabled(true);
-        mMoviesRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
 
-     ;
-
-        //Gets Recycler width and card width and arranges elements in layout as per screen size
-        mMoviesRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                mMoviesRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                int viewWidth = mMoviesRecyclerView.getMeasuredWidth();
-                float cardViewWidth = getApplication().getResources().getDimension(R.dimen.size_layout);
-                int newSpanCunt = (int) Math.floor(viewWidth / cardViewWidth);
-                gridLayoutManager.setSpanCount(newSpanCunt);
-                gridLayoutManager.requestLayout();
-            }
-        });
-
-        //Start on Page 1
+        //Start on Page 1 and checks for network connectivity
+        if (isOnline()){
         getMovies(currentPage);
+        mErrorMessageTextView.setVisibility(View.INVISIBLE);
+
+        }else{
+          mErrorMessageTextView.setVisibility(View.VISIBLE);
+          mProgressBar.setVisibility(View.GONE);
+
+        }
 
 
         //Set Pagination , On Scroll Continues to load Items
@@ -127,7 +115,40 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void setUpRecyclerView(){
+
+        //Reference
+        mMoviesRecyclerView.setHasFixedSize(true);
+
+        //Grid Layout Setup
+        gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
+        mMoviesRecyclerView.setLayoutManager(gridLayoutManager);
+
+
+        mMoviesRecyclerView.setItemViewCacheSize(20);
+        mMoviesRecyclerView.setDrawingCacheEnabled(true);
+        mMoviesRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
+
+        //Gets Recycler width and card width and arranges elements in layout as per screen size
+        mMoviesRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mMoviesRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                int viewWidth = mMoviesRecyclerView.getMeasuredWidth();
+                float cardViewWidth = getApplication().getResources().getDimension(R.dimen.size_layout);
+                int newSpanCunt = (int) Math.floor(viewWidth / cardViewWidth);
+                gridLayoutManager.setSpanCount(newSpanCunt);
+                gridLayoutManager.requestLayout();
+            }
+        });
+    }
+
+    /**
+     * @param page sets current page
+     */
     private void getMovies(int page) {
+        mErrorMessageTextView.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
         //checks if state is checking or not
         isFetchingMovies = true;
         movieClickHandler = new MovieClickHandler() {
@@ -239,10 +260,31 @@ public class MainActivity extends AppCompatActivity {
         sortMenu.show();
     }
 
+    /**
+     * Checks Network State returns true if connected
+     *
+     * @return
+     */
+    private boolean isOnline() {
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+            return networkInfo != null && networkInfo.isConnected();
+        } else {
+            return false;
+        }
+
+
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-
+       if(isOnline()){
+           getMovies(currentPage);
+           mErrorMessageTextView.setVisibility(View.GONE);
+       }
 
     }
 
