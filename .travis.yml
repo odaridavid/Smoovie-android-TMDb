@@ -1,7 +1,7 @@
 language: android
 android:
      before_install:
-     - chmod +x ./gradlew build connectedCheck
+     - chmod +x gradlew 
      components:
       - tools
       - platform-tools
@@ -13,10 +13,4 @@ android:
 
       - sys-img-armeabi-v7a-android-22
 
-      sudo: required
-
-      jdk:
-          - oraclejdk8
-
-      install: true
 
