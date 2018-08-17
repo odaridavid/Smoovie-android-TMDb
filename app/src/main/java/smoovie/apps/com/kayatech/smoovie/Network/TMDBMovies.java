@@ -13,8 +13,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import smoovie.apps.com.kayatech.smoovie.BuildConfig;
 import smoovie.apps.com.kayatech.smoovie.Model.Movie;
 import smoovie.apps.com.kayatech.smoovie.Model.MovieDetailsCallback;
+import smoovie.apps.com.kayatech.smoovie.Presenter.IMoviePresenter;
 
-public class TMDBMovies {
+public class TMDBMovies implements IMoviePresenter{
     private static final String TMDB_BASE_URL = "https://api.themoviedb.org/3/";
     private static final String LANGUAGE = "en-US";
     private final String TAG = TMDBMovies.class.getSimpleName();
@@ -55,7 +56,8 @@ public class TMDBMovies {
         return tmdbMoviesRepo;
     }
 
-    //Takes in page parameter to enable loading of multiple pages as user scrolls
+
+    @Override
     public void getMovies(int page, String sortBy, final OnMoviesCallback moviesCallback) {
 
         Callback<MovieListResponse> call = new Callback<MovieListResponse>() {
@@ -100,8 +102,9 @@ public class TMDBMovies {
 
     }
 
-    //Method Overload for getMovie Details
-    public void getMovie(int movieId, final MovieDetailsCallback movieDetailsCallback) {
+
+    @Override
+    public void getMovies(int movieId, final MovieDetailsCallback movieDetailsCallback) {
         TMDBService
                 .getMovie(movieId, API_KEY, LANGUAGE)
                 .enqueue(new Callback<Movie>() {
