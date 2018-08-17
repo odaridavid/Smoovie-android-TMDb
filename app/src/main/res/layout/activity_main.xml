@@ -34,7 +34,7 @@
         android:layout_gravity="center" />
     <TextView
         android:id="@+id/tv_error_message_display"
-        android:textSize="22sp"
+        android:textSize="15sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="16dp"
