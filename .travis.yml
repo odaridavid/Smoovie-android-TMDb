@@ -12,3 +12,5 @@ android:
      sudo: required
      before_install:
       - chmod +x gradlew
+      script:
+        - ./gradlew clean build -i --continue
