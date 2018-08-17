@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import org.parceler.Parcel;
 
 @Parcel
-public class Movie {
+public class Movie implements IMovie {
     //model class to map json data to pojo
     //Movie GET Class objects from tmdb
     @SerializedName("original_title")
@@ -33,48 +33,39 @@ public class Movie {
     public Movie() {
     }
 
-    Movie(String movieTitle, String movieOverview, String movieReleaseDate, String moviePoster, float voterAverage, String backdrop) {
-        MovieTitle = movieTitle;
-        MovieOverview = movieOverview;
-        MovieReleaseDate = movieReleaseDate;
-        MoviePoster = moviePoster;
-        VoterAverage = voterAverage;
-        Backdrop = backdrop;
-    }
 
-
+    @Override
     public String getMovieTitle() {
         return MovieTitle;
     }
 
-
+    @Override
     public String getMovieOverview() {
         return MovieOverview;
     }
 
-
+    @Override
     public String getMovieReleaseDate() {
         return MovieReleaseDate;
     }
 
-
+    @Override
     public String getMoviePoster() {
         return MoviePoster;
     }
 
-
+    @Override
     public float getVoterAverage() {
         return VoterAverage;
     }
 
-
+    @Override
     public String getBackdrop() {
         return Backdrop;
     }
 
-
+    @Override
     public int getMovieId() {
         return MovieId;
     }
-
 }
