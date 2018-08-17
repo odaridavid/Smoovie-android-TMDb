@@ -9,5 +9,5 @@ android:
       - android-27
       - sys-img-armeabi-v7a-android-22
 
-      before_install:
-      - chmod +x gradlew
+      script:
+       - chmod +x ./gradlew build connectedCheck
