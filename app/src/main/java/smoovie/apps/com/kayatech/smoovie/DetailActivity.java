@@ -1,5 +1,6 @@
 package smoovie.apps.com.kayatech.smoovie;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -12,6 +13,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.muddzdev.styleabletoastlibrary.StyleableToast;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -91,7 +93,7 @@ public class DetailActivity extends AppCompatActivity {
     private void getMovie() {
         final Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
 
-        mMoviesList.getMovie(mMovieId, new MovieDetailsCallback() {
+        mMoviesList.getMovies(mMovieId, new MovieDetailsCallback() {
             @Override
             public void onSuccess(Movie movie) {
 
@@ -132,7 +134,14 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onError() {
                 Log.d(TAG, "Internet Connection Error: ");
-                Toast.makeText(DetailActivity.this, getString(R.string.error_network), Toast.LENGTH_SHORT).show();
+                new StyleableToast
+                        .Builder(DetailActivity.this)
+                        .text(getString(R.string.error_network))
+                        .textColor(Color.WHITE)
+                        .backgroundColor(Color.rgb(66,165,245))
+                        .length(Toast.LENGTH_LONG)
+                        .show();
+
                 finish();
             }
         });
