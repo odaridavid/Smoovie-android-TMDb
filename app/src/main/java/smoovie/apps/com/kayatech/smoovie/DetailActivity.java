@@ -66,16 +66,18 @@ public class DetailActivity extends AppCompatActivity {
         mLabelReleased.setTypeface(custom_font_thin);
         mLabelOverview.setTypeface(custom_font_thin);
 
-        Bundle extras = getIntent().getExtras();
-        if (extras == null) {
+        //Check if intent contains extras
+        if (getIntent().getExtras() != null) {
+            mMovieId = Parcels.unwrap(getIntent().getParcelableExtra(MOVIE_ID));
+            mMoviesList = TMDBMovies.getInstance();
+            setupToolbar();
+            getMovie();
+        }else{
             return;
         }
-        mMovieId = Parcels.unwrap(getIntent().getParcelableExtra(MOVIE_ID));
 
 
-        mMoviesList = TMDBMovies.getInstance();
-        setupToolbar();
-        getMovie();
+
 
 
     }
