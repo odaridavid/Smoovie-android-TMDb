@@ -19,6 +19,8 @@ import android.view.ViewTreeObserver;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.parceler.Parcels;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -155,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(Movie movie) {
                 Intent openDetailsActivity = new Intent(MainActivity.this, DetailActivity.class);
-                openDetailsActivity.putExtra(DetailActivity.MOVIE_ID, movie.getMovieId());
+                openDetailsActivity.putExtra(DetailActivity.MOVIE_ID, Parcels.wrap(movie.getMovieId()));
                 startActivity(openDetailsActivity);
             }
         };

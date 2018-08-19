@@ -5,30 +5,30 @@ import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
 
-@Parcel
+@Parcel(Parcel.Serialization.BEAN)
 public class Movie implements IMovie {
     //model class to map json data to pojo
     //Movie GET Class objects from tmdb
     @SerializedName("original_title")
-    String MovieTitle;
+    private String MovieTitle;
 
     @SerializedName("overview")
-    String MovieOverview;
+    private String MovieOverview;
 
     @SerializedName("release_date")
-    String MovieReleaseDate;
+    private String MovieReleaseDate;
 
     @SerializedName("poster_path")
-    String MoviePoster;
+    private String MoviePoster;
 
     @SerializedName("vote_average")
-    float VoterAverage;
+    private  float VoterAverage;
 
     @SerializedName("backdrop_path")
-    String Backdrop;
+    private String Backdrop;
 
     @SerializedName("id")
-    int MovieId;
+    private int MovieId;
 
     public Movie() {
     }
