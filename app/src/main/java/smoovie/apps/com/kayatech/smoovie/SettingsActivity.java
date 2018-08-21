@@ -11,14 +11,12 @@ import butterknife.BindView;
 
 public class SettingsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
 
-    @BindView(R.id.action_toolbar_settings)
-    Toolbar toolbarSettingsPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
+        Toolbar toolbarSettingsPage = findViewById(R.id.action_toolbar_settings);
         setSupportActionBar(toolbarSettingsPage);
 
         if (getSupportActionBar()!= null) {
