@@ -17,7 +17,7 @@ import smoovie.apps.com.kayatech.smoovie.Presenter.IMoviePresenter;
 
 public class TMDBMovies implements IMoviePresenter{
     private static final String TMDB_BASE_URL = "https://api.themoviedb.org/3/";
-    private static final String LANGUAGE = "en-US";
+    public static String LANGUAGE = "en-US";
     private final String TAG = TMDBMovies.class.getSimpleName();
     private static TMDBMovies tmdbMoviesRepo;
     public static final String POPULAR = "popular";

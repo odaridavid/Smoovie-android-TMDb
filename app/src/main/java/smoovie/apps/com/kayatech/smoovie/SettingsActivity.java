@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import butterknife.BindView;
+import smoovie.apps.com.kayatech.smoovie.Network.TMDBMovies;
 
 public class SettingsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
 
@@ -35,7 +36,9 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
+          if (key.equals(getString(R.string.pref_language_key))){
+              TMDBMovies.LANGUAGE = sharedPreferences.getString(key,getResources().getString(R.string.pref_language_val_chinese));
+          }
     }
 
     @Override
