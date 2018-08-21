@@ -4,12 +4,12 @@
         <item>@string/pref_language_label_chinese</item>
         <item>@string/pref_language_label_english</item>
         <item>@string/pref_language_label_german</item>
-        <item>@string/pref_language_label_russian</item>
+        <item>@string/pref_language_label_french</item>
     </array>
     <array name="pref_language_values">
         <item>@string/pref_language_val_chinese</item>
         <item>@string/pref_language_val_english</item>
         <item>@string/pref_language_val_german</item>
-        <item>@string/pref_language_val_russian</item>
+        <item>@string/pref_language_val_french</item>
     </array>
 </resources>
