@@ -26,8 +26,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     private static MovieClickHandler mMovieClickHandler;
 
 
-
-    MoviesAdapter(Context context, List<Movie> movies,MovieClickHandler mMovieClickHandler) {
+    MoviesAdapter(Context context, List<Movie> movies, MovieClickHandler mMovieClickHandler) {
         this.context = context;
         this.MovieList = movies;
         this.mMovieClickHandler = mMovieClickHandler;
@@ -39,6 +38,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         this.MovieList = movieList;
         notifyDataSetChanged();
     }
+
     public void clearMovies() {
         //called when user sorts list starting from page 1
         MovieList.clear();
@@ -54,7 +54,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         View view = inflater.inflate(layoutIdForListItem, parent, false);
         return new MoviesViewHolder(view);
     }
-
 
 
     @Override
@@ -104,7 +103,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
             //Main Activity UI
             //Movie Title and Typeface
             ctx = itemView.getContext();
-            final Typeface custom_font = Typeface.createFromAsset(ctx.getAssets(),"fonts/Roboto-Thin.ttf");
+            final Typeface custom_font = Typeface.createFromAsset(ctx.getAssets(), "fonts/Roboto-Thin.ttf");
             mMovieTitle.setTypeface(custom_font);
             mMovieTitle.setText(movie.getMovieTitle());
 
@@ -115,7 +114,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
                     .into(mPosterImage);
 
             //Movie Rating
-            String rating = " "+Float.toString(movie.getVoterAverage())+" ";
+            String rating = " " + Float.toString(movie.getVoterAverage()) + " ";
             mMovieRatings.setText(rating);
 
         }

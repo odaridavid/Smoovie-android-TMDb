@@ -59,6 +59,8 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        //Bind Views
         ButterKnife.bind(this);
 
 
@@ -72,12 +74,9 @@ public class DetailActivity extends AppCompatActivity {
             mMoviesList = TMDBMovies.getInstance();
             setupToolbar();
             getMovie();
-        }else{
+        } else {
             return;
         }
-
-
-
 
 
     }
@@ -103,10 +102,6 @@ public class DetailActivity extends AppCompatActivity {
 
                 mMovieTitle.setText(movie.getMovieTitle());
                 mMovieTitle.setTypeface(custom_font);
-
-
-
-
                 mMovieOverview.setText(movie.getMovieOverview());
                 mMovieOverview.setTypeface(custom_font);
                 mMovieRating.setVisibility(View.VISIBLE);
@@ -142,7 +137,7 @@ public class DetailActivity extends AppCompatActivity {
                         .Builder(DetailActivity.this)
                         .text(getString(R.string.error_network))
                         .textColor(Color.WHITE)
-                        .backgroundColor(Color.rgb(66,165,245))
+                        .backgroundColor(Color.rgb(66, 165, 245))
                         .length(Toast.LENGTH_LONG)
                         .show();
 

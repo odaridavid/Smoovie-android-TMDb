@@ -69,15 +69,14 @@ public class MainActivity extends AppCompatActivity {
         setUpRecyclerView();
 
 
-
         //Start on Page 1 and checks for network connectivity
-        if (isOnline()){
-        getMovies(currentPage);
-        mErrorMessageTextView.setVisibility(View.INVISIBLE);
+        if (isOnline()) {
+            getMovies(currentPage);
+            mErrorMessageTextView.setVisibility(View.INVISIBLE);
 
-        }else{
-          mErrorMessageTextView.setVisibility(View.VISIBLE);
-          mProgressBar.setVisibility(View.GONE);
+        } else {
+            mErrorMessageTextView.setVisibility(View.VISIBLE);
+            mProgressBar.setVisibility(View.GONE);
 
         }
 
@@ -117,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setUpRecyclerView(){
+    private void setUpRecyclerView() {
 
         //Reference
         mMoviesRecyclerView.setHasFixedSize(true);
@@ -283,10 +282,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-       if(isOnline()){
-           getMovies(currentPage);
-           mErrorMessageTextView.setVisibility(View.GONE);
-       }
+        if (isOnline()) {
+            getMovies(currentPage);
+            mErrorMessageTextView.setVisibility(View.GONE);
+        }
 
     }
 
