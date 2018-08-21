@@ -14,8 +14,6 @@
     <string name="action_sort_label">Sort</string>
 
 
-
-
     <!--Error Log Messages-->
     <string name="error_network">"Please check your internet connection"</string>
 
@@ -25,4 +23,18 @@
     <string name="label_released">Released On</string>
     <string name="label_movie_title_view">Movie Title</string>
     <string name="label_text_view_rating_total">/10</string>
+    
+    <!--Preferences-->
+    <string name="pref_settings">Settings</string>
+    <string name="pref_language_title">Language</string>
+    <string name="pref_language_key">language</string>
+    <string name="pref_language_label_english">English</string>
+    <string name="pref_language_label_german">German</string>
+    <string name="pref_language_label_chinese">Chinese</string>
+    <string name="pref_language_label_russian">Russian</string>
+
+    <string name="pref_language_val_english">English</string>
+    <string name="pref_language_val_german">German</string>
+    <string name="pref_language_val_chinese">Chinese</string>
+    <string name="pref_language_val_russian">Russian</string>
 </resources>

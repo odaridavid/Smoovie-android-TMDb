@@ -225,9 +225,13 @@ public class MainActivity extends AppCompatActivity {
         if (itemId == R.id.action_sort) {
             showSortPopUpMenu();
             return true;
-        } else {
-            return super.onOptionsItemSelected(item);
+        }else if(itemId == R.id.action_settings){
+          Intent settingsIntent = new Intent(MainActivity.this,SettingsActivity.class);
+          startActivity(settingsIntent);
         }
+
+            return super.onOptionsItemSelected(item);
+
 
     }
 
