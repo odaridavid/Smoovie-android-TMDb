@@ -16,6 +16,8 @@ import android.widget.Toast;
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
 import com.squareup.picasso.Picasso;
 
+import org.parceler.Parcels;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import smoovie.apps.com.kayatech.smoovie.Model.Movie;
@@ -64,16 +66,18 @@ public class DetailActivity extends AppCompatActivity {
         mLabelReleased.setTypeface(custom_font_thin);
         mLabelOverview.setTypeface(custom_font_thin);
 
-        Bundle extras = getIntent().getExtras();
-        if (extras == null) {
+        //Check if intent contains extras
+        if (getIntent().getExtras() != null) {
+            mMovieId = Parcels.unwrap(getIntent().getParcelableExtra(MOVIE_ID));
+            mMoviesList = TMDBMovies.getInstance();
+            setupToolbar();
+            getMovie();
+        }else{
             return;
         }
-        mMovieId = getIntent().getIntExtra(MOVIE_ID, mMovieId);
 
 
-        mMoviesList = TMDBMovies.getInstance();
-        setupToolbar();
-        getMovie();
+
 
 
     }

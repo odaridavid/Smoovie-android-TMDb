@@ -3,9 +3,11 @@ package smoovie.apps.com.kayatech.smoovie;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -19,6 +21,8 @@ import android.view.ViewTreeObserver;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.parceler.Parcels;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -28,7 +32,7 @@ import smoovie.apps.com.kayatech.smoovie.Network.OnMoviesCallback;
 import smoovie.apps.com.kayatech.smoovie.Network.TMDBMovies;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private boolean isFetchingMovies = false;
@@ -67,15 +71,14 @@ public class MainActivity extends AppCompatActivity {
         setUpRecyclerView();
 
 
-
         //Start on Page 1 and checks for network connectivity
-        if (isOnline()){
-        getMovies(currentPage);
-        mErrorMessageTextView.setVisibility(View.INVISIBLE);
+        if (isOnline()) {
+            getMovies(currentPage);
+            mErrorMessageTextView.setVisibility(View.INVISIBLE);
 
-        }else{
-          mErrorMessageTextView.setVisibility(View.VISIBLE);
-          mProgressBar.setVisibility(View.GONE);
+        } else {
+            mErrorMessageTextView.setVisibility(View.VISIBLE);
+            mProgressBar.setVisibility(View.GONE);
 
         }
 
@@ -113,9 +116,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Setup Shared Preference
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        TMDBMovies.LANGUAGE = sp.getString(getString(R.string.pref_language_key), "");
+        sp.registerOnSharedPreferenceChangeListener(this);
+
     }
 
-    private void setUpRecyclerView(){
+    private void setUpRecyclerView() {
 
         //Reference
         mMoviesRecyclerView.setHasFixedSize(true);
@@ -155,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(Movie movie) {
                 Intent openDetailsActivity = new Intent(MainActivity.this, DetailActivity.class);
-                openDetailsActivity.putExtra(DetailActivity.MOVIE_ID, movie.getMovieId());
+                openDetailsActivity.putExtra(DetailActivity.MOVIE_ID, Parcels.wrap(movie.getMovieId()));
                 startActivity(openDetailsActivity);
             }
         };
@@ -223,9 +231,13 @@ public class MainActivity extends AppCompatActivity {
         if (itemId == R.id.action_sort) {
             showSortPopUpMenu();
             return true;
-        } else {
-            return super.onOptionsItemSelected(item);
+        } else if (itemId == R.id.action_settings) {
+            Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(settingsIntent);
         }
+
+        return super.onOptionsItemSelected(item);
+
 
     }
 
@@ -281,10 +293,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-       if(isOnline()){
-           getMovies(currentPage);
-           mErrorMessageTextView.setVisibility(View.GONE);
-       }
+        if (isOnline()) {
+            getMovies(currentPage);
+            mErrorMessageTextView.setVisibility(View.GONE);
+        }
 
     }
 
@@ -292,5 +304,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(getString(R.string.pref_language_key))) {
+            TMDBMovies.LANGUAGE = sharedPreferences.getString(key, getResources().getString(R.string.pref_language_val_english));
+        }
     }
 }

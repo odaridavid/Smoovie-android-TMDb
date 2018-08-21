@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Smoovie</string>
+    <string name="app_name" translatable="false">Smoovie</string>
     <!--Main Menu Sort By-->
     <string name="action_sort_most_popular">Most Popular</string>
     <string name="action_sort_high_ratings">High Ratings</string>
@@ -9,11 +9,8 @@
     <string name="label_text_placeholder">Movie Title</string>
     <string name="label_content_desc">Poster Image</string>
 
-    <string name="api_key">//put your api key here</string>
 
     <string name="action_sort_label">Sort</string>
-
-
 
 
     <!--Error Log Messages-->
@@ -25,4 +22,18 @@
     <string name="label_released">Released On</string>
     <string name="label_movie_title_view">Movie Title</string>
     <string name="label_text_view_rating_total">/10</string>
+    
+    <!--Preferences-->
+    <string name="pref_settings">Settings</string>
+    <string name="pref_language_title">Language</string>
+    <string name="pref_language_key" translatable="false">language</string>
+    <string name="pref_language_label_english">English</string>
+    <string name="pref_language_label_german">German</string>
+    <string name="pref_language_label_chinese">Chinese</string>
+    <string name="pref_language_label_french">French</string>
+
+    <string name="pref_language_val_english">en-US</string>
+    <string name="pref_language_val_german">de-DE</string>
+    <string name="pref_language_val_chinese">zh-CN</string>
+    <string name="pref_language_val_french">fr-FR</string>
 </resources>

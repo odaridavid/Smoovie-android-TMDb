@@ -1,5 +1,6 @@
 package smoovie.apps.com.kayatech.smoovie.Network;
 
+
 import android.util.Log;
 
 import java.util.concurrent.TimeUnit;
@@ -17,7 +18,7 @@ import smoovie.apps.com.kayatech.smoovie.Presenter.IMoviePresenter;
 
 public class TMDBMovies implements IMoviePresenter{
     private static final String TMDB_BASE_URL = "https://api.themoviedb.org/3/";
-    private static final String LANGUAGE = "en-US";
+    public static String LANGUAGE ;
     private final String TAG = TMDBMovies.class.getSimpleName();
     private static TMDBMovies tmdbMoviesRepo;
     public static final String POPULAR = "popular";
@@ -25,6 +26,7 @@ public class TMDBMovies implements IMoviePresenter{
     public static final String UPCOMING = "upcoming";
     private static final String API_KEY = BuildConfig.API_KEY;
     private ApiGetServices TMDBService;
+    private static final Object LOCK = new Object();
 
     //Singleton-one instance of class
     //No multiple instances of TMDB.
@@ -35,7 +37,7 @@ public class TMDBMovies implements IMoviePresenter{
 
     public static TMDBMovies getInstance() {
         if (tmdbMoviesRepo == null) {
-
+               synchronized (LOCK){
             //OKHTTP CLIENT-handles http requests
             final OkHttpClient client = new OkHttpClient.Builder()
                     .addInterceptor(new LoggingInterceptor())
@@ -51,6 +53,7 @@ public class TMDBMovies implements IMoviePresenter{
                     .build();
 
             tmdbMoviesRepo = new TMDBMovies(retrofit.create(ApiGetServices.class));
+               }
         }
 
         return tmdbMoviesRepo;
@@ -84,6 +87,8 @@ public class TMDBMovies implements IMoviePresenter{
 
         switch (sortBy) {
             //called when menu option selected
+
+
             case TOP_RATED:
                 TMDBService.getTopRatedMovies(API_KEY, LANGUAGE, page)
                         .enqueue(call);
