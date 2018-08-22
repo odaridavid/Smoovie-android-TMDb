@@ -14,7 +14,7 @@
     <dimen name="size_default_10">10dp</dimen>
 
     <!--items xml-->
-    <dimen name="size_frame_layout">56dp</dimen>
+    <dimen name="size_frame_layout">48dp</dimen>
 
     <!--Detail Activity-->
     <dimen name="size_app_bar_height">200dp</dimen>
