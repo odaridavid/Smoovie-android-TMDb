@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Smoovie</string>
+    <string name="action_sort_most_popular">最受欢迎</string>
+    <string name="action_sort_upcoming">即将到来</string>
+    <string name="action_sort_high_ratings">高评级</string>
+    <string name="error_network">请检查您的互联网连接</string>
+    <string name="label_overview">概观</string>
+    <string name="label_released">发布了</string>
+    <string name="pref_settings">设置</string>
+    <string name="pref_language_title">语言</string>
+</resources>
