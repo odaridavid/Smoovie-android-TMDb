@@ -4,6 +4,7 @@ package smoovie.apps.com.kayatech.smoovie;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 import org.parceler.Parcels;
 
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -119,8 +121,41 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         //Setup Shared Preference
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         TMDBMovies.LANGUAGE = sp.getString(getString(R.string.pref_language_key), "");
+        setUpLocale(TMDBMovies.LANGUAGE);
         sp.registerOnSharedPreferenceChangeListener(this);
 
+    }
+
+    private void setUpLocale(String language) {
+        if (language.equals(getString(R.string.pref_language_val_chinese))) {
+            Locale locale = new Locale("zh");
+            Configuration config = getBaseContext().getResources().getConfiguration();
+            Locale.setDefault(locale);
+            config.setLocale(locale);
+            getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        }
+        if (language.equals(getString(R.string.pref_language_val_french))) {
+            Locale locale = new Locale("fr");
+            Configuration config = getBaseContext().getResources().getConfiguration();
+            Locale.setDefault(locale);
+            config.setLocale(locale);
+            getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        }
+        if (language.equals(getString(R.string.pref_language_val_german))) {
+            Locale locale = new Locale("de");
+            Locale.setDefault(locale);
+            Configuration config = getBaseContext().getResources().getConfiguration();
+            config.setLocale(locale);
+            getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        }
+        if (language.equals(getString(R.string.pref_language_val_english))) {
+            Locale locale = new Locale("en");
+            Locale.setDefault(locale);
+            Configuration config = getBaseContext().getResources().getConfiguration();
+            config.setLocale(locale);
+            getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        }
+        Log.d(TAG, "Language is :" + TMDBMovies.LANGUAGE);
     }
 
     private void setUpRecyclerView() {
@@ -278,7 +313,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
      * @return
      */
     private boolean isOnline() {
-
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager != null) {
             NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -286,7 +320,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         } else {
             return false;
         }
-
 
     }
 
@@ -297,7 +330,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             getMovies(currentPage);
             mErrorMessageTextView.setVisibility(View.GONE);
         }
-
     }
 
     @Override
@@ -316,6 +348,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals(getString(R.string.pref_language_key))) {
             TMDBMovies.LANGUAGE = sharedPreferences.getString(key, getResources().getString(R.string.pref_language_val_english));
+            setUpLocale(TMDBMovies.LANGUAGE);
+            Log.d(TAG, "Language is :" + TMDBMovies.LANGUAGE);
         }
     }
+
 }

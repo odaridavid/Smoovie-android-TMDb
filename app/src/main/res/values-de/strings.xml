@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Smoovie</string>
+    <string name="pref_language_title">Sprache</string>
+    <string name="pref_settings">die Einstellungen</string>
+    <string name="label_released">Freigegeben am</string>
+    <string name="label_overview">Überblick</string>
+    <string name="error_network">Bitte überprüfe deine Internetverbindung</string>
+    <string name="action_sort_most_popular">Am beliebtesten</string>
+    <string name="action_sort_high_ratings">Hohe Bewertungen</string>
+    <string name="action_sort_upcoming">Bevorstehende</string>
+</resources>
