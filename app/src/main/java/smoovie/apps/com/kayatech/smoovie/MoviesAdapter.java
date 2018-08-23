@@ -111,6 +111,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
             Picasso.with(ctx)
                     .load(IMAGE_BASE_URL + movie.getMoviePoster())
                     .error(R.drawable.test)
+                    .placeholder(R.drawable.test)
                     .into(mPosterImage);
 
             //Movie Rating

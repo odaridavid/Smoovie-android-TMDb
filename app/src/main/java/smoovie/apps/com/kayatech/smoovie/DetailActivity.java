@@ -118,14 +118,15 @@ public class DetailActivity extends AppCompatActivity {
                 if (!isFinishing()) {
                     Picasso.with(DetailActivity.this)
                             .load(IMAGE_BASE_URL_BACKDROP + movie.getBackdrop())
-                            .error(R.color.colorAccent)
-                            .placeholder(R.color.colorAccent)
+                            .error(R.drawable.test_back)
+                            .placeholder(R.drawable.test_back)
                             .into(mMovieBackdrop);
                 }
                 if (!isFinishing()) {
                     Picasso.with(DetailActivity.this)
                             .load(IMAGE_BASE_URL_POSTER + movie.getMoviePoster())
-                            .error(R.color.colorPrimary)
+                            .error(R.drawable.test)
+                            .placeholder(R.drawable.test)
                             .into(mMoviePoster);
                 }
             }
