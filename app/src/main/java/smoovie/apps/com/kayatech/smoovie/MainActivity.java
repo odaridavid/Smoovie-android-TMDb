@@ -121,8 +121,41 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         //Setup Shared Preference
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         TMDBMovies.LANGUAGE = sp.getString(getString(R.string.pref_language_key), "");
+        setUpLocale(TMDBMovies.LANGUAGE);
         sp.registerOnSharedPreferenceChangeListener(this);
 
+    }
+
+    private void setUpLocale(String language) {
+        if (language.equals(getString(R.string.pref_language_val_chinese))) {
+            Locale locale = new Locale("zh");
+            Configuration config = getBaseContext().getResources().getConfiguration();
+            Locale.setDefault(locale);
+            config.setLocale(locale);
+            getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        }
+        if (language.equals(getString(R.string.pref_language_val_french))) {
+            Locale locale = new Locale("fr");
+            Configuration config = getBaseContext().getResources().getConfiguration();
+            Locale.setDefault(locale);
+            config.setLocale(locale);
+            getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        }
+        if (language.equals(getString(R.string.pref_language_val_german))) {
+            Locale locale = new Locale("de");
+            Locale.setDefault(locale);
+            Configuration config = getBaseContext().getResources().getConfiguration();
+            config.setLocale(locale);
+            getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        }
+        if (language.equals(getString(R.string.pref_language_val_english))) {
+            Locale locale = new Locale("en");
+            Locale.setDefault(locale);
+            Configuration config = getBaseContext().getResources().getConfiguration();
+            config.setLocale(locale);
+            getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        }
+        Log.d(TAG, "Language is :" + TMDBMovies.LANGUAGE);
     }
 
     private void setUpRecyclerView() {
@@ -297,7 +330,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             getMovies(currentPage);
             mErrorMessageTextView.setVisibility(View.GONE);
         }
-
     }
 
     @Override
@@ -316,35 +348,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals(getString(R.string.pref_language_key))) {
             TMDBMovies.LANGUAGE = sharedPreferences.getString(key, getResources().getString(R.string.pref_language_val_english));
-            if (TMDBMovies.LANGUAGE == getString(R.string.pref_language_val_chinese) ){
-                Locale locale = new Locale("zh");
-                Configuration config = getBaseContext().getResources().getConfiguration();
-                Locale.setDefault(locale);
-                config.setLocale(locale);
-                getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
-            }
-            if (TMDBMovies.LANGUAGE == getString(R.string.pref_language_val_french) ){
-                Locale locale = new Locale("fr");
-                Configuration config = getBaseContext().getResources().getConfiguration();
-                Locale.setDefault(locale);
-                config.setLocale(locale);
-                getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
-            }
-            if (TMDBMovies.LANGUAGE == getString(R.string.pref_language_val_german) ){
-                Locale locale = new Locale("de");
-                Locale.setDefault(locale);
-                Configuration config = getBaseContext().getResources().getConfiguration();
-                config.setLocale(locale);
-                getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
-            }
-            if (TMDBMovies.LANGUAGE == getString(R.string.pref_language_val_english) ){
-                Locale locale = new Locale("en");
-                Locale.setDefault(locale);
-                Configuration config = getBaseContext().getResources().getConfiguration();
-                config.setLocale(locale);
-                getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
-            }
-            Log.d(TAG,"Language is :"+TMDBMovies.LANGUAGE);
+            setUpLocale(TMDBMovies.LANGUAGE);
+            Log.d(TAG, "Language is :" + TMDBMovies.LANGUAGE);
         }
     }
+
 }
