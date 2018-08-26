@@ -1,4 +1,4 @@
-package smoovie.apps.com.kayatech.smoovie;
+package smoovie.apps.com.kayatech.smoovie.View;
 
 
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+
+import smoovie.apps.com.kayatech.smoovie.R;
 
 
 public class SettingsActivity extends AppCompatActivity {

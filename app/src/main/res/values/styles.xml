@@ -15,4 +15,5 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
+
 </resources>

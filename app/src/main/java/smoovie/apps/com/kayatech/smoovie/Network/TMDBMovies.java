@@ -12,11 +12,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import smoovie.apps.com.kayatech.smoovie.BuildConfig;
-import smoovie.apps.com.kayatech.smoovie.Model.Movie;
-import smoovie.apps.com.kayatech.smoovie.Model.MovieDetailsCallback;
-import smoovie.apps.com.kayatech.smoovie.Presenter.IMoviePresenter;
 
-public class TMDBMovies implements IMoviePresenter{
+public class TMDBMovies {
     private static final String TMDB_BASE_URL = "https://api.themoviedb.org/3/";
     public static String LANGUAGE ;
     private final String TAG = TMDBMovies.class.getSimpleName();
@@ -24,15 +21,15 @@ public class TMDBMovies implements IMoviePresenter{
     public static final String POPULAR = "popular";
     public static final String TOP_RATED = "top_rated";
     public static final String UPCOMING = "upcoming";
-    private static final String API_KEY = BuildConfig.API_KEY;
-    private ApiGetServices TMDBService;
+    public static final String API_KEY = BuildConfig.API_KEY;
+    public static ApiGetServices tmdbApiService;
     private static final Object LOCK = new Object();
 
     //Singleton-one instance of class
     //No multiple instances of TMDB.
 
     private TMDBMovies(ApiGetServices TMDBService) {
-        this.TMDBService = TMDBService;
+        tmdbApiService = TMDBService;
     }
 
     public static TMDBMovies getInstance() {
@@ -60,7 +57,7 @@ public class TMDBMovies implements IMoviePresenter{
     }
 
 
-    @Override
+
     public void getMovies(int page, String sortBy, final OnMoviesCallback moviesCallback) {
 
         Callback<MovieListResponse> call = new Callback<MovieListResponse>() {
@@ -87,19 +84,17 @@ public class TMDBMovies implements IMoviePresenter{
 
         switch (sortBy) {
             //called when menu option selected
-
-
             case TOP_RATED:
-                TMDBService.getTopRatedMovies(API_KEY, LANGUAGE, page)
+                tmdbApiService.getTopRatedMovies(API_KEY, LANGUAGE, page)
                         .enqueue(call);
                 break;
 
             case POPULAR:
-                TMDBService.getPopularMoviesLoaded(API_KEY, LANGUAGE, page)
+                tmdbApiService.getPopularMovies(API_KEY, LANGUAGE, page)
                         .enqueue(call);
                 break;
             case UPCOMING:
-                TMDBService.getUpcomingMovies(API_KEY, LANGUAGE, page).enqueue(call);
+                tmdbApiService.getUpcomingMovies(API_KEY, LANGUAGE, page).enqueue(call);
                 break;
 
         }
@@ -107,38 +102,5 @@ public class TMDBMovies implements IMoviePresenter{
 
     }
 
-
-    @Override
-    public void getMovies(int movieId, final MovieDetailsCallback movieDetailsCallback) {
-        TMDBService
-                .getMovie(movieId, API_KEY, LANGUAGE)
-                .enqueue(new Callback<Movie>() {
-                             @Override
-                             public void onResponse(Call<Movie> call, Response<Movie> response) {
-                                 if (response.isSuccessful()) {
-                                     Movie movie = response.body();
-                                     if (movie != null) {
-                                         movieDetailsCallback.onSuccess(movie);
-                                     } else {
-                                         movieDetailsCallback.onError();
-                                     }
-                                 } else {
-                                     movieDetailsCallback.onError();
-                                 }
-                             }
-
-                             @Override
-                             public void onFailure(Call<Movie> call, Throwable t) {
-
-
-                                 movieDetailsCallback.onError();
-                                 Log.d(TAG, "Movie Details Error");
-
-
-                             }
-                         }
-                );
-
-    }
 
 }

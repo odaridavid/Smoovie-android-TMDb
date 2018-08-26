@@ -1,4 +1,4 @@
-package smoovie.apps.com.kayatech.smoovie;
+package smoovie.apps.com.kayatech.smoovie.View;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -17,6 +17,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import smoovie.apps.com.kayatech.smoovie.Model.Movie;
+import smoovie.apps.com.kayatech.smoovie.R;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder> {
 
@@ -26,10 +27,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     private static MovieClickHandler mMovieClickHandler;
 
 
-    MoviesAdapter(Context context, List<Movie> movies, MovieClickHandler mMovieClickHandler) {
+    MoviesAdapter(Context context, List<Movie> movies, MovieClickHandler MovieClickHandler) {
         this.context = context;
         this.MovieList = movies;
-        this.mMovieClickHandler = mMovieClickHandler;
+        mMovieClickHandler = MovieClickHandler;
 
 
     }
@@ -46,6 +47,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     }
 
 
+    @NonNull
     @Override
     public MoviesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
@@ -82,7 +84,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         @BindView(R.id.tv_rating_cardlabel)
         TextView mMovieRatings;
 
-        public MoviesViewHolder(View itemView) {
+        MoviesViewHolder(View itemView) {
             super(itemView);
             // get the reference of item view's
             ButterKnife.bind(this, itemView);
@@ -96,7 +98,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
             });
         }
 
-        public void bind(Movie movie) {
+        private void bind(Movie movie) {
 
             this.movies = movie;
 

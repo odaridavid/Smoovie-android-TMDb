@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/settings_fragment"
-        android:name="smoovie.apps.com.kayatech.smoovie.SettingsFragment"
+        android:name="smoovie.apps.com.kayatech.smoovie.View.SettingsFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

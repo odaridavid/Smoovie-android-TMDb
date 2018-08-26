@@ -1,4 +1,4 @@
-package smoovie.apps.com.kayatech.smoovie;
+package smoovie.apps.com.kayatech.smoovie.View;
 
 
 import android.content.Context;
@@ -32,6 +32,8 @@ import butterknife.ButterKnife;
 import smoovie.apps.com.kayatech.smoovie.Model.Movie;
 import smoovie.apps.com.kayatech.smoovie.Network.OnMoviesCallback;
 import smoovie.apps.com.kayatech.smoovie.Network.TMDBMovies;
+import smoovie.apps.com.kayatech.smoovie.R;
+import smoovie.apps.com.kayatech.smoovie.ViewModel.MoviesViewModel;
 
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -44,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     MoviesAdapter mMoviesAdapter;
     GridLayoutManager gridLayoutManager;
     MovieClickHandler movieClickHandler;
+
+    //View Model
+    private MoviesViewModel moviesViewModel;
 
 
     @BindView(R.id.pb_getmovie_progress)
@@ -69,6 +74,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         movieList = TMDBMovies.getInstance();
 
+        //View Model
+//        moviesViewModel = ViewModelProviders.of(this).get(MoviesViewModel.class);
+//        moviesViewModel.getMovieList().observe(this, new Observer<List<Movie>>() {
+//            @Override
+//            public void onChanged(@Nullable List<Movie> movies) {
+//
+//            }
+//        });
 
         setUpRecyclerView();
 
@@ -310,7 +323,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     /**
      * Checks Network State returns true if connected
      *
-     * @return
+     * @return Network State
      */
     private boolean isOnline() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

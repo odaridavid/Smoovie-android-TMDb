@@ -1,4 +1,4 @@
-package smoovie.apps.com.kayatech.smoovie;
+package smoovie.apps.com.kayatech.smoovie.View;
 
 import smoovie.apps.com.kayatech.smoovie.Model.Movie;
 

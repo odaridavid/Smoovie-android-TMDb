@@ -15,7 +15,7 @@ public interface ApiGetServices {
     //Response to display List on Main UI
     //Most Popular
     @GET("movie/popular")
-    Call<MovieListResponse> getPopularMoviesLoaded(
+    Call<MovieListResponse> getPopularMovies(
             @Query("api_key") String apiKey,
             @Query("language") String language,
             @Query("page") int page
@@ -40,16 +40,7 @@ public interface ApiGetServices {
 
     );
 
-    @GET("movie/latest")
-    Call<MovieListResponse> getLatestMovies(
-            @Query("api_key") String apiKey,
-            @Query("language") String language,
-            @Query("page") int page
-    );
-
-
-    //TODO @Path --
-   //Response to get movie details to display on Details UI
+    //Response to get movie details to display on Details UI
     @GET("movie/{movie_id}")
     Call<Movie> getMovie(
             @Path("movie_id") int id,

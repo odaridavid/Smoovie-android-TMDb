@@ -17,25 +17,13 @@ public class MovieListResponse {
     @Expose
     private int page;
 
-    @SerializedName("total_results")
-    @Expose
-    private int totalResults;
-
     @SerializedName("results")
     @Expose
     private List<Movie> moviesResult;
 
-    @SerializedName("total_pages")
-    @Expose
-    private int totalPages;
-
     //Getters
     public int getPage() {
         return page;
-    }
-
-    public int getTotalResults() {
-        return totalResults;
     }
 
 
@@ -43,9 +31,5 @@ public class MovieListResponse {
         return moviesResult;
     }
 
-
-    public int getTotalPages() {
-        return totalPages;
-    }
 
 }
