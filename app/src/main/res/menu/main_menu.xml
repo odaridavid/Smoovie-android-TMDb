@@ -13,7 +13,7 @@
         android:id="@+id/action_settings"
         android:enabled="true"
         android:icon="@drawable/ic_action_settings"
-        android:title="@string/action_sort_label"
+        android:title="@string/action_settings_label"
         android:orderInCategory="100"
         app:showAsAction="ifRoom" />
 </menu>
