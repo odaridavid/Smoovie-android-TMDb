@@ -9,7 +9,7 @@
 
     <!--Grid Item-->
     <string name="label_text_placeholder" translatable="false">Movie Title</string>
-    <string name="label_content_desc" translatable="false">Poster Image</string>
+    <string name="label_content_description_poster">Poster Image</string>
 
     <!--Action Buttons-->
     <string name="action_sort_label" translatable="false">Sort</string>
@@ -17,13 +17,13 @@
 
 
     <!--Error Log Messages-->
-    <string name="error_network">"Please check your internet connection"</string>
+    <string name="error_network_message">"Please check your internet connection"</string>
 
     <!--Detail Screen-->
     <string name="label_overview">Overview</string>
     <string name="label_released">Released On</string>
-    <string name="label_text_view_rating_total" translatable="false">/10</string>
-    <string name="label_content_description">Favourites Icon</string>
+    <string name="label_rating_total" translatable="false">/10</string>
+    <string name="label_content_description_favicon">Favourites Icon</string>
     <string name="label_trailers">Trailers</string>
     <string name="label_reviews">Reviews</string>
 

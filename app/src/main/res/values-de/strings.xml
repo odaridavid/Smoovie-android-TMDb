@@ -4,8 +4,12 @@
     <string name="pref_settings">die Einstellungen</string>
     <string name="label_released">Freigegeben am</string>
     <string name="label_overview">Überblick</string>
-    <string name="error_network">Bitte überprüfe deine Internetverbindung</string>
+    <string name="error_network_message">Bitte überprüfe deine Internetverbindung</string>
     <string name="action_sort_most_popular">Am beliebtesten</string>
     <string name="action_sort_high_ratings">Hohe Bewertungen</string>
     <string name="action_sort_upcoming">Bevorstehende</string>
+    <string name="label_content_description">Favoritensymbol</string>
+    <string name="action_sort_favourites">Favorit</string>
+    <string name="label_trailers">Anhänger</string>
+    <string name="label_reviews">Bewertungen</string>
 </resources>

@@ -3,9 +3,13 @@
     <string name="action_sort_most_popular">最受欢迎</string>
     <string name="action_sort_upcoming">即将到来</string>
     <string name="action_sort_high_ratings">高评级</string>
-    <string name="error_network">请检查您的互联网连接</string>
+    <string name="error_network_message">请检查您的互联网连接</string>
     <string name="label_overview">概观</string>
     <string name="label_released">发布了</string>
     <string name="pref_settings">设置</string>
     <string name="pref_language_title">语言</string>
+    <string name="label_content_description">喜欢的图标</string>
+    <string name="action_sort_favourites">喜爱</string>
+    <string name="label_trailers">拖车</string>
+    <string name="label_reviews">评测</string>
 </resources>
