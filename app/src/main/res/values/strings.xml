@@ -4,7 +4,7 @@
     <string name="action_sort_most_popular">Most Popular</string>
     <string name="action_sort_high_ratings">High Ratings</string>
     <string name="action_sort_upcoming">Upcoming</string>
-    <string name="action_sort_latest" translatable="false">Latest Movies</string>
+
 
     <string name="label_text_placeholder" translatable="false">Movie Title</string>
     <string name="label_content_desc" translatable="false">Poster Image</string>
@@ -17,11 +17,10 @@
     <string name="error_network">"Please check your internet connection"</string>
 
     <!--Detail Screen-->
-    <string name="label_rate" translatable="false">Rating</string>
     <string name="label_overview">Overview</string>
     <string name="label_released">Released On</string>
-    <string name="label_movie_title_view" translatable="false">Movie Title</string>
     <string name="label_text_view_rating_total" translatable="false">/10</string>
+    <string name="label_content_description">Favcon</string>
 
     <!--Preferences-->
     <string name="pref_settings">Settings</string>

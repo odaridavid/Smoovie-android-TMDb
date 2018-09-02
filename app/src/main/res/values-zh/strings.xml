@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Smoovie</string>
     <string name="action_sort_most_popular">最受欢迎</string>
     <string name="action_sort_upcoming">即将到来</string>
     <string name="action_sort_high_ratings">高评级</string>
