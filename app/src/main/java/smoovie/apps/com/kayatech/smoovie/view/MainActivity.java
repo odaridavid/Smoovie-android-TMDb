@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
             @Override
             public void onFailure() {
-                Log.d(TAG, getString(R.string.error_network));
+                Log.d(TAG, getString(R.string.error_network_message));
 
             }
         });

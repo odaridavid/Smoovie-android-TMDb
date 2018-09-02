@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/ic_favorite_true" android:state_activated="true" />
+    <!--<item android:drawable="@drawable/ic_favorite_true" android:state_enabled="true" />-->
+    <!--<item android:drawable="@drawable/ic_favorite_true" android:state_checked="true" />-->
+
+    <item android:drawable="@drawable/ic_favorite_false"/>
+</selector>
