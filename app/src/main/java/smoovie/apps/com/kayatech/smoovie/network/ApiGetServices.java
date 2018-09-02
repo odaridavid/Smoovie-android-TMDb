@@ -1,11 +1,11 @@
-package smoovie.apps.com.kayatech.smoovie.Network;
+package smoovie.apps.com.kayatech.smoovie.network;
 
 
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import smoovie.apps.com.kayatech.smoovie.Model.Movie;
+import smoovie.apps.com.kayatech.smoovie.model.Movie;
 
 
 public interface ApiGetServices {

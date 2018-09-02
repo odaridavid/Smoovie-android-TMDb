@@ -1,6 +1,6 @@
-package smoovie.apps.com.kayatech.smoovie.Model;
+package smoovie.apps.com.kayatech.smoovie.model;
 
-public interface IMovie {
+interface IMovie {
     String getMovieTitle();
 
 

@@ -1,4 +1,4 @@
-package smoovie.apps.com.kayatech.smoovie.Model;
+package smoovie.apps.com.kayatech.smoovie.model;
 
 
 import com.google.gson.annotations.SerializedName;

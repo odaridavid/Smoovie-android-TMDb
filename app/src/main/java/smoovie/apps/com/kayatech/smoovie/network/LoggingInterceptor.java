@@ -1,5 +1,6 @@
-package smoovie.apps.com.kayatech.smoovie.Network;
+package smoovie.apps.com.kayatech.smoovie.network;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.io.IOException;
@@ -13,7 +14,7 @@ public class LoggingInterceptor implements Interceptor {
 
     //logs the outgoing request and the incoming response.
     @Override
-    public Response intercept(Interceptor.Chain chain) throws IOException {
+    public Response intercept(@NonNull Interceptor.Chain chain) throws IOException {
         Request request = chain.request();
 
         long t1 = System.nanoTime();

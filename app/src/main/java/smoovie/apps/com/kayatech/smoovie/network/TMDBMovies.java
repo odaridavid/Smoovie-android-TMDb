@@ -1,6 +1,7 @@
-package smoovie.apps.com.kayatech.smoovie.Network;
+package smoovie.apps.com.kayatech.smoovie.network;
 
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.concurrent.TimeUnit;
@@ -62,7 +63,7 @@ public class TMDBMovies {
 
         Callback<MovieListResponse> call = new Callback<MovieListResponse>() {
             @Override
-            public void onResponse(Call<MovieListResponse> call, Response<MovieListResponse> response) {
+            public void onResponse(@NonNull Call<MovieListResponse> call, Response<MovieListResponse> response) {
                 if (response.isSuccessful()) {
                     MovieListResponse moviesResponse = response.body();
                     if (moviesResponse != null && moviesResponse.getMoviesResult() != null) {
@@ -77,7 +78,7 @@ public class TMDBMovies {
             }
 
             @Override
-            public void onFailure(Call<MovieListResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<MovieListResponse> call, @NonNull Throwable t) {
                 Log.d(TAG, "Movies Could Not Be Loaded:No Result");
             }
         };

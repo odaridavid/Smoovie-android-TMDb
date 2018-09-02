@@ -1,11 +1,11 @@
-package smoovie.apps.com.kayatech.smoovie.Network;
+package smoovie.apps.com.kayatech.smoovie.network;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-import smoovie.apps.com.kayatech.smoovie.Model.Movie;
+import smoovie.apps.com.kayatech.smoovie.model.Movie;
 
 public class MovieListResponse {
 
