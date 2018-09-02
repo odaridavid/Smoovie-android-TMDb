@@ -16,4 +16,9 @@
         android:title="@string/action_sort_upcoming"
         android:orderInCategory="3"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_sort_favourites"
+        android:title="@string/action_sort_favourites"
+        android:orderInCategory="4"
+        app:showAsAction="never"/>
 </menu>
