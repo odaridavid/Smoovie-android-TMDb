@@ -1,16 +1,19 @@
 <resources>
     <string name="app_name" translatable="false">Smoovie</string>
+
     <!--Main Menu Sort By-->
     <string name="action_sort_most_popular">Most Popular</string>
     <string name="action_sort_high_ratings">High Ratings</string>
     <string name="action_sort_upcoming">Upcoming</string>
+    <string name="action_sort_favourites">Favourites</string>
 
-
+    <!--Grid Item-->
     <string name="label_text_placeholder" translatable="false">Movie Title</string>
     <string name="label_content_desc" translatable="false">Poster Image</string>
 
-
+    <!--Action Buttons-->
     <string name="action_sort_label" translatable="false">Sort</string>
+    <string name="action_settings_label" translatable="false">Settings</string>
 
 
     <!--Error Log Messages-->
@@ -20,17 +23,22 @@
     <string name="label_overview">Overview</string>
     <string name="label_released">Released On</string>
     <string name="label_text_view_rating_total" translatable="false">/10</string>
-    <string name="label_content_description">Favcon</string>
+    <string name="label_content_description">Favourites Icon</string>
+    <string name="label_trailers">Trailers</string>
+    <string name="label_reviews">Reviews</string>
 
     <!--Preferences-->
     <string name="pref_settings">Settings</string>
     <string name="pref_language_title">Language</string>
     <string name="pref_language_key" translatable="false">language</string>
+
+    <!--Preference Labels-->
     <string name="pref_language_label_english" translatable="false">English</string>
     <string name="pref_language_label_german" translatable="false">German</string>
     <string name="pref_language_label_chinese" translatable="false">Chinese</string>
     <string name="pref_language_label_french" translatable="false">French</string>
 
+    <!--Preference Values-->
     <string name="pref_language_val_english" translatable="false">en-US</string>
     <string name="pref_language_val_german" translatable="false">de-DE</string>
     <string name="pref_language_val_chinese" translatable="false">zh-CN</string>
