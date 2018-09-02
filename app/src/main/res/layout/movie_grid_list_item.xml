@@ -55,7 +55,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:contentDescription="@string/label_content_desc"
+            android:contentDescription="@string/label_content_description_poster"
             android:padding="@dimen/size_small"
             android:scaleType="fitXY"
             android:src="@drawable/test" />

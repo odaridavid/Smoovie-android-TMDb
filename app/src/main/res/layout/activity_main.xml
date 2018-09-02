@@ -39,6 +39,6 @@
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:layout_gravity="center"
-        android:text="@string/error_network"
+        android:text="@string/error_network_message"
         android:visibility="invisible" />
 </android.support.design.widget.CoordinatorLayout>
