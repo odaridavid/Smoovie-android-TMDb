@@ -1,9 +1,9 @@
-package smoovie.apps.com.kayatech.smoovie.Presenter;
+package smoovie.apps.com.kayatech.smoovie.viewmodel;
 
 import android.arch.lifecycle.LiveData;
 
-import smoovie.apps.com.kayatech.smoovie.Model.Movie;
-import smoovie.apps.com.kayatech.smoovie.Network.OnMoviesCallback;
+import smoovie.apps.com.kayatech.smoovie.model.Movie;
+
 
 public interface IMoviePresenter {
 

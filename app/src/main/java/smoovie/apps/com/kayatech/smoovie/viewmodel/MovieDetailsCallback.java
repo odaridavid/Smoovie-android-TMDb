@@ -1,7 +1,7 @@
-package smoovie.apps.com.kayatech.smoovie.Presenter;
+package smoovie.apps.com.kayatech.smoovie.viewmodel;
 
 
-import smoovie.apps.com.kayatech.smoovie.Model.Movie;
+import smoovie.apps.com.kayatech.smoovie.model.Movie;
 
 public interface MovieDetailsCallback {
         //On Success movie details received
