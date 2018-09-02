@@ -12,4 +12,11 @@
 
     </style>
 
+    <style name="DetailViewMarginStyle">
+        <item name="android:layout_marginBottom">@dimen/size_medium</item>
+        <item name="android:layout_marginEnd">@dimen/size_default</item>
+        <item name="android:layout_marginStart">@dimen/size_default</item>
+        <item name="android:layout_marginTop">@dimen/size_medium</item>
+    </style>
+
 </resources>
