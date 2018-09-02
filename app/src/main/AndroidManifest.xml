@@ -15,7 +15,7 @@
         android:theme="@style/AppThemeNoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".View.MainActivity"
+            android:name=".view.MainActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,12 +24,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".View.DetailActivity"
+            android:name=".view.DetailActivity"
             android:configChanges="locale"
-            android:parentActivityName=".View.MainActivity" />
+            android:parentActivityName=".view.MainActivity" />
         <activity
-            android:name=".View.SettingsActivity"
-            android:parentActivityName=".View.MainActivity" />
+            android:name=".view.SettingsActivity"
+            android:parentActivityName=".view.MainActivity" />
     </application>
 
 </manifest>
