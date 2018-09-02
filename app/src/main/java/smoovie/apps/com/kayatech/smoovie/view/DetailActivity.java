@@ -4,7 +4,6 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -135,7 +134,7 @@ public class DetailActivity extends AppCompatActivity {
         mMovieOverview.setText(movie.getMovieOverview());
         mMovieOverview.setTypeface(custom_font);
         mMovieRating.setVisibility(View.VISIBLE);
-        mMovieRating.setRating(movie.getVoterAverage() / 2);
+        mMovieRating.setRating(movie.getVoterAverage()/2);
 
         float movieavg = movie.getVoterAverage();
         String movieAvgString = Float.toString(movieavg);
@@ -168,7 +167,7 @@ public class DetailActivity extends AppCompatActivity {
     private void displayError() {
         new StyleableToast
                 .Builder(DetailActivity.this)
-                .text(getString(R.string.error_network))
+                .text(getString(R.string.error_network_message))
                 .textColor(Color.WHITE)
                 .backgroundColor(Color.rgb(66, 165, 245))
                 .length(Toast.LENGTH_LONG)
@@ -178,26 +177,26 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void addFavourites(View v){
-         Drawable currentDrawable = mFavcon.getDrawable();
-         if(currentDrawable == getDrawable(R.drawable.ic_favorite_true)){
-             mFavcon.setImageDrawable(getDrawable(R.drawable.ic_favorite_false));
-             new StyleableToast
-                     .Builder(DetailActivity.this)
-                     .text("Removed from Favourites")
-                     .textColor(Color.WHITE)
-                     .backgroundColor(Color.rgb(66, 165, 245))
-                     .length(Toast.LENGTH_SHORT)
-                     .show();
-
-         }else {
-             mFavcon.setImageDrawable(getDrawable(R.drawable.ic_favorite_true));
-             new StyleableToast
-                     .Builder(DetailActivity.this)
-                     .text("Added to Favourites")
-                     .textColor(Color.WHITE)
-                     .backgroundColor(Color.rgb(66, 165, 245))
-                     .length(Toast.LENGTH_SHORT)
-                     .show();
-         }
+//         Drawable currentDrawable = mFavcon.getDrawable();
+//         if(currentDrawable == getDrawable(R.drawable.ic_favorite_true)){
+//             mFavcon.setImageDrawable(getDrawable(R.drawable.ic_favorite_false));
+//             new StyleableToast
+//                     .Builder(DetailActivity.this)
+//                     .text("Removed from Favourites")
+//                     .textColor(Color.WHITE)
+//                     .backgroundColor(Color.rgb(66, 165, 245))
+//                     .length(Toast.LENGTH_SHORT)
+//                     .show();
+//
+//         }else {
+//             mFavcon.setImageDrawable(getDrawable(R.drawable.ic_favorite_true));
+//             new StyleableToast
+//                     .Builder(DetailActivity.this)
+//                     .text("Added to Favourites")
+//                     .textColor(Color.WHITE)
+//                     .backgroundColor(Color.rgb(66, 165, 245))
+//                     .length(Toast.LENGTH_SHORT)
+//                     .show();
+//         }
     }
 }
