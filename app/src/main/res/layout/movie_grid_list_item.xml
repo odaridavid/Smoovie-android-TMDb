@@ -12,9 +12,6 @@
     android:layout_marginEnd="@dimen/size_small"
     android:layout_marginBottom="@dimen/size_medium"
     android:layout_marginTop="@dimen/size_medium"
-    android:backgroundTint="@color/colorWhite"
-    android:clickable="true"
-    android:foreground="?android:attr/selectableItemBackground"
     app:cardCornerRadius="@dimen/size_small"
     android:focusable="true"
     app:cardElevation="@dimen/size_medium"
@@ -22,7 +19,6 @@
     android:id="@+id/cv_movie">
 
     <FrameLayout
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:animateLayoutChanges="true"
@@ -50,7 +46,8 @@
     <RelativeLayout
         android:id="@+id/rl_parent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/movie_selector">
 
         <ImageView
             android:id="@+id/iv_poster_image"
