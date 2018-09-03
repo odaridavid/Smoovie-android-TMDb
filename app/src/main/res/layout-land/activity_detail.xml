@@ -82,21 +82,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_default"
+                android:text="@string/label_default"
                 android:textColor="@color/colorAccent"
                 android:textSize="18sp"
                 app:layout_constraintLeft_toLeftOf="@id/rb_movie_rating"
                 app:layout_constraintTop_toTopOf="parent"
+                tools:text="@string/movie_title_dummy_text" />
 
-                tools:text="Hotel Transylvania 3:Summer Vacation" />
             <ImageView
                 android:id="@+id/iv_favcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 android:layout_margin="@dimen/size_default"
+                android:contentDescription="@string/label_content_description_favicon"
                 android:src="@drawable/favourites_selector"
-                android:contentDescription="@string/label_content_description_favicon"/>
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <RatingBar
                 android:id="@+id/rb_movie_rating"
@@ -118,10 +119,11 @@
                 android:layout_marginEnd="@dimen/size_smallest"
                 android:layout_marginStart="@dimen/size_default"
                 android:layout_marginTop="@dimen/size_default"
+                android:text="@string/label_default"
                 android:textSize="14sp"
                 app:layout_constraintLeft_toRightOf="@id/iv_poster_image"
                 app:layout_constraintTop_toBottomOf="@id/rb_movie_rating"
-                tools:text="6.9" />
+                tools:text="@string/movie_rating_dummy_text" />
 
             <TextView
                 android:id="@+id/tv_rating_total"
@@ -136,9 +138,9 @@
 
             <TextView
                 android:id="@+id/tv_label_overview"
+                style="@style/DetailViewMarginStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/DetailViewMarginStyle"
                 android:text="@string/label_overview"
                 android:textSize="18sp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -147,19 +149,20 @@
 
             <TextView
                 android:id="@+id/tv_overview"
+                style="@style/DetailViewMarginStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/DetailViewMarginStyle"
+                android:text="@string/label_default"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 app:layout_constraintTop_toBottomOf="@id/tv_label_overview"
-                tools:text="A lot of Reviews and a lot of revies and a lot of revies ansndahkjd jdkjk dhkshfskfhskf djdjdjdjdj djjdjdjdjdjdjdjdjdjdj" />
+                tools:text="@string/movie_overview_dummy_text" />
 
             <TextView
                 android:id="@+id/tv_label_release_date"
+                style="@style/DetailViewMarginStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/DetailViewMarginStyle"
                 android:text="@string/label_released"
                 android:textSize="18sp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -168,15 +171,16 @@
 
             <TextView
                 android:id="@+id/tv_release_date"
+                style="@style/DetailViewMarginStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/DetailViewMarginStyle"
+                android:text="@string/label_default"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_label_release_date"
-                tools:text="08-08-2019" />
+                tools:text="@string/movie_release_date_dummy_text" />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>
