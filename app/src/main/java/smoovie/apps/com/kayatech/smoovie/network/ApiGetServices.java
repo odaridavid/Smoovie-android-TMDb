@@ -47,4 +47,19 @@ public interface ApiGetServices {
             @Query("api_key") String apiKEy,
             @Query("language") String language
     );
+
+    @GET("movie/{movie_id}/reviews")
+    Call<Movie> getMovieReviews(
+            @Path("movie_id") int id,
+            @Query("api_key") String apiKEy,
+            @Query("language") String language
+    );
+
+    @GET("movie/{movie_id}/videos")
+    Call<Movie> getMovieVideos(
+            @Path("movie_id") int id,
+            @Query("api_key") String apiKEy,
+            @Query("language") String language
+    );
+
 }
