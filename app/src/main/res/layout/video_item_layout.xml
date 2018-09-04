@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:layout_margin="@dimen/size_small"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <ImageView
+        android:id="@+id/iv_trailer"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:contentDescription="@string/label_trailers" />
+</android.support.constraint.ConstraintLayout>
