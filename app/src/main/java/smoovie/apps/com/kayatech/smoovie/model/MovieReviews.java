@@ -1,6 +1,6 @@
 package smoovie.apps.com.kayatech.smoovie.model;
 
-import com.google.gson.annotations.Expose;
+
 import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
@@ -14,14 +14,6 @@ public class MovieReviews {
     @SerializedName("author")
     private String author;
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
     @SerializedName("content")
     private String content;
 
@@ -30,7 +22,13 @@ public class MovieReviews {
 
     public MovieReviews() {
     }
+    public void setAuthor(String author) {
+        this.author = author;
+    }
 
+    public void setContent(String content) {
+        this.content = content;
+    }
     public String getId() {
         return id;
     }

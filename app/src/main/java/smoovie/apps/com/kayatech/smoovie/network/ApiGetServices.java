@@ -15,6 +15,7 @@ public interface ApiGetServices {
     //Retrofit http requests
     //Query parameter appended to the URL.
     //Call - An invocation of a Retrofit method that sends a request to a webserver and returns a response
+
     //Response to display List on Main UI
     //Most Popular
     @GET("movie/popular")
@@ -44,6 +45,7 @@ public interface ApiGetServices {
     );
 
     //Response to get movie details to display on Details UI
+    //@Path sets value for {args}
     @GET("movie/{movie_id}")
     Call<Movie> getMovie(
             @Path("movie_id") int id,
