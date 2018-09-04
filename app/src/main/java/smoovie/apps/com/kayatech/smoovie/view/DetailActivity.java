@@ -7,10 +7,13 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,40 +23,64 @@ import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import smoovie.apps.com.kayatech.smoovie.model.Movie;
-import smoovie.apps.com.kayatech.smoovie.viewmodel.MovieDetailsCallback;
 import smoovie.apps.com.kayatech.smoovie.R;
+import smoovie.apps.com.kayatech.smoovie.model.Movie;
+import smoovie.apps.com.kayatech.smoovie.model.MovieReviews;
+import smoovie.apps.com.kayatech.smoovie.viewmodel.IMovieDetailsCallback;
+import smoovie.apps.com.kayatech.smoovie.viewmodel.IMovieReviewsCallback;
 import smoovie.apps.com.kayatech.smoovie.viewmodel.MovieDetailViewModel;
+import smoovie.apps.com.kayatech.smoovie.viewmodel.MoviesRepository;
 
 public class DetailActivity extends AppCompatActivity {
 
     private static final String TAG = DetailActivity.class.getSimpleName();
     public static final String MOVIE_ID = "movie_id";
+    public static MoviesRepository moviesRepository;
+    private ReviewsAdapter mReviewsAdapter;
 
 
     @BindView(R.id.tv_rating_value)
-    TextView mRatingValue;
-    @BindView(R.id.tv_label_release_date)
-    TextView mLabelReleased;
-    @BindView(R.id.tv_label_overview)
-    TextView mLabelOverview;
-    @BindView(R.id.tv_release_date)
-    TextView mMovieReleaseDate;
-    @BindView(R.id.tv_overview)
-    TextView mMovieOverview;
-    @BindView(R.id.tv_label_movie_title)
-    TextView mMovieTitle;
-    @BindView(R.id.rb_movie_rating)
-    RatingBar mMovieRating;
-    @BindView(R.id.iv_backdrop)
-    ImageView mMovieBackdrop;
-    @BindView(R.id.iv_poster_image)
-    ImageView mMoviePoster;
-    @BindView(R.id.iv_favcon)
-    ImageView mFavcon;
+    TextView mRatingValueTextView;
 
+    @BindView(R.id.tv_label_release_date)
+    TextView mLabelReleasedTextView;
+
+    @BindView(R.id.tv_label_overview)
+    TextView mLabelOverviewTextView;
+
+    @BindView(R.id.tv_release_date)
+    TextView mMovieReleaseDateTextView;
+
+    @BindView(R.id.tv_overview)
+    TextView mMovieOverviewTextView;
+
+    @BindView(R.id.tv_label_movie_title)
+    TextView mMovieTitleTextView;
+
+    @BindView(R.id.rb_movie_rating)
+    RatingBar mMovieRatingRatingBar;
+
+    @BindView(R.id.iv_backdrop)
+    ImageView mMovieBackdropImageView;
+
+    @BindView(R.id.iv_poster_image)
+    ImageView mMoviePosterImageView;
+
+    @BindView(R.id.iv_favcon)
+    ImageView mFavconImageView;
+
+    @BindView(R.id.tv_label_reviews)
+    TextView mMovieReviewLabel;
+
+    @BindView(R.id.rv_movies_review)
+    RecyclerView mMoviesReviewRecyclerView;
+
+    MovieDetailViewModel movieDetailViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,22 +91,25 @@ public class DetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
 
+
+
         Typeface custom_font_thin = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Light.ttf");
-        mLabelReleased.setTypeface(custom_font_thin);
-        mLabelOverview.setTypeface(custom_font_thin);
+        mLabelReleasedTextView.setTypeface(custom_font_thin);
+        mLabelOverviewTextView.setTypeface(custom_font_thin);
+        mMovieReviewLabel.setTypeface(custom_font_thin);
 
         //Check if intent contains extras
         if (getIntent().getExtras() != null) {
-            int mMovieId = Parcels.unwrap(getIntent().getParcelableExtra(MOVIE_ID));
+            final int mMovieId = Parcels.unwrap(getIntent().getParcelableExtra(MOVIE_ID));
             Log.d("Movie Being Passed", "" + mMovieId);
             setupToolbar();
-
-            MovieDetailViewModel movieDetailViewModel = ViewModelProviders.of(this).get(MovieDetailViewModel.class);
-            movieDetailViewModel.init(mMovieId, new MovieDetailsCallback() {
+            int page = 1;
+            movieDetailViewModel = ViewModelProviders.of(this).get(MovieDetailViewModel.class);
+            movieDetailViewModel.init(mMovieId,page, new IMovieDetailsCallback() {
                 @Override
                 public void onSuccess(Movie movie) {
                     if (movie != null) {
-
+                        setUpRecyclerView();
                         updateInterface(movie);
 
                         // Toast.makeText(DetailActivity.this,""+movie.getMovieTitle(),Toast.LENGTH_LONG).show();
@@ -88,6 +118,7 @@ public class DetailActivity extends AppCompatActivity {
 
                 @Override
                 public void onError() {
+                    displayError();
 
                 }
             });
@@ -96,14 +127,14 @@ public class DetailActivity extends AppCompatActivity {
                 public void onChanged(@Nullable Movie movie) {
                     if (movie != null) {
                         Log.d(TAG, "TITLE::" + movie.toString());
+                        setUpRecyclerView();
                         updateInterface(movie);
                     }
                 }
             });
-
         }
 
-        mFavcon.setOnClickListener(new View.OnClickListener() {
+        mFavconImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addFavourites(v);
@@ -124,39 +155,93 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
+   void setUpRecyclerView(){
+
+
+           //Reference
+           mMoviesReviewRecyclerView.setHasFixedSize(true);
+
+           //Grid Layout Setup
+           LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+           mMoviesReviewRecyclerView.setLayoutManager(linearLayoutManager);
+
+
+           mMoviesReviewRecyclerView.setItemViewCacheSize(5);
+           mMoviesReviewRecyclerView.setDrawingCacheEnabled(true);
+           mMoviesReviewRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
+
+
+
+    }
+
     private void updateInterface(Movie movie) {
         String IMAGE_BASE_URL_BACKDROP = "http://image.tmdb.org/t/p/w780";
         String IMAGE_BASE_URL_POSTER = "http://image.tmdb.org/t/p/w185";
 
         final Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
-        mMovieTitle.setText(movie.getMovieTitle());
-        mMovieTitle.setTypeface(custom_font);
-        mMovieOverview.setText(movie.getMovieOverview());
-        mMovieOverview.setTypeface(custom_font);
-        mMovieRating.setVisibility(View.VISIBLE);
-        mMovieRating.setRating(movie.getVoterAverage()/2);
+        mMovieTitleTextView.setText(movie.getMovieTitle());
+        mMovieTitleTextView.setTypeface(custom_font);
+        mMovieOverviewTextView.setText(movie.getMovieOverview());
+        mMovieOverviewTextView.setTypeface(custom_font);
+        mMovieRatingRatingBar.setVisibility(View.VISIBLE);
+        mMovieRatingRatingBar.setRating(movie.getVoterAverage() / 2);
 
         float movieavg = movie.getVoterAverage();
         String movieAvgString = Float.toString(movieavg);
 
-        mRatingValue.setText(movieAvgString);
-        mMovieReleaseDate.setText(movie.getMovieReleaseDate());
-        mMovieReleaseDate.setTypeface(custom_font);
+        mRatingValueTextView.setText(movieAvgString);
+        mMovieReleaseDateTextView.setText(movie.getMovieReleaseDate());
+        mMovieReleaseDateTextView.setTypeface(custom_font);
         if (!isFinishing()) {
             Picasso.with(DetailActivity.this)
                     .load(IMAGE_BASE_URL_BACKDROP + movie.getBackdrop())
                     .error(R.drawable.test_back)
                     .placeholder(R.drawable.test_back)
-                    .into(mMovieBackdrop);
+                    .into(mMovieBackdropImageView);
         }
         if (!isFinishing()) {
             Picasso.with(DetailActivity.this)
                     .load(IMAGE_BASE_URL_POSTER + movie.getMoviePoster())
                     .error(R.drawable.test)
                     .placeholder(R.drawable.test)
-                    .into(mMoviePoster);
+                    .into(mMoviePosterImageView);
+
         }
+        int movieId = movie.getMovieId();
+       int page = 1;
+        movieDetailViewModel.moviesRepository.getMovieReviews(page, movieId, new IMovieReviewsCallback() {
+            @Override
+            public void onSuccess(int page, List<MovieReviews> movieReviews) {
+
+                if (mReviewsAdapter == null) {
+                    mReviewsAdapter = new ReviewsAdapter(getApplicationContext(),movieReviews);
+                    mMoviesReviewRecyclerView.setAdapter(mReviewsAdapter);
+
+                }else {
+                    if (page == 1) {
+                        mReviewsAdapter.clearMovies();
+                    }
+
+                    //appends movie results to list and updates recycler view
+                    mReviewsAdapter.setmMovieReviewsList(movieReviews);
+
+                }
+            }
+
+            @Override
+            public void onFailure() {
+
+//             MovieReviews mr = new MovieReviews();
+//             mr.setAuthor(getResources().getString(R.string.label_default));
+//             mr.setContent(getResources().getString(R.string.label_default));
+//             List<MovieReviews> mrlist = new ArrayList<>();
+//             mrlist.add(mr);
+//             mReviewsAdapter.setmMovieReviewsList(mrlist);
+
+            }
+        });
     }
+
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -176,10 +261,10 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
-    private void addFavourites(View v){
-//         Drawable currentDrawable = mFavcon.getDrawable();
+    private void addFavourites(View v) {
+//         Drawable currentDrawable = mFavconImageView.getDrawable();
 //         if(currentDrawable == getDrawable(R.drawable.ic_favorite_true)){
-//             mFavcon.setImageDrawable(getDrawable(R.drawable.ic_favorite_false));
+//             mFavconImageView.setImageDrawable(getDrawable(R.drawable.ic_favorite_false));
 //             new StyleableToast
 //                     .Builder(DetailActivity.this)
 //                     .text("Removed from Favourites")
@@ -189,7 +274,7 @@ public class DetailActivity extends AppCompatActivity {
 //                     .show();
 //
 //         }else {
-//             mFavcon.setImageDrawable(getDrawable(R.drawable.ic_favorite_true));
+//             mFavconImageView.setImageDrawable(getDrawable(R.drawable.ic_favorite_true));
 //             new StyleableToast
 //                     .Builder(DetailActivity.this)
 //                     .text("Added to Favourites")
