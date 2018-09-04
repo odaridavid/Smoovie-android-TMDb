@@ -12,4 +12,8 @@
     <string name="action_sort_favourites">Favorit</string>
     <string name="label_trailers">Anhänger</string>
     <string name="label_reviews">Bewertungen</string>
+    <string name="label_content_description_favicon">Favoritensymbol</string>
+    <string name="label_content_description_poster">Poster Bild</string>
+    <string name="error_trailer_unavailable">"Keine Anhänger verfügbar "</string>
+    <string name="error_review_unavailable">Keine Bewertung verfügbar</string>
 </resources>
