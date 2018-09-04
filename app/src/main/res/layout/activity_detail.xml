@@ -143,6 +143,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/label_overview"
                 android:textSize="16sp"
+                android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/iv_poster_image" />
@@ -165,6 +166,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/label_released"
                 android:textSize="16sp"
+                android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_overview" />
@@ -183,6 +185,41 @@
                 tools:text="@string/movie_release_date_dummy_text" />
 
             <TextView
+                android:id="@+id/tv_label_trailers"
+                style="@style/DetailViewMarginStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/label_trailers"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_release_date" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_movies_trailer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:scrollbars="horizontal"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_label_trailers" />
+            <TextView
+                android:id="@+id/tv_no_trailer"
+                android:layout_width="match_parent"
+                style="@style/DetailViewMarginStyle"
+                android:layout_height="wrap_content"
+                android:text="@string/error_trailer_unavailable"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_label_trailers"
+                android:visibility="gone"/>
+
+            <TextView
                 android:id="@+id/tv_label_reviews"
                 style="@style/DetailViewMarginStyle"
                 android:layout_width="match_parent"
@@ -190,9 +227,10 @@
                 android:text="@string/label_reviews"
                 android:textAlignment="center"
                 android:textSize="16sp"
+                android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_release_date" />
+                app:layout_constraintTop_toBottomOf="@id/rv_movies_trailer" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_movies_review"
@@ -202,6 +240,19 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_label_reviews" />
+
+            <TextView
+                android:id="@+id/tv_no_review"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/error_review_unavailable"
+                style="@style/DetailViewMarginStyle"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_label_reviews"
+                android:visibility="gone"/>
 
 
         </android.support.constraint.ConstraintLayout>
