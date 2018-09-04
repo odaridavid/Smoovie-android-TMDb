@@ -31,12 +31,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import smoovie.apps.com.kayatech.smoovie.R;
 import smoovie.apps.com.kayatech.smoovie.model.Movie;
-import smoovie.apps.com.kayatech.smoovie.viewmodel.OnMoviesCallback;
 import smoovie.apps.com.kayatech.smoovie.network.TMDBMovies;
+import smoovie.apps.com.kayatech.smoovie.viewmodel.IMovieListCallback;
 
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final String KEY = "Key";
     private static final String TAG = MainActivity.class.getSimpleName();
     private boolean isFetchingMovies = false;
     private int currentPage = 1;
@@ -48,19 +47,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
 
     @BindView(R.id.pb_getmovie_progress)
-
     ProgressBar mProgressBar;
 
     @BindView(R.id.rv_movies)
-
     RecyclerView mMoviesRecyclerView;
 
     @BindView(R.id.tv_error_message_display)
-
     TextView mErrorMessageTextView;
 
     @BindView(R.id.action_toolbar_main)
-
     Toolbar toolbarMainPage;
 
 
@@ -73,15 +68,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
 
         movieList = TMDBMovies.getInstance();
-
-        //view Model
-//        moviesViewModel = ViewModelProviders.of(this).get(MoviesViewModel.class);
-//        moviesViewModel.getMovieList().observe(this, new Observer<List<Movie>>() {
-//            @Override
-//            public void onChanged(@Nullable List<Movie> movies) {
-//
-//            }
-//        });
 
         setUpRecyclerView();
 
@@ -96,21 +82,16 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             mProgressBar.setVisibility(View.GONE);
 
         }
-
-
         //Set Pagination , On Scroll Continues to load Items
         mMoviesRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
                 //on ui and cached
                 int totalItemCount = gridLayoutManager.getItemCount();
-
                 //in cache
                 int visibleItemCount = gridLayoutManager.getChildCount();
-
                 //on ui
                 int firstVisibleItem = gridLayoutManager.findFirstVisibleItemPosition();
 
@@ -130,7 +111,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         TMDBMovies.LANGUAGE = sp.getString(getString(R.string.pref_language_key), "");
         setUpLocale(TMDBMovies.LANGUAGE);
         sp.registerOnSharedPreferenceChangeListener(this);
-
     }
 
     private void setUpLocale(String language) {
@@ -166,15 +146,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     private void setUpRecyclerView() {
-
         //Reference
         mMoviesRecyclerView.setHasFixedSize(true);
-
-        //Grid Layout Setup
         gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
         mMoviesRecyclerView.setLayoutManager(gridLayoutManager);
-
-
         mMoviesRecyclerView.setItemViewCacheSize(20);
         mMoviesRecyclerView.setDrawingCacheEnabled(true);
         mMoviesRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
@@ -211,26 +186,23 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         };
 
 
-        movieList.getMovies(page, sortBy, new OnMoviesCallback() {
+        movieList.getMovies(page, sortBy, new IMovieListCallback() {
             @Override
             public void onSuccess(int page, List<Movie> movies) {
 
                 if (mMoviesAdapter == null) {
-                    mMoviesAdapter = new MoviesAdapter(getApplicationContext(), movies, IMovieClickHandler);
+                    mMoviesAdapter = new MoviesAdapter(movies, IMovieClickHandler);
                     mMoviesRecyclerView.setAdapter(mMoviesAdapter);
-
                 } else {
                     if (page == 1) {
                         mMoviesAdapter.clearMovies();
                     }
                     mProgressBar.setVisibility(View.GONE);
                     //appends movie results to list and updates recycler view
-                    mMoviesAdapter.setMovieList(movies);
-
+                    mMoviesAdapter.setmMovieList(movies);
                 }
                 currentPage = page;
                 isFetchingMovies = false;
-
 
                 setTitleBar();
             }
@@ -238,7 +210,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             @Override
             public void onFailure() {
                 Log.d(TAG, getString(R.string.error_network_message));
-
             }
         });
     }
@@ -255,8 +226,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             case TMDBMovies.UPCOMING:
                 setTitle(getString(R.string.action_sort_upcoming));
                 break;
-
-
         }
     }
 
@@ -288,9 +257,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         sortMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-
                 //* Every time we sort, we go back to page 1
-
                 currentPage = 1;
 
                 switch (item.getItemId()) {
@@ -327,7 +294,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         } else {
             return false;
         }
-
     }
 
     @Override
@@ -353,5 +319,4 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             Log.d(TAG, "Language is :" + TMDBMovies.LANGUAGE);
         }
     }
-
 }
