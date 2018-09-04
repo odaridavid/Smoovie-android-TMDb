@@ -19,12 +19,9 @@ import smoovie.apps.com.kayatech.smoovie.model.MovieReviews;
 public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.MoviesReviewViewHolder> {
 
     //Adapter Class
-    private final Context mContext;
     private List<MovieReviews> mMovieReviewsList;
 
-
-    ReviewsAdapter(Context context, List<MovieReviews> moviesReview) {
-        mContext = context;
+    ReviewsAdapter(List<MovieReviews> moviesReview) {
         mMovieReviewsList = moviesReview;
     }
 
@@ -34,11 +31,9 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.MoviesRe
     }
 
     public void clearMovies() {
-        //called when user sorts list starting from page 1
         mMovieReviewsList.clear();
         notifyDataSetChanged();
     }
-
 
     @NonNull
     @Override
@@ -50,10 +45,8 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.MoviesRe
         return new MoviesReviewViewHolder(view);
     }
 
-
     @Override
     public void onBindViewHolder(@NonNull MoviesReviewViewHolder holder, int position) {
-
         holder.bind(mMovieReviewsList.get(position));
     }
 
@@ -63,12 +56,9 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.MoviesRe
         return (mMovieReviewsList == null) ? 0 : mMovieReviewsList.size();
     }
 
-
-    // Provide a reference to the views for each data item
     public static class MoviesReviewViewHolder extends RecyclerView.ViewHolder {
 
         MovieReviews moviesReview;
-
         @BindView(R.id.tv_reviews_author)
         TextView mMovieReviewsAuthorTextView;
         @BindView(R.id.tv_reviews_content)
@@ -76,10 +66,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.MoviesRe
 
         MoviesReviewViewHolder(View itemView) {
             super(itemView);
-            // get the reference of item view's
             ButterKnife.bind(this, itemView);
-
-
         }
 
         private void bind(MovieReviews movieReviews) {
@@ -88,20 +75,10 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.MoviesRe
             if (movieReviews != null ) {
                 String author = movieReviews.getAuthor();
                 String reviews = movieReviews.getContent();
-
                 mMovieReviewsAuthorTextView.setText(author);
                 mMovieReviewsContentTextView.setText(reviews);
                 Log.d("MOVIES REVIEWS",author+" THE BODY "+reviews);
-
             }
-            if (movieReviews == null){
-
-                    mMovieReviewsAuthorTextView.setText(itemView.getResources().getString(R.string.label_default));
-                    mMovieReviewsContentTextView.setText(itemView.getResources().getString(R.string.label_default));
-
-            }
-
-
         }
     }
 

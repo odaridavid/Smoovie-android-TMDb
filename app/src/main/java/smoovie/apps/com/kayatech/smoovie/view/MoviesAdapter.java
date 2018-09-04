@@ -22,30 +22,25 @@ import smoovie.apps.com.kayatech.smoovie.R;
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder> {
 
     //Adapter Class
-    private final Context context;
-    private List<Movie> MovieList;
+    private List<Movie> mMovieList;
     private static IMovieClickHandler mIMovieClickHandler;
 
 
-    MoviesAdapter(Context context, List<Movie> movies, IMovieClickHandler IMovieClickHandler) {
-        this.context = context;
-        this.MovieList = movies;
+    MoviesAdapter(List<Movie> movies, IMovieClickHandler IMovieClickHandler) {
+        this.mMovieList = movies;
         mIMovieClickHandler = IMovieClickHandler;
-
-
     }
 
-    public void setMovieList(List<Movie> movieList) {
-        this.MovieList = movieList;
+    public void setmMovieList(List<Movie> mMovieList) {
+        this.mMovieList = mMovieList;
         notifyDataSetChanged();
     }
 
     public void clearMovies() {
         //called when user sorts list starting from page 1
-        MovieList.clear();
+        mMovieList.clear();
         notifyDataSetChanged();
     }
-
 
     @NonNull
     @Override
@@ -57,21 +52,18 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         return new MoviesViewHolder(view);
     }
 
-
     @Override
     public void onBindViewHolder(@NonNull MoviesViewHolder holder, int position) {
-
-        holder.bind(MovieList.get(position));
+        holder.bind(mMovieList.get(position));
     }
 
     @Override
     public int getItemCount() {
         //check for null
-        return (MovieList == null) ? 0 : MovieList.size();
+        return (mMovieList == null) ? 0 : mMovieList.size();
     }
 
 
-    // Provide a reference to the views for each data item
     public static class MoviesViewHolder extends RecyclerView.ViewHolder {
 
         Movie movies;
@@ -86,10 +78,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
 
         MoviesViewHolder(View itemView) {
             super(itemView);
-            // get the reference of item view's
             ButterKnife.bind(this, itemView);
-
-
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -99,28 +88,22 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         }
 
         private void bind(Movie movie) {
-
             this.movies = movie;
-
             //Main Activity UI
             //Movie Title and Typeface
             ctx = itemView.getContext();
             final Typeface custom_font = Typeface.createFromAsset(ctx.getAssets(), "fonts/Roboto-Thin.ttf");
             mMovieTitle.setTypeface(custom_font);
             mMovieTitle.setText(movie.getMovieTitle());
-
             //Poster Image
             Picasso.with(ctx)
                     .load(IMAGE_BASE_URL + movie.getMoviePoster())
                     .error(R.drawable.test)
                     .placeholder(R.drawable.test)
                     .into(mPosterImage);
-
             //Movie Rating
             String rating = " " + Float.toString(movie.getVoterAverage()) + " ";
             mMovieRatings.setText(rating);
-
         }
     }
-
 }
