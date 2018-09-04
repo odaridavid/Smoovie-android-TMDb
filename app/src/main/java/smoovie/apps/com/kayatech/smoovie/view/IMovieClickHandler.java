@@ -2,6 +2,6 @@ package smoovie.apps.com.kayatech.smoovie.view;
 
 import smoovie.apps.com.kayatech.smoovie.model.Movie;
 
-interface MovieClickHandler {
+interface IMovieClickHandler {
     void onClick(Movie movie);
 }

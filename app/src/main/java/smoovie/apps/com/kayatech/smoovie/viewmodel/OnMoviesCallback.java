@@ -1,4 +1,4 @@
-package smoovie.apps.com.kayatech.smoovie.network;
+package smoovie.apps.com.kayatech.smoovie.viewmodel;
 
 import java.util.List;
 

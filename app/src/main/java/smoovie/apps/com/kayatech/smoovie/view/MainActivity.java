@@ -29,22 +29,22 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import smoovie.apps.com.kayatech.smoovie.model.Movie;
-import smoovie.apps.com.kayatech.smoovie.network.OnMoviesCallback;
-import smoovie.apps.com.kayatech.smoovie.network.TMDBMovies;
 import smoovie.apps.com.kayatech.smoovie.R;
+import smoovie.apps.com.kayatech.smoovie.model.Movie;
+import smoovie.apps.com.kayatech.smoovie.viewmodel.OnMoviesCallback;
+import smoovie.apps.com.kayatech.smoovie.network.TMDBMovies;
 
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
-
+    private static final String KEY = "Key";
     private static final String TAG = MainActivity.class.getSimpleName();
     private boolean isFetchingMovies = false;
     private int currentPage = 1;
     private TMDBMovies movieList;
-    private String sortBy = TMDBMovies.UPCOMING;
+    private String sortBy = TMDBMovies.POPULAR;
     private MoviesAdapter mMoviesAdapter;
     private GridLayoutManager gridLayoutManager;
-    private MovieClickHandler movieClickHandler;
+    private IMovieClickHandler IMovieClickHandler;
 
 
     @BindView(R.id.pb_getmovie_progress)
@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         mProgressBar.setVisibility(View.VISIBLE);
         //checks if state is checking or not
         isFetchingMovies = true;
-        movieClickHandler = new MovieClickHandler() {
+        IMovieClickHandler = new IMovieClickHandler() {
             @Override
             public void onClick(Movie movie) {
                 Intent openDetailsActivity = new Intent(MainActivity.this, DetailActivity.class);
@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             public void onSuccess(int page, List<Movie> movies) {
 
                 if (mMoviesAdapter == null) {
-                    mMoviesAdapter = new MoviesAdapter(getApplicationContext(), movies, movieClickHandler);
+                    mMoviesAdapter = new MoviesAdapter(getApplicationContext(), movies, IMovieClickHandler);
                     mMoviesRecyclerView.setAdapter(mMoviesAdapter);
 
                 } else {

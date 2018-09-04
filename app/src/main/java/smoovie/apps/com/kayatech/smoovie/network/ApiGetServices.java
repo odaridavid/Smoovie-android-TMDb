@@ -6,6 +6,9 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import smoovie.apps.com.kayatech.smoovie.model.Movie;
+import smoovie.apps.com.kayatech.smoovie.model.MovieListResponse;
+import smoovie.apps.com.kayatech.smoovie.model.MovieReviewResponse;
+import smoovie.apps.com.kayatech.smoovie.model.MovieVideoResponse;
 
 
 public interface ApiGetServices {
@@ -49,14 +52,14 @@ public interface ApiGetServices {
     );
 
     @GET("movie/{movie_id}/reviews")
-    Call<Movie> getMovieReviews(
+    Call<MovieReviewResponse> getMovieReviews(
             @Path("movie_id") int id,
             @Query("api_key") String apiKEy,
             @Query("language") String language
     );
 
     @GET("movie/{movie_id}/videos")
-    Call<Movie> getMovieVideos(
+    Call<MovieVideoResponse> getMovieVideos(
             @Path("movie_id") int id,
             @Query("api_key") String apiKEy,
             @Query("language") String language

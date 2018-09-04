@@ -13,6 +13,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import smoovie.apps.com.kayatech.smoovie.BuildConfig;
+import smoovie.apps.com.kayatech.smoovie.model.MovieListResponse;
+import smoovie.apps.com.kayatech.smoovie.viewmodel.OnMoviesCallback;
 
 public class TMDBMovies {
     private static final String TMDB_BASE_URL = "https://api.themoviedb.org/3/";

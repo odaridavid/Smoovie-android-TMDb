@@ -24,13 +24,13 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     //Adapter Class
     private final Context context;
     private List<Movie> MovieList;
-    private static MovieClickHandler mMovieClickHandler;
+    private static IMovieClickHandler mIMovieClickHandler;
 
 
-    MoviesAdapter(Context context, List<Movie> movies, MovieClickHandler MovieClickHandler) {
+    MoviesAdapter(Context context, List<Movie> movies, IMovieClickHandler IMovieClickHandler) {
         this.context = context;
         this.MovieList = movies;
-        mMovieClickHandler = MovieClickHandler;
+        mIMovieClickHandler = IMovieClickHandler;
 
 
     }
@@ -93,7 +93,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mMovieClickHandler.onClick(movies);
+                    mIMovieClickHandler.onClick(movies);
                 }
             });
         }
