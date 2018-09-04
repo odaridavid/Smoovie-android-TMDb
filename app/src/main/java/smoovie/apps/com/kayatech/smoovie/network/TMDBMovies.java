@@ -14,7 +14,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import smoovie.apps.com.kayatech.smoovie.BuildConfig;
 import smoovie.apps.com.kayatech.smoovie.model.MovieListResponse;
-import smoovie.apps.com.kayatech.smoovie.viewmodel.OnMoviesCallback;
+import smoovie.apps.com.kayatech.smoovie.viewmodel.IMovieListCallback;
 
 public class TMDBMovies {
     private static final String TMDB_BASE_URL = "https://api.themoviedb.org/3/";
@@ -61,7 +61,7 @@ public class TMDBMovies {
 
 
 
-    public void getMovies(int page, String sortBy, final OnMoviesCallback moviesCallback) {
+    public void getMovies(int page, String sortBy, final IMovieListCallback moviesCallback) {
 
         Callback<MovieListResponse> call = new Callback<MovieListResponse>() {
             @Override

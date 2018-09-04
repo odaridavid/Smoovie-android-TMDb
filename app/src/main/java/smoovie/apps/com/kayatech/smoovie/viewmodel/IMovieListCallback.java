@@ -4,7 +4,7 @@ import java.util.List;
 
 import smoovie.apps.com.kayatech.smoovie.model.Movie;
 
-public interface OnMoviesCallback {
+public interface IMovieListCallback {
 
     //On Success Gets Movie List and page depending on sort by option
     void onSuccess(int page,List<Movie> movies);
