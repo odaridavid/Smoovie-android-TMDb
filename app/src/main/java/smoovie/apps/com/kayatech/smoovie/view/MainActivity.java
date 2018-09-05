@@ -18,9 +18,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver;;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.muddzdev.styleabletoastlibrary.StyleableToast;
 
 import org.parceler.Parcels;
 
@@ -83,34 +86,36 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         }
         //Set Pagination , On Scroll Continues to load Items
-        mMoviesRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                //on ui and cached
-                int totalItemCount = gridLayoutManager.getItemCount();
-                //in cache
-                int visibleItemCount = gridLayoutManager.getChildCount();
-                //on ui
-                int firstVisibleItem = gridLayoutManager.findFirstVisibleItemPosition();
-
-                if (firstVisibleItem + visibleItemCount >= totalItemCount) {
-                    mProgressBar.setVisibility(View.VISIBLE);
-                    //if reached the end fetch more movies move to next page
-                    if (!isFetchingMovies) {
-                        mProgressBar.setVisibility(View.GONE);
-                        getMovies(currentPage + 1);
-                    }
-                }
-            }
-        });
+//        mMoviesRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                //on ui and cached
+//                int totalItemCount = gridLayoutManager.getItemCount();
+//                //in cache
+//                int visibleItemCount = gridLayoutManager.getChildCount();
+//                //on ui
+//                int firstVisibleItem = gridLayoutManager.findFirstVisibleItemPosition();
+//
+//                if (firstVisibleItem + visibleItemCount >= totalItemCount) {
+//                    mProgressBar.setVisibility(View.VISIBLE);
+//                    //if reached the end fetch more movies move to next page
+//                    if (!isFetchingMovies) {
+//                        mProgressBar.setVisibility(View.GONE);
+//                        getMovies(currentPage + 1);
+//                    }
+//                }
+//            }
+//        });
 
         //Setup Shared Preference
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         TMDBMovies.LANGUAGE = sp.getString(getString(R.string.pref_language_key), "");
         setUpLocale(TMDBMovies.LANGUAGE);
         sp.registerOnSharedPreferenceChangeListener(this);
+
+
     }
 
     private void setUpLocale(String language) {
@@ -272,6 +277,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     case R.id.action_sort_upcoming:
                         sortBy = TMDBMovies.UPCOMING;
                         getMovies(currentPage);
+                        return true;
+                    case R.id.action_sort_favourites:
+                        Intent openFavouritesActivity = new Intent(MainActivity.this,FavouritesActivity.class);
+                        startActivity(openFavouritesActivity);
                     default:
                         return false;
                 }
@@ -299,9 +308,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     protected void onResume() {
         super.onResume();
-        if (isOnline()) {
+        if(isOnline()){
             getMovies(currentPage);
-            mErrorMessageTextView.setVisibility(View.GONE);
         }
     }
 

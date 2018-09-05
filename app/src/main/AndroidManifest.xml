@@ -30,6 +30,10 @@
         <activity
             android:name=".view.SettingsActivity"
             android:parentActivityName=".view.MainActivity" />
+        <activity
+            android:name=".view.FavouritesActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".view.MainActivity" />
     </application>
 
 </manifest>

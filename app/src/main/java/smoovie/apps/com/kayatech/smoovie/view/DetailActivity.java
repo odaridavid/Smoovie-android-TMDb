@@ -33,6 +33,10 @@ import smoovie.apps.com.kayatech.smoovie.R;
 import smoovie.apps.com.kayatech.smoovie.model.Movie;
 import smoovie.apps.com.kayatech.smoovie.model.MovieReviews;
 import smoovie.apps.com.kayatech.smoovie.model.MovieVideos;
+import smoovie.apps.com.kayatech.smoovie.room_database.AppExecutors;
+import smoovie.apps.com.kayatech.smoovie.room_database.MovieDatabase;
+import smoovie.apps.com.kayatech.smoovie.viewmodel.DetailViewModel;
+import smoovie.apps.com.kayatech.smoovie.viewmodel.FavouritesViewModelFactory;
 import smoovie.apps.com.kayatech.smoovie.viewmodel.IMovieDetailsCallback;
 import smoovie.apps.com.kayatech.smoovie.viewmodel.IMovieReviewsCallback;
 import smoovie.apps.com.kayatech.smoovie.viewmodel.IMovieVideosCallback;
@@ -42,11 +46,13 @@ public class DetailActivity extends AppCompatActivity {
 
     private static final String TAG = DetailActivity.class.getSimpleName();
     public static final String MOVIE_ID = "movie_id";
+    public static final String MOVIE_ID_DB = "movie_id_db";
     private ReviewsAdapter mReviewsAdapter;
     private VideoAdapter mVideoAdapter;
     private IVideoClickHandler iVideoClickHandler;
     private IShareClickHandler iShareClickHandler;
     MovieDetailViewModel movieDetailViewModel;
+    private MovieDatabase movieDatabase;
 
     @BindView(R.id.tv_rating_value)
     TextView mRatingValueTextView;
@@ -66,8 +72,6 @@ public class DetailActivity extends AppCompatActivity {
     ImageView mMovieBackdropImageView;
     @BindView(R.id.iv_poster_image)
     ImageView mMoviePosterImageView;
-    @BindView(R.id.iv_favcon)
-    ImageView mFavconImageView;
     @BindView(R.id.tv_label_reviews)
     TextView mMovieReviewLabelTextView;
     @BindView(R.id.tv_label_trailers)
@@ -80,62 +84,79 @@ public class DetailActivity extends AppCompatActivity {
     RecyclerView mMoviesReviewRecyclerView;
     @BindView(R.id.rv_movies_trailer)
     RecyclerView mMoviesTrailerRecyclerView;
-
+    @BindView(R.id.iv_favcon)
+    ImageView mFavouritesIconImageView;
+    private static final int DEFAULT_TASK_ID = -1;
+    private int movieIdIn = DEFAULT_TASK_ID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-
         //Bind Views
         ButterKnife.bind(this);
 
+
+        movieDatabase = MovieDatabase.getMovieDatabaseInstance(getApplicationContext());
         //Custom Font For Labels
         Typeface custom_font_thin = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Light.ttf");
         mLabelReleasedTextView.setTypeface(custom_font_thin);
         mLabelOverviewTextView.setTypeface(custom_font_thin);
         mMovieReviewLabelTextView.setTypeface(custom_font_thin);
         mMovieTrailerLabelTextView.setTypeface(custom_font_thin);
-
+        setupToolbar();
         //Check if intent contains extras
-        if (getIntent().getExtras() != null) {
-            final int mMovieId = Parcels.unwrap(getIntent().getParcelableExtra(MOVIE_ID));
-            Log.d("Movie Being Passed", "" + mMovieId);
-            setupToolbar();
-            movieDetailViewModel = ViewModelProviders.of(this).get(MovieDetailViewModel.class);
-            movieDetailViewModel.init(mMovieId, new IMovieDetailsCallback() {
-                @Override
-                public void onSuccess(Movie movie) {
-                    if (movie != null) {
-                        setUpRecyclerView();
-                        updateInterface(movie);
-                        // Toast.makeText(DetailActivity.this,""+movie.getMovieTitle(),Toast.LENGTH_LONG).show();
-                    }
-                }
+        Intent intent = getIntent();
+        if (intent.getExtras() != null) {
+            if (intent.hasExtra(MOVIE_ID)) {
 
-                @Override
-                public void onError() {
-                    displayError();
-                }
-            });
-            movieDetailViewModel.getMovie().observe(this, new Observer<Movie>() {
-                @Override
-                public void onChanged(@Nullable Movie movie) {
-                    if (movie != null) {
-                        Log.d(TAG, "TITLE::" + movie.toString());
-                        setUpRecyclerView();
-                        updateInterface(movie);
+                final int mMovieId = Parcels.unwrap(getIntent().getParcelableExtra(MOVIE_ID));
+                Log.d(TAG, "Movie Being Passed" + mMovieId);
+
+                movieDetailViewModel = ViewModelProviders.of(this).get(MovieDetailViewModel.class);
+                movieDetailViewModel.init(mMovieId, new IMovieDetailsCallback() {
+                    @Override
+                    public void onSuccess(Movie movie) {
+                        if (movie != null) {
+                            setUpRecyclerView();
+                            updateInterface(movie);
+                            // Toast.makeText(DetailActivity.this,""+movie.getMovieTitle(),Toast.LENGTH_LONG).show();
+                        }
                     }
-                }
-            });
-        }
-        //On Favicon icon clicked
-        mFavconImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addFavourites(v);
+
+                    @Override
+                    public void onError() {
+                        displayError();
+                    }
+                });
+                movieDetailViewModel.getMovie().observe(this, new Observer<Movie>() {
+                    @Override
+                    public void onChanged(@Nullable Movie movie) {
+                        if (movie != null) {
+                            Log.d(TAG, "TITLE::" + movie.toString());
+                            setUpRecyclerView();
+                            updateInterface(movie);
+                        }
+                    }
+                });
             }
-        });
+
+            if (intent.hasExtra(MOVIE_ID_DB)) {
+                movieIdIn = intent.getIntExtra(MOVIE_ID_DB, DEFAULT_TASK_ID);
+                FavouritesViewModelFactory factory = new FavouritesViewModelFactory(movieDatabase, movieIdIn);
+                final DetailViewModel detailViewModel = ViewModelProviders.of(this, factory).get(DetailViewModel.class);
+                detailViewModel.getMovieLiveData().observe(this, new Observer<Movie>() {
+                    @Override
+                    public void onChanged(@Nullable Movie movie) {
+                        detailViewModel.getMovieLiveData().removeObserver(this);
+                        if (movie != null) {
+                            setUpRecyclerView();
+                            populateUIfromRoomDatabase(movie);
+                        }
+                    }
+                });
+            }
+        }
     }
 
     private void setupToolbar() {
@@ -166,7 +187,7 @@ public class DetailActivity extends AppCompatActivity {
         mMoviesTrailerRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
     }
 
-    private void updateInterface(Movie movie) {
+    private void updateInterface(final Movie movie) {
         String IMAGE_BASE_URL_BACKDROP = "http://image.tmdb.org/t/p/w780";
         String IMAGE_BASE_URL_POSTER = "http://image.tmdb.org/t/p/w185";
 
@@ -200,7 +221,50 @@ public class DetailActivity extends AppCompatActivity {
         }
         getMovieReview(movie);
         getVideo(movie);
+        mFavouritesIconImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onAddToFavourites(movie);
+                Toast.makeText(DetailActivity.this, "Added", Toast.LENGTH_LONG).show();
+            }
+        });
 
+    }
+
+    private void populateUIfromRoomDatabase(final Movie movie) {
+        String IMAGE_BASE_URL_BACKDROP = "http://image.tmdb.org/t/p/w780";
+        String IMAGE_BASE_URL_POSTER = "http://image.tmdb.org/t/p/w185";
+
+        final Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
+        mMovieTitleTextView.setText(movie.getMovieTitle());
+        mMovieTitleTextView.setTypeface(custom_font);
+        mMovieOverviewTextView.setText(movie.getMovieOverview());
+        mMovieOverviewTextView.setTypeface(custom_font);
+        mMovieRatingRatingBar.setVisibility(View.VISIBLE);
+        mMovieRatingRatingBar.setRating(movie.getVoterAverage() / 2);
+
+        float movieavg = movie.getVoterAverage();
+        String movieAvgString = Float.toString(movieavg);
+
+        mRatingValueTextView.setText(movieAvgString);
+        mMovieReleaseDateTextView.setText(movie.getMovieReleaseDate());
+        mMovieReleaseDateTextView.setTypeface(custom_font);
+        if (!isFinishing()) {
+            Picasso.with(DetailActivity.this)
+                    .load(IMAGE_BASE_URL_BACKDROP + movie.getBackdrop())
+                    .error(R.drawable.test_back)
+                    .placeholder(R.drawable.test_back)
+                    .into(mMovieBackdropImageView);
+        }
+        if (!isFinishing()) {
+            Picasso.with(DetailActivity.this)
+                    .load(IMAGE_BASE_URL_POSTER + movie.getMoviePoster())
+                    .error(R.drawable.test)
+                    .placeholder(R.drawable.test)
+                    .into(mMoviePosterImageView);
+        }
+        mMovieReviewLabelTextView.setVisibility(View.GONE);
+        mMovieTrailerLabelTextView.setVisibility(View.GONE);
     }
 
     private void getVideo(Movie movie) {
@@ -262,7 +326,8 @@ public class DetailActivity extends AppCompatActivity {
             startActivity(youtubeIntent);
         }
     }
-    private void openShareIntent(String linkToShare){
+
+    private void openShareIntent(String linkToShare) {
         String mimeType = "text/plain";
         String title = getString(R.string.label_share);
         ShareCompat
@@ -325,27 +390,29 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
-    private void addFavourites(View v) {
-//         Drawable currentDrawable = mFavconImageView.getDrawable();
-//         if(currentDrawable == getDrawable(R.drawable.ic_favorite_true)){
-//             mFavconImageView.setImageDrawable(getDrawable(R.drawable.ic_favorite_false));
-//             new StyleableToast
-//                     .Builder(DetailActivity.this)
-//                     .text("Removed from Favourites")
-//                     .textColor(Color.WHITE)
-//                     .backgroundColor(Color.rgb(66, 165, 245))
-//                     .length(Toast.LENGTH_SHORT)
-//                     .show();
-//
-//         }else {
-//             mFavconImageView.setImageDrawable(getDrawable(R.drawable.ic_favorite_true));
-//             new StyleableToast
-//                     .Builder(DetailActivity.this)
-//                     .text("Added to Favourites")
-//                     .textColor(Color.WHITE)
-//                     .backgroundColor(Color.rgb(66, 165, 245))
-//                     .length(Toast.LENGTH_SHORT)
-//                     .show();
-//         }
+    public void onAddToFavourites(Movie movie) {
+        int movieId = movie.getMovieId();
+        String movieTitle = movie.getMovieTitle();
+        String movieOverview = movie.getMovieOverview();
+        String moviePoster = movie.getMoviePoster();
+        String movieBackdrop = movie.getBackdrop();
+        float movieAverage = movie.getVoterAverage();
+        String movieReleaseDate = movie.getMovieReleaseDate();
+
+        final Movie favMovie = new Movie(movieId, movieTitle, movieOverview, movieReleaseDate, moviePoster, movieBackdrop, movieAverage);
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                movieDatabase.movieDAO().saveMovieAsFavourite(favMovie);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mFavouritesIconImageView.setImageDrawable(getDrawable(R.drawable.ic_favorite_true));
+                    }
+                });
+            }
+        });
+
+
     }
 }

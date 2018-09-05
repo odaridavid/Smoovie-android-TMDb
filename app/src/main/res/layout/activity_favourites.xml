@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.FavouritesActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/action_toolbar_fav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:elevation="@dimen/size_small"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/action_sort_favourites" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_favourite_movies"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/action_toolbar_fav" />
+
+    <ImageView
+        android:id="@+id/iv_favcon_view_default"
+        android:layout_width="@dimen/video_width"
+        android:layout_height="@dimen/video_width"
+        android:contentDescription="@string/label_content_description_favicon"
+        android:src="@drawable/ic_favorite_true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:gravity="center"
+        android:id="@+id/tv_fav_default"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/default_favs"
+        android:visibility="gone"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/iv_favcon_view_default"/>
+
+</android.support.constraint.ConstraintLayout>

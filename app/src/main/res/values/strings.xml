@@ -59,4 +59,7 @@
     <string name="pref_language_val_chinese" translatable="false">zh-CN</string>
     <string name="pref_language_val_french" translatable="false">fr-FR</string>
     <string name="label_content_description">Favourites Icon</string>
+
+    <!--Favs-->
+    <string name="default_favs">View Favourites Here</string>
 </resources>
