@@ -19,4 +19,5 @@ interface IMovie {
     String getBackdrop();
 
     int getMovieId();
+    void setMovieId(int movieId);
 }
