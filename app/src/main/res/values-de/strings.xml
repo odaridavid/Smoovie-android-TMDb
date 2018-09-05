@@ -16,4 +16,5 @@
     <string name="label_content_description_poster">Poster Bild</string>
     <string name="error_trailer_unavailable">"Keine Anhänger verfügbar "</string>
     <string name="error_review_unavailable">Keine Bewertung verfügbar</string>
+    <string name="label_share">Aktie</string>
 </resources>

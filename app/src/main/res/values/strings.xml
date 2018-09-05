@@ -26,6 +26,7 @@
     <string name="label_content_description_favicon">Favourites Icon</string>
     <string name="label_trailers">Trailers</string>
     <string name="label_reviews">Reviews</string>
+    <string name="label_share">Share</string>
     <string name="label_default" translatable="false">---</string>
     <string name="error_trailer_unavailable">No Trailer Available</string>
     <string name="error_review_unavailable">No Review Available</string>

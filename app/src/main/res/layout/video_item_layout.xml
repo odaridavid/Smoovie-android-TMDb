@@ -1,15 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:clickable="true"
     android:layout_margin="@dimen/size_small"
+    android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground">
 
+    <FrameLayout
+        android:id="@+id/fl_trailers"
+        android:layout_width="@dimen/video_width"
+        android:layout_height="@dimen/video_height">
+
+        <ImageView
+            android:id="@+id/iv_trailer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/label_trailers" />
+
+        <ImageView
+            android:id="@+id/iv_trailer_play"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/label_trailers"
+            android:foregroundGravity="center"
+            android:src="@drawable/ic_play_arrow_black_24dp"
+            android:clickable="true"
+            android:focusable="true"/>
+    </FrameLayout>
+
+
     <ImageView
-        android:id="@+id/iv_trailer"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:contentDescription="@string/label_trailers" />
+        android:background="@drawable/video_view_selector"
+        android:clickable="true"
+        android:focusable="true"
+        android:id="@+id/iv_icon_share"
+        android:layout_width="@dimen/video_width"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/label_share"
+        android:padding="@dimen/size_default"
+        android:src="@drawable/ic_share_black_24dp"
+        app:layout_constraintTop_toBottomOf="@+id/fl_trailers" />
+
+
 </android.support.constraint.ConstraintLayout>

@@ -22,11 +22,13 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.MoviesVideoV
     //Adapter Class
     private List<MovieVideos> mMovieVideoList;
     private static IVideoClickHandler mIVideoClickHandler;
+    private static IShareClickHandler mIShareClickHandler;
 
 
-    VideoAdapter(List<MovieVideos> mMovieVideoList, IVideoClickHandler mVideoClickHandler) {
+    VideoAdapter(List<MovieVideos> mMovieVideoList, IVideoClickHandler iVideoClickHandler, IShareClickHandler iShareClickHandler) {
         this.mMovieVideoList = mMovieVideoList;
-        mIVideoClickHandler = mVideoClickHandler;
+        mIVideoClickHandler = iVideoClickHandler;
+        mIShareClickHandler = iShareClickHandler;
     }
 
     public void setMovieVideoList(List<MovieVideos> mMovieVideoList) {
@@ -66,16 +68,26 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.MoviesVideoV
         MovieVideos movieVideos;
         private Context ctx;
         @BindView(R.id.iv_trailer)
-        ImageView mMovieTrailer;
+        ImageView mMovieTrailerThumbnailImageView;
+        @BindView(R.id.iv_icon_share)
+        ImageView mMovieTrailerShareImageView;
+        @BindView(R.id.iv_trailer_play)
+        ImageView mMovieTrailerPlay;
 
         MoviesVideoViewHolder(View itemView) {
             super(itemView);
             // get the reference of item view's
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(new View.OnClickListener() {
+            mMovieTrailerPlay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mIVideoClickHandler.onClick(movieVideos);
+                }
+            });
+            mMovieTrailerShareImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mIShareClickHandler.onClick(movieVideos);
                 }
             });
         }
@@ -87,7 +99,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.MoviesVideoV
             Picasso.with(ctx)
                     .load(String.format(YOUTUBE_THUMBNAIL_URL, movieVideos.getKeyTrailer()))
                     .placeholder(R.color.colorAlternate)
-                    .into(mMovieTrailer);
+                    .into(mMovieTrailerThumbnailImageView);
         }
     }
 

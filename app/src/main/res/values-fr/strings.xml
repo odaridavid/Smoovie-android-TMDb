@@ -16,4 +16,5 @@
     <string name="label_content_description_poster">Image de l\'affiche</string>
     <string name="error_trailer_unavailable">Pas de remorques disponibles</string>
     <string name="error_review_unavailable">" Aucune critique disponible"</string>
+    <string name="label_share">Partager</string>
 </resources>

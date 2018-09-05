@@ -20,4 +20,7 @@
     <dimen name="size_app_bar_height">200dp</dimen>
     <dimen name="size_image_view_poster">120dp</dimen>
 
+    <!--Video -->
+    <dimen name="video_width">150dp</dimen>
+    <dimen name="video_height">100dp</dimen>
 </resources>

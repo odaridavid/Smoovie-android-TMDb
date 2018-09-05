@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -44,6 +45,7 @@ public class DetailActivity extends AppCompatActivity {
     private ReviewsAdapter mReviewsAdapter;
     private VideoAdapter mVideoAdapter;
     private IVideoClickHandler iVideoClickHandler;
+    private IShareClickHandler iShareClickHandler;
     MovieDetailViewModel movieDetailViewModel;
 
     @BindView(R.id.tv_rating_value)
@@ -204,7 +206,16 @@ public class DetailActivity extends AppCompatActivity {
     private void getVideo(Movie movie) {
         final String YOUTUBE_VIDEO_BASE_URL = "http://www.youtube.com/watch?v=%s";
         int movieId = movie.getMovieId();
+        //Click Handling Sharing
+        iShareClickHandler = new IShareClickHandler() {
+            @Override
+            public void onClick(MovieVideos movieVideos) {
+                String YoutubeLink = String.format(YOUTUBE_VIDEO_BASE_URL, movieVideos.getKeyTrailer());
+                openShareIntent(YoutubeLink);
+            }
+        };
 
+        //Click Handling Youtube Intent
         iVideoClickHandler = new IVideoClickHandler() {
             @Override
             public void onClick(MovieVideos movieVideos) {
@@ -219,7 +230,7 @@ public class DetailActivity extends AppCompatActivity {
             public void onSuccess(List<MovieVideos> movieVideos) {
                 //Attach Video Adapter to Recycler View
                 if (mVideoAdapter == null) {
-                    mVideoAdapter = new VideoAdapter(movieVideos, iVideoClickHandler);
+                    mVideoAdapter = new VideoAdapter(movieVideos, iVideoClickHandler, iShareClickHandler);
                     mMoviesTrailerRecyclerView.setAdapter(mVideoAdapter);
                 } else {
                     mVideoAdapter.clearMovies();
@@ -249,9 +260,18 @@ public class DetailActivity extends AppCompatActivity {
         Intent youtubeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeVideoLink));
         if (youtubeIntent.resolveActivity(getPackageManager()) != null) {
             startActivity(youtubeIntent);
-
         }
-
+    }
+    private void openShareIntent(String linkToShare){
+        String mimeType = "text/plain";
+        String title = getString(R.string.label_share);
+        ShareCompat
+                .IntentBuilder
+                .from(this)
+                .setType(mimeType)
+                .setChooserTitle(title)
+                .setText(linkToShare)
+                .startChooser();
     }
 
     private void getMovieReview(Movie movie) {
