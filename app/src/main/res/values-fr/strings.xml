@@ -17,4 +17,7 @@
     <string name="error_trailer_unavailable">Pas de remorques disponibles</string>
     <string name="error_review_unavailable">" Aucune critique disponible"</string>
     <string name="label_share">Partager</string>
+    <string name="label_added_favs">Ajouté aux favoris</string>
+    <string name="default_favs">Voir les favoris ici</string>
+    <string name="label_removed_favs">Retiré des favoris</string>
 </resources>

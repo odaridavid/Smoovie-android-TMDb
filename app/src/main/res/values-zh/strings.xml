@@ -16,4 +16,8 @@
     <string name="label_content_description_poster">海报图片</string>
     <string name="error_trailer_unavailable">"没有预告片 "</string>
     <string name="error_review_unavailable">"没有评论 "</string>
+    <string name="label_share">分享</string>
+    <string name="label_added_favs">添加到收藏夹</string>
+    <string name="default_favs">在此查看收藏夹</string>
+    <string name="label_removed_favs">"从收藏夹中删除 "</string>
 </resources>

@@ -17,4 +17,7 @@
     <string name="error_trailer_unavailable">"Keine Anhänger verfügbar "</string>
     <string name="error_review_unavailable">Keine Bewertung verfügbar</string>
     <string name="label_share">Aktie</string>
+    <string name="label_added_favs">Zu Favoriten hinzugefügt</string>
+    <string name="default_favs">Favoriten hier anzeigen</string>
+    <string name="label_removed_favs">Aus den Favoriten entfernt</string>
 </resources>
