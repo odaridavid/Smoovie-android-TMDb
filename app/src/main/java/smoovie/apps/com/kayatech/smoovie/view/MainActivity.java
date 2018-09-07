@@ -34,9 +34,6 @@ import smoovie.apps.com.kayatech.smoovie.model.Movie;
 import smoovie.apps.com.kayatech.smoovie.network.TMDBMovies;
 import smoovie.apps.com.kayatech.smoovie.viewmodel.IMovieListCallback;
 
-;
-
-
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     private boolean isFetchingMovies = false;
@@ -67,22 +64,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbarMainPage);
-
-
         movieList = TMDBMovies.getInstance();
-
         setUpRecyclerView();
-
-
         //Start on Page 1 and checks for network connectivity
         if (isOnline()) {
             getMovies(currentPage);
             mErrorMessageTextView.setVisibility(View.INVISIBLE);
-
         } else {
             mErrorMessageTextView.setVisibility(View.VISIBLE);
             mProgressBar.setVisibility(View.GONE);
-
         }
         //Set Pagination , On Scroll Continues to load Items
 //        mMoviesRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -188,12 +178,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 startActivity(openDetailsActivity);
             }
         };
-
-
         movieList.getMovies(page, sortBy, new IMovieListCallback() {
             @Override
             public void onSuccess(int page, List<Movie> movies) {
-
                 if (mMoviesAdapter == null) {
                     mMoviesAdapter = new MoviesAdapter(movies, IMovieClickHandler);
                     mMoviesRecyclerView.setAdapter(mMoviesAdapter);
@@ -207,10 +194,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 }
                 currentPage = page;
                 isFetchingMovies = false;
-
                 setTitleBar();
             }
-
             @Override
             public void onFailure() {
                 Log.d(TAG, getString(R.string.error_network_message));
@@ -250,10 +235,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(settingsIntent);
         }
-
         return super.onOptionsItemSelected(item);
-
-
     }
 
     private void showSortPopUpMenu() {
@@ -263,7 +245,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             public boolean onMenuItemClick(MenuItem item) {
                 //* Every time we sort, we go back to page 1
                 currentPage = 1;
-
                 switch (item.getItemId()) {
                     case R.id.action_sort_most_popular:
                         sortBy = TMDBMovies.POPULAR;
@@ -288,7 +269,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         sortMenu.inflate(R.menu.main_menu_items_sort);
         sortMenu.show();
     }
-
     /**
      * Checks Network State returns true if connected
      *
