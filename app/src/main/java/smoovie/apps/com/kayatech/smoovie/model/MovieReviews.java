@@ -22,6 +22,7 @@ public class MovieReviews {
 
     public MovieReviews() {
     }
+
     public void setAuthor(String author) {
         this.author = author;
     }
@@ -29,6 +30,7 @@ public class MovieReviews {
     public void setContent(String content) {
         this.content = content;
     }
+
     public String getId() {
         return id;
     }

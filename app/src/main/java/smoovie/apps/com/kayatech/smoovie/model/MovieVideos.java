@@ -25,8 +25,9 @@ public class MovieVideos {
     @SerializedName("type")
     private String typeTrailer;
 
-     MovieVideos() {
+    MovieVideos() {
     }
+
     public String getSizeTrailer() {
         return sizeTrailer;
     }

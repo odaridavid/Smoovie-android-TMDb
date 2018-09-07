@@ -18,7 +18,7 @@ import smoovie.apps.com.kayatech.smoovie.viewmodel.IMovieListCallback;
 
 public class TMDBMovies {
     private static final String TMDB_BASE_URL = "https://api.themoviedb.org/3/";
-    public static String LANGUAGE ;
+    public static String LANGUAGE;
     private final String TAG = TMDBMovies.class.getSimpleName();
     private static TMDBMovies tmdbMoviesRepo;
     public static final String POPULAR = "popular";
@@ -37,28 +37,27 @@ public class TMDBMovies {
 
     public static TMDBMovies getInstance() {
         if (tmdbMoviesRepo == null) {
-               synchronized (LOCK){
-            //OKHTTP CLIENT-handles http requests
-            final OkHttpClient client = new OkHttpClient.Builder()
-                    .addInterceptor(new LoggingInterceptor())
-                    .connectTimeout(15, TimeUnit.SECONDS)
-                    .readTimeout(15, TimeUnit.SECONDS)
-                    .build();
+            synchronized (LOCK) {
+                //OKHTTP CLIENT-handles http requests
+                final OkHttpClient client = new OkHttpClient.Builder()
+                        .addInterceptor(new LoggingInterceptor())
+                        .connectTimeout(15, TimeUnit.SECONDS)
+                        .readTimeout(15, TimeUnit.SECONDS)
+                        .build();
 
-            //REST ADAPTER
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(TMDB_BASE_URL)
-                    .client(client)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+                //REST ADAPTER
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(TMDB_BASE_URL)
+                        .client(client)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
 
-            tmdbMoviesRepo = new TMDBMovies(retrofit.create(ApiGetServices.class));
-               }
+                tmdbMoviesRepo = new TMDBMovies(retrofit.create(ApiGetServices.class));
+            }
         }
 
         return tmdbMoviesRepo;
     }
-
 
 
     public void getMovies(int page, String sortBy, final IMovieListCallback moviesCallback) {
