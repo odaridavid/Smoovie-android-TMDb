@@ -2,7 +2,11 @@ package smoovie.apps.com.kayatech.smoovie.viewmodel;
 
 import android.arch.lifecycle.LiveData;
 
+import java.util.List;
+
 import smoovie.apps.com.kayatech.smoovie.model.Movie;
+import smoovie.apps.com.kayatech.smoovie.model.MovieReviews;
+import smoovie.apps.com.kayatech.smoovie.model.MovieVideos;
 
 
 public interface IMoviePresenter {
@@ -15,7 +19,7 @@ public interface IMoviePresenter {
      * @param movieId Clicked Movie Id
      * @param iMovieVideosCallback Trailer Callback for handling on success and error
      */
-    void getMovieVideos(int movieId, final IMovieVideosCallback iMovieVideosCallback);
+    LiveData<List<MovieVideos>> getMovieVideos(int movieId, final IMovieVideosCallback iMovieVideosCallback);
 
     /**
      *
@@ -23,7 +27,7 @@ public interface IMoviePresenter {
      * @param movieId Clicked Movie Id
      * @param iMovieReviewsCallback Callback for handling on success and on error for Reviews
      */
-    void getMovieReviews(int page,int movieId, final IMovieReviewsCallback iMovieReviewsCallback);
+    LiveData<List<MovieReviews>> getMovieReviews(int page, int movieId, final IMovieReviewsCallback iMovieReviewsCallback);
 
 
     //Takes in page parameter to enable loading of multiple pages as user scrolls

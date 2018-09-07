@@ -5,12 +5,16 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import smoovie.apps.com.kayatech.smoovie.model.Movie;
 import smoovie.apps.com.kayatech.smoovie.model.MovieReviewResponse;
+import smoovie.apps.com.kayatech.smoovie.model.MovieReviews;
 import smoovie.apps.com.kayatech.smoovie.model.MovieVideoResponse;
+import smoovie.apps.com.kayatech.smoovie.model.MovieVideos;
 import smoovie.apps.com.kayatech.smoovie.network.TMDBMovies;
 
 
@@ -52,7 +56,8 @@ public class MoviesRepository implements IMoviePresenter {
 
     //Videos
     @Override
-    public void getMovieVideos(int movieId, final IMovieVideosCallback iMovieVideosCallback) {
+    public LiveData<List<MovieVideos>> getMovieVideos(int movieId, final IMovieVideosCallback iMovieVideosCallback) {
+        final MutableLiveData<List<MovieVideos>> movieVideoLiveData = new MutableLiveData<>();
         Callback<MovieVideoResponse> call = new Callback<MovieVideoResponse>() {
             @Override
             public void onResponse(@NonNull Call<MovieVideoResponse> call,@NonNull Response<MovieVideoResponse> response) {
@@ -61,6 +66,7 @@ public class MoviesRepository implements IMoviePresenter {
                     if (movieVideoResponse != null && movieVideoResponse.getMoviesResult() != null) {
                         //Gets Movies List
                         iMovieVideosCallback.onSuccess(movieVideoResponse.getMoviesResult());
+                        movieVideoLiveData.setValue(movieVideoResponse.getMoviesResult());
 
                     } else {
                         iMovieVideosCallback.onError();
@@ -79,14 +85,15 @@ public class MoviesRepository implements IMoviePresenter {
 
         TMDBMovies.tmdbApiService.getMovieVideos(movieId,TMDBMovies.API_KEY,TMDBMovies.LANGUAGE)
                 .enqueue(call);
+        return movieVideoLiveData;
     }
 
 
 
     //Reviews
     @Override
-    public void getMovieReviews(int page,int movieId, final IMovieReviewsCallback iMovieReviewsCallback) {
-
+    public LiveData<List<MovieReviews>> getMovieReviews(int page, int movieId, final IMovieReviewsCallback iMovieReviewsCallback) {
+        final MutableLiveData<List<MovieReviews>> movieReviewLiveData = new MutableLiveData<>();
         Callback<MovieReviewResponse> call = new Callback<MovieReviewResponse>() {
             @Override
             public void onResponse(@NonNull Call<MovieReviewResponse> call,@NonNull Response<MovieReviewResponse> response) {
@@ -95,6 +102,7 @@ public class MoviesRepository implements IMoviePresenter {
                     if (moviesReviewResponse != null && moviesReviewResponse.getMoviesResult() != null) {
                         //Gets Movies List
                         iMovieReviewsCallback.onSuccess(moviesReviewResponse.getPage(), moviesReviewResponse.getMoviesResult());
+                        movieReviewLiveData.setValue(moviesReviewResponse.getMoviesResult());
 
                     } else {
                        iMovieReviewsCallback.onFailure();
@@ -112,6 +120,7 @@ public class MoviesRepository implements IMoviePresenter {
 
        TMDBMovies.tmdbApiService.getMovieReviews(movieId,TMDBMovies.API_KEY,TMDBMovies.LANGUAGE)
                 .enqueue(call);
+        return movieReviewLiveData;
 
     }
 
