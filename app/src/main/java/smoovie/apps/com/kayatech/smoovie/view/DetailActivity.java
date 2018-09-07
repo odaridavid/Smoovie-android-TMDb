@@ -132,7 +132,7 @@ public class DetailActivity extends AppCompatActivity {
                 }, new IMovieVideosCallback() {
                     @Override
                     public void onSuccess(List<MovieVideos> movieVideos) {
-                       setupVideoAdapter(movieVideos);
+                        setupVideoAdapter(movieVideos);
                     }
 
                     @Override

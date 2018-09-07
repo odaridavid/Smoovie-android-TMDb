@@ -18,12 +18,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;;
+import android.view.ViewTreeObserver;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.muddzdev.styleabletoastlibrary.StyleableToast;
 
 import org.parceler.Parcels;
 
@@ -36,6 +33,8 @@ import smoovie.apps.com.kayatech.smoovie.R;
 import smoovie.apps.com.kayatech.smoovie.model.Movie;
 import smoovie.apps.com.kayatech.smoovie.network.TMDBMovies;
 import smoovie.apps.com.kayatech.smoovie.viewmodel.IMovieListCallback;
+
+;
 
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -279,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         getMovies(currentPage);
                         return true;
                     case R.id.action_sort_favourites:
-                        Intent openFavouritesActivity = new Intent(MainActivity.this,FavouritesActivity.class);
+                        Intent openFavouritesActivity = new Intent(MainActivity.this, FavouritesActivity.class);
                         startActivity(openFavouritesActivity);
                     default:
                         return false;
@@ -308,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     protected void onResume() {
         super.onResume();
-        if(isOnline()){
+        if (isOnline()) {
             getMovies(currentPage);
         }
     }

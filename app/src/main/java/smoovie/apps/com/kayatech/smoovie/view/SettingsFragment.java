@@ -22,7 +22,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             Preference preference = preferenceScreen.getPreference(i);
             if (preference instanceof ListPreference) {
 
-                se.putString(preference.getKey(),((ListPreference) preference).getValue());
+                se.putString(preference.getKey(), ((ListPreference) preference).getValue());
                 se.apply();
                 String language = sp.getString(preference.getKey(), "");
                 setLanguagePreferenceSummary(preference, language);

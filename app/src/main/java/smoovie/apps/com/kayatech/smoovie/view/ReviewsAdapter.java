@@ -72,12 +72,12 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.MoviesRe
         private void bind(MovieReviews movieReviews) {
 
             this.moviesReview = movieReviews;
-            if (movieReviews != null ) {
+            if (movieReviews != null) {
                 String author = movieReviews.getAuthor();
                 String reviews = movieReviews.getContent();
                 mMovieReviewsAuthorTextView.setText(author);
                 mMovieReviewsContentTextView.setText(reviews);
-                Log.d("MOVIES REVIEWS",author+" THE BODY "+reviews);
+                Log.d("MOVIES REVIEWS", author + " THE BODY " + reviews);
             }
         }
     }

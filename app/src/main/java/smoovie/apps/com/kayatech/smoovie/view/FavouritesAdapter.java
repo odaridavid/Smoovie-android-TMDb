@@ -34,9 +34,11 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
         this.mMovieList = movie;
         notifyDataSetChanged();
     }
+
     public interface IFavMovieClickHandler {
         void onItemClickListener(int movieId);
     }
+
     public void clearMovies() {
         mMovieList.clear();
         notifyDataSetChanged();

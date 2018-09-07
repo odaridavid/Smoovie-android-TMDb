@@ -1,7 +1,6 @@
 package smoovie.apps.com.kayatech.smoovie.view;
 
 
-
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -11,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import smoovie.apps.com.kayatech.smoovie.R;
-
 
 
 public class SettingsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -46,7 +44,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals(getString(R.string.pref_language_key))) {
-          recreate();
+            recreate();
         }
     }
 
