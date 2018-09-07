@@ -12,7 +12,7 @@ import org.parceler.Parcel;
 
 @Entity(tableName = "favourite_movie")
 @Parcel(Parcel.Serialization.BEAN)
-public class Movie implements IMovie {
+public class Movie {
     //model class to map json data to pojo
     //Movie GET Class objects from tmdb
     @ColumnInfo(name = "movie_title")
@@ -33,7 +33,7 @@ public class Movie implements IMovie {
 
     @ColumnInfo(name = "voter_average")
     @SerializedName("vote_average")
-    private  float voterAverage;
+    private float voterAverage;
 
     @ColumnInfo(name = "backdrop")
     @SerializedName("backdrop_path")
@@ -43,11 +43,15 @@ public class Movie implements IMovie {
     @SerializedName("id")
     private int movieId;
 
+
+    @ColumnInfo(name = "favourite")
+    private boolean isFavourite;
+
     @Ignore
     public Movie() {
     }
 
-    public Movie(int movieId, String movieTitle, String movieOverview, String movieReleaseDate, String moviePoster, String backdrop, float voterAverage) {
+    public Movie(int movieId, String movieTitle, String movieOverview, String movieReleaseDate, String moviePoster, String backdrop, float voterAverage, boolean isFavourite) {
         this.movieId = movieId;
         this.movieTitle = movieTitle;
         this.movieOverview = movieOverview;
@@ -55,55 +59,56 @@ public class Movie implements IMovie {
         this.moviePoster = moviePoster;
         this.backdrop = backdrop;
         this.voterAverage = voterAverage;
+        this.isFavourite = isFavourite;
     }
 
     @Ignore
-    public Movie(String movieTitle, String movieOverview, String movieReleaseDate, String moviePoster, String backdrop, float voterAverage) {
+    public Movie(String movieTitle, String movieOverview, String movieReleaseDate, String moviePoster, String backdrop, float voterAverage, boolean isFavourite) {
         this.movieTitle = movieTitle;
         this.movieOverview = movieOverview;
         this.movieReleaseDate = movieReleaseDate;
         this.moviePoster = moviePoster;
         this.backdrop = backdrop;
         this.voterAverage = voterAverage;
+        this.isFavourite = isFavourite;
     }
 
+    public boolean isFavourite() {
+        return isFavourite;
+    }
 
-    @Override
+    public void isFavourite(boolean isFavourite) {
+        this.isFavourite = isFavourite;
+    }
+
     public String getMovieTitle() {
         return movieTitle;
     }
 
-    @Override
     public String getMovieOverview() {
         return movieOverview;
     }
 
-    @Override
     public String getMovieReleaseDate() {
         return movieReleaseDate;
     }
 
-    @Override
     public String getMoviePoster() {
         return moviePoster;
     }
 
-    @Override
     public float getVoterAverage() {
         return voterAverage;
     }
 
-    @Override
     public String getBackdrop() {
         return backdrop;
     }
 
-    @Override
     public int getMovieId() {
         return movieId;
     }
 
-    @Override
     public void setMovieId(int movieId) {
         this.movieId = movieId;
     }
