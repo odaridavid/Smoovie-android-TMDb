@@ -22,6 +22,10 @@ android {
             buildConfigField("String", "API_KEY", SMOOVIE_API_KEY)
         }
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
