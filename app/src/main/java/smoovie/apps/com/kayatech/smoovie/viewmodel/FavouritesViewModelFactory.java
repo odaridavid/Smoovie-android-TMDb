@@ -9,9 +9,9 @@ import smoovie.apps.com.kayatech.smoovie.room_database.MovieDatabase;
 public class FavouritesViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
     private final MovieDatabase movieDatabase;
-    private  final int movieId;
+    private final int movieId;
 
-    public FavouritesViewModelFactory(MovieDatabase movieDatabase,int movieId){
+    public FavouritesViewModelFactory(MovieDatabase movieDatabase, int movieId) {
         this.movieDatabase = movieDatabase;
         this.movieId = movieId;
     }
@@ -19,6 +19,6 @@ public class FavouritesViewModelFactory extends ViewModelProvider.NewInstanceFac
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new DetailViewModel(movieDatabase,movieId);
+        return (T) new DetailViewModel(movieDatabase, movieId);
     }
 }

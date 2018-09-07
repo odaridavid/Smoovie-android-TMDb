@@ -20,7 +20,7 @@ public class FavouritesViewModel extends AndroidViewModel {
 
     }
 
-    public LiveData<List<Movie>> getMovies(){
+    public LiveData<List<Movie>> getMovies() {
 
         return movies;
     }

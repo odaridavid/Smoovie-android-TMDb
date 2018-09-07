@@ -60,7 +60,7 @@ public class MoviesRepository implements IMoviePresenter {
         final MutableLiveData<List<MovieVideos>> movieVideoLiveData = new MutableLiveData<>();
         Callback<MovieVideoResponse> call = new Callback<MovieVideoResponse>() {
             @Override
-            public void onResponse(@NonNull Call<MovieVideoResponse> call,@NonNull Response<MovieVideoResponse> response) {
+            public void onResponse(@NonNull Call<MovieVideoResponse> call, @NonNull Response<MovieVideoResponse> response) {
                 if (response.isSuccessful()) {
                     MovieVideoResponse movieVideoResponse = response.body();
                     if (movieVideoResponse != null && movieVideoResponse.getMoviesResult() != null) {
@@ -77,17 +77,16 @@ public class MoviesRepository implements IMoviePresenter {
             }
 
             @Override
-            public void onFailure(@NonNull Call<MovieVideoResponse> call,@NonNull Throwable t) {
+            public void onFailure(@NonNull Call<MovieVideoResponse> call, @NonNull Throwable t) {
 
             }
         };
 
 
-        TMDBMovies.tmdbApiService.getMovieVideos(movieId,TMDBMovies.API_KEY,TMDBMovies.LANGUAGE)
+        TMDBMovies.tmdbApiService.getMovieVideos(movieId, TMDBMovies.API_KEY, TMDBMovies.LANGUAGE)
                 .enqueue(call);
         return movieVideoLiveData;
     }
-
 
 
     //Reviews
@@ -96,7 +95,7 @@ public class MoviesRepository implements IMoviePresenter {
         final MutableLiveData<List<MovieReviews>> movieReviewLiveData = new MutableLiveData<>();
         Callback<MovieReviewResponse> call = new Callback<MovieReviewResponse>() {
             @Override
-            public void onResponse(@NonNull Call<MovieReviewResponse> call,@NonNull Response<MovieReviewResponse> response) {
+            public void onResponse(@NonNull Call<MovieReviewResponse> call, @NonNull Response<MovieReviewResponse> response) {
                 if (response.isSuccessful()) {
                     MovieReviewResponse moviesReviewResponse = response.body();
                     if (moviesReviewResponse != null && moviesReviewResponse.getMoviesResult() != null) {
@@ -105,7 +104,7 @@ public class MoviesRepository implements IMoviePresenter {
                         movieReviewLiveData.setValue(moviesReviewResponse.getMoviesResult());
 
                     } else {
-                       iMovieReviewsCallback.onFailure();
+                        iMovieReviewsCallback.onFailure();
                     }
                 } else {
                     iMovieReviewsCallback.onFailure();
@@ -113,12 +112,12 @@ public class MoviesRepository implements IMoviePresenter {
             }
 
             @Override
-            public void onFailure(@NonNull Call<MovieReviewResponse> call,@NonNull Throwable t) {
+            public void onFailure(@NonNull Call<MovieReviewResponse> call, @NonNull Throwable t) {
 
             }
         };
 
-       TMDBMovies.tmdbApiService.getMovieReviews(movieId,TMDBMovies.API_KEY,TMDBMovies.LANGUAGE)
+        TMDBMovies.tmdbApiService.getMovieReviews(movieId, TMDBMovies.API_KEY, TMDBMovies.LANGUAGE)
                 .enqueue(call);
         return movieReviewLiveData;
 

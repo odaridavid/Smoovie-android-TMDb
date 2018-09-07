@@ -15,16 +15,14 @@ public interface IMoviePresenter {
     LiveData<Movie> getMovie(int movieId, final IMovieDetailsCallback iMovieDetailsCallback);
 
     /**
-     *
-     * @param movieId Clicked Movie Id
+     * @param movieId              Clicked Movie Id
      * @param iMovieVideosCallback Trailer Callback for handling on success and error
      */
     LiveData<List<MovieVideos>> getMovieVideos(int movieId, final IMovieVideosCallback iMovieVideosCallback);
 
     /**
-     *
-     * @param page Current Page
-     * @param movieId Clicked Movie Id
+     * @param page                  Current Page
+     * @param movieId               Clicked Movie Id
      * @param iMovieReviewsCallback Callback for handling on success and on error for Reviews
      */
     LiveData<List<MovieReviews>> getMovieReviews(int page, int movieId, final IMovieReviewsCallback iMovieReviewsCallback);

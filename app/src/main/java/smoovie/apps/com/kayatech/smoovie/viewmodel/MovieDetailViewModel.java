@@ -9,7 +9,6 @@ import java.util.List;
 
 import smoovie.apps.com.kayatech.smoovie.model.Movie;
 import smoovie.apps.com.kayatech.smoovie.model.MovieReviews;
-import smoovie.apps.com.kayatech.smoovie.model.MovieVideoResponse;
 import smoovie.apps.com.kayatech.smoovie.model.MovieVideos;
 
 
@@ -26,10 +25,10 @@ public class MovieDetailViewModel extends AndroidViewModel {
 
     }
 
-    public void init(int mMovieId,int page, final IMovieDetailsCallback IMovieDetailsCallback,final IMovieVideosCallback iMovieVideosCallback,final IMovieReviewsCallback iMovieReviewsCallback) {
+    public void init(int mMovieId, int page, final IMovieDetailsCallback IMovieDetailsCallback, final IMovieVideosCallback iMovieVideosCallback, final IMovieReviewsCallback iMovieReviewsCallback) {
         movie = moviesRepository.getMovie(mMovieId, IMovieDetailsCallback);
-        movieVideosLiveData = moviesRepository.getMovieVideos(mMovieId,iMovieVideosCallback);
-        movieReviewsLiveData = moviesRepository.getMovieReviews(page,mMovieId,iMovieReviewsCallback);
+        movieVideosLiveData = moviesRepository.getMovieVideos(mMovieId, iMovieVideosCallback);
+        movieReviewsLiveData = moviesRepository.getMovieReviews(page, mMovieId, iMovieReviewsCallback);
 
     }
 
