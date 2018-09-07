@@ -29,4 +29,10 @@ public interface IMovieDAO {
 
     @Query("SELECT * FROM favourite_movie WHERE movieId = :id")
     LiveData<Movie> loadMovieById(int id);
+
+    @Query("SELECT * FROM favourite_movie WHERE favourite = 1 AND movieId = :id")
+    LiveData<Movie> getFavourite(int id);
+
+    @Query("SELECT * FROM favourite_movie WHERE movie_title = :movieTitle")
+    Movie loadMovie(String movieTitle);
 }
