@@ -161,18 +161,6 @@ public class DetailActivity extends AppCompatActivity {
                     }
                 });
                 detectDrawableChange();
-                movieDetailViewModel.getMovieReviewsLiveData().observe(this, new Observer<List<MovieReviews>>() {
-                    @Override
-                    public void onChanged(@Nullable List<MovieReviews> movieReviews) {
-                        setupReviewAapter(1, movieReviews);
-                    }
-                });
-                movieDetailViewModel.getMovieVideosLiveData().observe(this, new Observer<List<MovieVideos>>() {
-                    @Override
-                    public void onChanged(@Nullable List<MovieVideos> movieVideos) {
-                        setupVideoAdapter(movieVideos);
-                    }
-                });
             }
             if (intent.hasExtra(MOVIE_ID_DB)) {
                 movieIdIn = intent.getIntExtra(MOVIE_ID_DB, DEFAULT_TASK_ID);
