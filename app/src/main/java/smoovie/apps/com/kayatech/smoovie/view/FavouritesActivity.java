@@ -41,7 +41,6 @@ public class FavouritesActivity extends AppCompatActivity implements FavouritesA
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favourites);
-        //Butterknife issues with recycler
         mFavouriteMoviesRecyclerView = findViewById(R.id.rv_favourite_movies);
         mFavconImage = findViewById(R.id.iv_favcon_view_default);
         mFavDefaultText = findViewById(R.id.tv_fav_default);
@@ -95,6 +94,7 @@ public class FavouritesActivity extends AppCompatActivity implements FavouritesA
             public void onChanged(@Nullable List<Movie> movies) {
                 favouritesAdapter.setmMovieReviewsList(movies);
                 if (!(movies.size() > 0)) {
+                    //When List Is Empty
                     final Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
                     mFavouriteMoviesRecyclerView.setVisibility(View.GONE);
                     mFavconImage.setVisibility(View.VISIBLE);
@@ -103,10 +103,12 @@ public class FavouritesActivity extends AppCompatActivity implements FavouritesA
                 }
             }
         });
+
     }
 
     @Override
     public void onItemClickListener(int movieId) {
+        //Open Movie In Detail Activity
         Intent intent = new Intent(FavouritesActivity.this, DetailActivity.class);
         intent.putExtra(DetailActivity.MOVIE_ID_DB, movieId);
         Log.d(TAG, "onItemClickListener: " + movieId);

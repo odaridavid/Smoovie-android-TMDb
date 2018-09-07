@@ -88,6 +88,8 @@ public class DetailActivity extends AppCompatActivity {
     ImageView mFavouritesIconImageView;
     private static final int DEFAULT_TASK_ID = -1;
     private int movieIdIn = DEFAULT_TASK_ID;
+    FavouritesViewModelFactory factory;
+    DetailViewModel detailViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,8 +97,6 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         //Bind Views
         ButterKnife.bind(this);
-
-
         movieDatabase = MovieDatabase.getMovieDatabaseInstance(getApplicationContext());
         //Custom Font For Labels
         Typeface custom_font_thin = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Light.ttf");
@@ -109,24 +109,45 @@ public class DetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent.getExtras() != null) {
             if (intent.hasExtra(MOVIE_ID)) {
-
                 final int mMovieId = Parcels.unwrap(getIntent().getParcelableExtra(MOVIE_ID));
                 Log.d(TAG, "Movie Being Passed" + mMovieId);
-
+                //For Room Database will be used to compare loaded movie and  that in Database
+                factory = new FavouritesViewModelFactory(movieDatabase, mMovieId);
+                detailViewModel = ViewModelProviders.of(this, factory).get(DetailViewModel.class);
+                //Handles Loading movie
                 movieDetailViewModel = ViewModelProviders.of(this).get(MovieDetailViewModel.class);
-                movieDetailViewModel.init(mMovieId, new IMovieDetailsCallback() {
+                movieDetailViewModel.init(mMovieId, 1, new IMovieDetailsCallback() {
                     @Override
                     public void onSuccess(Movie movie) {
                         if (movie != null) {
                             setUpRecyclerView();
                             updateInterface(movie);
-                            // Toast.makeText(DetailActivity.this,""+movie.getMovieTitle(),Toast.LENGTH_LONG).show();
                         }
                     }
 
                     @Override
                     public void onError() {
                         displayError();
+                    }
+                }, new IMovieVideosCallback() {
+                    @Override
+                    public void onSuccess(List<MovieVideos> movieVideos) {
+                       setupVideoAdapter(movieVideos);
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+                }, new IMovieReviewsCallback() {
+                    @Override
+                    public void onSuccess(int page, List<MovieReviews> movieReviews) {
+                        setupReviewAapter(page, movieReviews);
+                    }
+
+                    @Override
+                    public void onFailure() {
+
                     }
                 });
                 movieDetailViewModel.getMovie().observe(this, new Observer<Movie>() {
@@ -139,12 +160,25 @@ public class DetailActivity extends AppCompatActivity {
                         }
                     }
                 });
+                detectDrawableChange();
+                movieDetailViewModel.getMovieReviewsLiveData().observe(this, new Observer<List<MovieReviews>>() {
+                    @Override
+                    public void onChanged(@Nullable List<MovieReviews> movieReviews) {
+                        setupReviewAapter(1, movieReviews);
+                    }
+                });
+                movieDetailViewModel.getMovieVideosLiveData().observe(this, new Observer<List<MovieVideos>>() {
+                    @Override
+                    public void onChanged(@Nullable List<MovieVideos> movieVideos) {
+                        setupVideoAdapter(movieVideos);
+                    }
+                });
             }
-
             if (intent.hasExtra(MOVIE_ID_DB)) {
                 movieIdIn = intent.getIntExtra(MOVIE_ID_DB, DEFAULT_TASK_ID);
-                FavouritesViewModelFactory factory = new FavouritesViewModelFactory(movieDatabase, movieIdIn);
-                final DetailViewModel detailViewModel = ViewModelProviders.of(this, factory).get(DetailViewModel.class);
+                //View Model
+                factory = new FavouritesViewModelFactory(movieDatabase, movieIdIn);
+                detailViewModel = ViewModelProviders.of(this, factory).get(DetailViewModel.class);
                 detailViewModel.getMovieLiveData().observe(this, new Observer<Movie>() {
                     @Override
                     public void onChanged(@Nullable Movie movie) {
@@ -155,8 +189,59 @@ public class DetailActivity extends AppCompatActivity {
                         }
                     }
                 });
+                detectDrawableChange();
             }
         }
+    }
+
+    void setupReviewAapter(int page, List<MovieReviews> movieReviews) {
+        if (mReviewsAdapter == null) {
+            //Attach Reviews Adapter to Recycler View
+            mReviewsAdapter = new ReviewsAdapter(movieReviews);
+            mMoviesReviewRecyclerView.setAdapter(mReviewsAdapter);
+        } else {
+            if (page == 1) {
+                mReviewsAdapter.clearMovies();
+            }
+            //appends movie results to list and updates recycler view
+            mReviewsAdapter.setmMovieReviewsList(movieReviews);
+        }
+        if (!(movieReviews.size() > 0)) {
+            final Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
+            mMovieReviewEmptyTextView.setTypeface(custom_font);
+            mMovieReviewEmptyTextView.setVisibility(View.VISIBLE);
+            mMoviesReviewRecyclerView.setVisibility(View.GONE);
+        }
+    }
+
+    void setupVideoAdapter(List<MovieVideos> movieVideos) {
+        //Attach Video Adapter to Recycler View
+        if (mVideoAdapter == null) {
+            mVideoAdapter = new VideoAdapter(movieVideos, iVideoClickHandler, iShareClickHandler);
+            mMoviesTrailerRecyclerView.setAdapter(mVideoAdapter);
+        } else {
+            mVideoAdapter.clearMovies();
+        }
+        //appends movie results to list and updates recycler view
+        mVideoAdapter.setMovieVideoList(movieVideos);
+        if (!(movieVideos.size() > 0)) {
+            final Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
+            mMovieTrailerEmptyTextView.setTypeface(custom_font);
+            mMovieTrailerEmptyTextView.setVisibility(View.VISIBLE);
+            mMoviesTrailerRecyclerView.setVisibility(View.GONE);
+        }
+    }
+
+    private void detectDrawableChange() {
+        detailViewModel.isFavourites().observe(this, new Observer<Movie>() {
+            @Override
+            public void onChanged(@Nullable Movie movie) {
+                if (movie != null)
+                    if (movie.isFavourite()) {
+                        mFavouritesIconImageView.setImageDrawable(getDrawable(R.drawable.ic_favorite_true));
+                    }
+            }
+        });
     }
 
     private void setupToolbar() {
@@ -187,90 +272,63 @@ public class DetailActivity extends AppCompatActivity {
         mMoviesTrailerRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
     }
 
-    private void updateInterface(final Movie movie) {
-        String IMAGE_BASE_URL_BACKDROP = "http://image.tmdb.org/t/p/w780";
-        String IMAGE_BASE_URL_POSTER = "http://image.tmdb.org/t/p/w185";
-
-        final Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
-        mMovieTitleTextView.setText(movie.getMovieTitle());
-        mMovieTitleTextView.setTypeface(custom_font);
-        mMovieOverviewTextView.setText(movie.getMovieOverview());
-        mMovieOverviewTextView.setTypeface(custom_font);
-        mMovieRatingRatingBar.setVisibility(View.VISIBLE);
-        mMovieRatingRatingBar.setRating(movie.getVoterAverage() / 2);
-
-        float movieavg = movie.getVoterAverage();
-        String movieAvgString = Float.toString(movieavg);
-
-        mRatingValueTextView.setText(movieAvgString);
-        mMovieReleaseDateTextView.setText(movie.getMovieReleaseDate());
-        mMovieReleaseDateTextView.setTypeface(custom_font);
-        if (!isFinishing()) {
-            Picasso.with(DetailActivity.this)
-                    .load(IMAGE_BASE_URL_BACKDROP + movie.getBackdrop())
-                    .error(R.drawable.test_back)
-                    .placeholder(R.drawable.test_back)
-                    .into(mMovieBackdropImageView);
-        }
-        if (!isFinishing()) {
-            Picasso.with(DetailActivity.this)
-                    .load(IMAGE_BASE_URL_POSTER + movie.getMoviePoster())
-                    .error(R.drawable.test)
-                    .placeholder(R.drawable.test)
-                    .into(mMoviePosterImageView);
-        }
-        getMovieReview(movie);
-        getVideo(movie);
+    private void updateInterface(final Movie movieResult) {
+        buildUi(movieResult);
+        shareVideo();
+        //Add to Favourites
         mFavouritesIconImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onAddToFavourites(movie);
-                Toast.makeText(DetailActivity.this, "Added", Toast.LENGTH_LONG).show();
+                Log.d(TAG, "Click");
+                addToFavouritesDatabaseOperations(movieResult);
             }
         });
-
     }
 
     private void populateUIfromRoomDatabase(final Movie movie) {
-        String IMAGE_BASE_URL_BACKDROP = "http://image.tmdb.org/t/p/w780";
-        String IMAGE_BASE_URL_POSTER = "http://image.tmdb.org/t/p/w185";
-
-        final Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
-        mMovieTitleTextView.setText(movie.getMovieTitle());
-        mMovieTitleTextView.setTypeface(custom_font);
-        mMovieOverviewTextView.setText(movie.getMovieOverview());
-        mMovieOverviewTextView.setTypeface(custom_font);
-        mMovieRatingRatingBar.setVisibility(View.VISIBLE);
-        mMovieRatingRatingBar.setRating(movie.getVoterAverage() / 2);
-
-        float movieavg = movie.getVoterAverage();
-        String movieAvgString = Float.toString(movieavg);
-
-        mRatingValueTextView.setText(movieAvgString);
-        mMovieReleaseDateTextView.setText(movie.getMovieReleaseDate());
-        mMovieReleaseDateTextView.setTypeface(custom_font);
-        if (!isFinishing()) {
-            Picasso.with(DetailActivity.this)
-                    .load(IMAGE_BASE_URL_BACKDROP + movie.getBackdrop())
-                    .error(R.drawable.test_back)
-                    .placeholder(R.drawable.test_back)
-                    .into(mMovieBackdropImageView);
-        }
-        if (!isFinishing()) {
-            Picasso.with(DetailActivity.this)
-                    .load(IMAGE_BASE_URL_POSTER + movie.getMoviePoster())
-                    .error(R.drawable.test)
-                    .placeholder(R.drawable.test)
-                    .into(mMoviePosterImageView);
-        }
+        buildUi(movie);
+        //Disable Reviewa and Trailers
         mMovieReviewLabelTextView.setVisibility(View.GONE);
         mMovieTrailerLabelTextView.setVisibility(View.GONE);
     }
 
-    private void getVideo(Movie movie) {
+    private void buildUi(Movie movie) {
+        String IMAGE_BASE_URL_BACKDROP = "http://image.tmdb.org/t/p/w780";
+        String IMAGE_BASE_URL_POSTER = "http://image.tmdb.org/t/p/w185";
+        //Setup Typeface
+        final Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
+        mMovieReleaseDateTextView.setTypeface(custom_font);
+        mMovieTitleTextView.setTypeface(custom_font);
+        mMovieOverviewTextView.setTypeface(custom_font);
+        //Setup Visibility
+        mMovieRatingRatingBar.setVisibility(View.VISIBLE);
+        //Set Data
+        mMovieRatingRatingBar.setRating(movie.getVoterAverage() / 2);
+        mMovieTitleTextView.setText(movie.getMovieTitle());
+        float movieavg = movie.getVoterAverage();
+        String movieAvgString = Float.toString(movieavg);
+        mRatingValueTextView.setText(movieAvgString);
+        mMovieReleaseDateTextView.setText(movie.getMovieReleaseDate());
+        mMovieOverviewTextView.setText(movie.getMovieOverview());
+        if (!isFinishing()) {
+            Picasso.with(DetailActivity.this)
+                    .load(IMAGE_BASE_URL_BACKDROP + movie.getBackdrop())
+                    .error(R.drawable.test_back)
+                    .placeholder(R.drawable.test_back)
+                    .into(mMovieBackdropImageView);
+        }
+        if (!isFinishing()) {
+            Picasso.with(DetailActivity.this)
+                    .load(IMAGE_BASE_URL_POSTER + movie.getMoviePoster())
+                    .error(R.drawable.test)
+                    .placeholder(R.drawable.test)
+                    .into(mMoviePosterImageView);
+        }
+    }
+
+    private void shareVideo() {
         final String YOUTUBE_VIDEO_BASE_URL = "http://www.youtube.com/watch?v=%s";
-        int movieId = movie.getMovieId();
-        //Click Handling Sharing
+        //Click Handling Sharing for text
         iShareClickHandler = new IShareClickHandler() {
             @Override
             public void onClick(MovieVideos movieVideos) {
@@ -278,7 +336,6 @@ public class DetailActivity extends AppCompatActivity {
                 openShareIntent(YoutubeLink);
             }
         };
-
         //Click Handling Youtube Intent
         iVideoClickHandler = new IVideoClickHandler() {
             @Override
@@ -288,37 +345,10 @@ public class DetailActivity extends AppCompatActivity {
                 openYoutubeIntent(YoutubeLink);
             }
         };
-
-        movieDetailViewModel.moviesRepository.getMovieVideos(movieId, new IMovieVideosCallback() {
-            @Override
-            public void onSuccess(List<MovieVideos> movieVideos) {
-                //Attach Video Adapter to Recycler View
-                if (mVideoAdapter == null) {
-                    mVideoAdapter = new VideoAdapter(movieVideos, iVideoClickHandler, iShareClickHandler);
-                    mMoviesTrailerRecyclerView.setAdapter(mVideoAdapter);
-                } else {
-                    mVideoAdapter.clearMovies();
-                }
-                //appends movie results to list and updates recycler view
-                mVideoAdapter.setMovieVideoList(movieVideos);
-                if (!(movieVideos.size() > 0)) {
-                    final Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
-                    mMovieTrailerEmptyTextView.setTypeface(custom_font);
-                    mMovieTrailerEmptyTextView.setVisibility(View.VISIBLE);
-                    mMoviesTrailerRecyclerView.setVisibility(View.GONE);
-                    //   Toast.makeText(DetailActivity.this,"No Trailer",Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onError() {
-
-            }
-        });
     }
 
     /**
-     * @param youtubeVideoLink youtube link to video passed in an  inten and checked to prevent crashing
+     * @param youtubeVideoLink youtube link to video passed in an  intent to open in browser or youtube app
      */
     private void openYoutubeIntent(String youtubeVideoLink) {
         Intent youtubeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeVideoLink));
@@ -327,6 +357,9 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * @param linkToShare shared as text
+     */
     private void openShareIntent(String linkToShare) {
         String mimeType = "text/plain";
         String title = getString(R.string.label_share);
@@ -338,39 +371,6 @@ public class DetailActivity extends AppCompatActivity {
                 .setText(linkToShare)
                 .startChooser();
     }
-
-    private void getMovieReview(Movie movie) {
-        int movieId = movie.getMovieId();
-        int page = 1;
-        movieDetailViewModel.moviesRepository.getMovieReviews(page, movieId, new IMovieReviewsCallback() {
-            @Override
-            public void onSuccess(int page, List<MovieReviews> movieReviews) {
-                if (mReviewsAdapter == null) {
-                    //Attach Reviews Adapter to Recycler View
-                    mReviewsAdapter = new ReviewsAdapter(movieReviews);
-                    mMoviesReviewRecyclerView.setAdapter(mReviewsAdapter);
-                } else {
-                    if (page == 1) {
-                        mReviewsAdapter.clearMovies();
-                    }
-                    //appends movie results to list and updates recycler view
-                    mReviewsAdapter.setmMovieReviewsList(movieReviews);
-                }
-                if (!(movieReviews.size() > 0)) {
-                    final Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
-                    mMovieReviewEmptyTextView.setTypeface(custom_font);
-                    mMovieReviewEmptyTextView.setVisibility(View.VISIBLE);
-                    mMoviesReviewRecyclerView.setVisibility(View.GONE);
-                    //  Toast.makeText(DetailActivity.this, "No Review", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure() {
-            }
-        });
-    }
-
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -387,32 +387,56 @@ public class DetailActivity extends AppCompatActivity {
                 .length(Toast.LENGTH_LONG)
                 .show();
         finish();
-
     }
 
-    public void onAddToFavourites(Movie movie) {
-        int movieId = movie.getMovieId();
-        String movieTitle = movie.getMovieTitle();
-        String movieOverview = movie.getMovieOverview();
-        String moviePoster = movie.getMoviePoster();
-        String movieBackdrop = movie.getBackdrop();
-        float movieAverage = movie.getVoterAverage();
-        String movieReleaseDate = movie.getMovieReleaseDate();
-
-        final Movie favMovie = new Movie(movieId, movieTitle, movieOverview, movieReleaseDate, moviePoster, movieBackdrop, movieAverage);
+    public void addToFavouritesDatabaseOperations(final Movie movieToAdd) {
+        //Values To Be Saved to database
+        int movieId = movieToAdd.getMovieId();
+        final String movieTitle = movieToAdd.getMovieTitle();
+        String movieOverview = movieToAdd.getMovieOverview();
+        String moviePoster = movieToAdd.getMoviePoster();
+        String movieBackdrop = movieToAdd.getBackdrop();
+        float movieAverage = movieToAdd.getVoterAverage();
+        String movieReleaseDate = movieToAdd.getMovieReleaseDate();
+        final Movie favMovie = new Movie(movieId, movieTitle, movieOverview, movieReleaseDate, moviePoster, movieBackdrop, movieAverage, true);
+        //Executor Background Thread
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                movieDatabase.movieDAO().saveMovieAsFavourite(favMovie);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mFavouritesIconImageView.setImageDrawable(getDrawable(R.drawable.ic_favorite_true));
-                    }
-                });
+                //To Avoid Unique Constraint Error
+                //If it doesnt exist in the database add it
+                if (movieDatabase.movieDAO().loadMovie(movieTitle) == null) {
+                    movieDatabase.movieDAO().saveMovieAsFavourite(favMovie);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new StyleableToast.Builder(DetailActivity.this)
+                                    .text(getString(R.string.label_added_favs))
+                                    .length(Toast.LENGTH_SHORT)
+                                    .textColor(getResources().getColor(R.color.colorWhite))
+                                    .backgroundColor(getResources().getColor(R.color.colorAlternate))
+                                    .show();
+                            mFavouritesIconImageView.setImageDrawable(getDrawable(R.drawable.ic_favorite_true));
+                        }
+                    });
+                } else {
+                    //Remove and display toast and change drawable
+                    movieDatabase.movieDAO().removeMovieFromFavourites(favMovie);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new StyleableToast.Builder(DetailActivity.this)
+                                    .text(getString(R.string.label_removed_favs))
+                                    .length(Toast.LENGTH_SHORT)
+                                    .textColor(getResources().getColor(R.color.colorWhite))
+                                    .backgroundColor(getResources().getColor(R.color.colorAccent))
+                                    .show();
+                            mFavouritesIconImageView.setImageDrawable(getDrawable(R.drawable.ic_favorite_false));
+                        }
+                    });
+                }
             }
         });
-
-
     }
+
 }
