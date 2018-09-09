@@ -104,6 +104,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
             //Movie Rating
             String rating = " " + Float.toString(movie.getVoterAverage()) + " ";
             mMovieRatings.setText(rating);
+
         }
     }
 }

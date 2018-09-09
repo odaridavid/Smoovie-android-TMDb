@@ -4,19 +4,19 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cv_movie"
     android:layout_width="match_parent"
     android:layout_height="@dimen/size_height"
     android:layout_alignParentEnd="true"
     android:layout_alignParentStart="true"
-    android:layout_marginStart="@dimen/size_small"
-    android:layout_marginEnd="@dimen/size_small"
     android:layout_marginBottom="@dimen/size_medium"
+    android:layout_marginEnd="@dimen/size_small"
+    android:layout_marginStart="@dimen/size_small"
     android:layout_marginTop="@dimen/size_medium"
-    app:cardCornerRadius="@dimen/size_small"
     android:focusable="true"
+    app:cardCornerRadius="@dimen/size_small"
     app:cardElevation="@dimen/size_medium"
-    app:contentPadding="4dp"
-    android:id="@+id/cv_movie">
+    app:contentPadding="4dp">
 
     <FrameLayout
         android:layout_width="wrap_content"
@@ -80,6 +80,7 @@
                 android:textColor="@color/colorWhite"
                 android:textSize="12sp"
                 tools:text="@string/label_text_placeholder" />
+
         </FrameLayout>
 
     </RelativeLayout>

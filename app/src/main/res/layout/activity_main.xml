@@ -32,13 +32,53 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center" />
+
     <TextView
         android:id="@+id/tv_error_message_display"
-        android:textSize="15sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="16dp"
         android:layout_gravity="center"
+        android:padding="16dp"
         android:text="@string/error_network_message"
+        android:textSize="15sp"
         android:visibility="invisible" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_favourite_movies"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_extra_large"
+        android:scrollbars="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/action_toolbar_fav" />
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <ImageView
+            android:id="@+id/iv_favcon_view_default"
+            android:layout_width="@dimen/video_width"
+            android:layout_height="@dimen/video_width"
+            android:layout_gravity="center"
+            android:contentDescription="@string/label_content_description_favicon"
+            android:src="@drawable/ic_favorite_true"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/tv_fav_default"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/default_favs"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@id/iv_favcon_view_default" />
+    </android.support.constraint.ConstraintLayout>
+
+
 </android.support.design.widget.CoordinatorLayout>
