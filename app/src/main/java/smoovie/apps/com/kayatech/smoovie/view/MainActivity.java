@@ -99,7 +99,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 sortBy = savedInstanceState.getString(KEY_SORT);//Setup Recycler view depending on sort option
                 if (isOnline()) {
                     if (sortBy != null) {
-
                         setUpRecyclerViewInstance(sortBy);
                         //Set Title for toolbar on rotate
                         setTitleToolbar(sortBy);
