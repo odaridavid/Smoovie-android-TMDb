@@ -87,7 +87,6 @@ public class DetailActivity extends AppCompatActivity {
     @BindView(R.id.iv_favcon)
     ImageView mFavouritesIconImageView;
     private static final int DEFAULT_TASK_ID = -1;
-    private int movieIdIn = DEFAULT_TASK_ID;
     FavouritesViewModelFactory factory;
     DetailViewModel detailViewModel;
 
@@ -163,6 +162,7 @@ public class DetailActivity extends AppCompatActivity {
                 detectDrawableChange();
             }
             if (intent.hasExtra(MOVIE_ID_DB)) {
+                int movieIdIn = DEFAULT_TASK_ID;
                 movieIdIn = intent.getIntExtra(MOVIE_ID_DB, DEFAULT_TASK_ID);
                 //View Model
                 factory = new FavouritesViewModelFactory(movieDatabase, movieIdIn);
