@@ -162,7 +162,7 @@ public class DetailActivity extends AppCompatActivity {
                 detectDrawableChange();
             }
             if (intent.hasExtra(MOVIE_ID_DB)) {
-                int movieIdIn = DEFAULT_TASK_ID;
+                int movieIdIn;
                 movieIdIn = intent.getIntExtra(MOVIE_ID_DB, DEFAULT_TASK_ID);
                 //View Model
                 factory = new FavouritesViewModelFactory(movieDatabase, movieIdIn);

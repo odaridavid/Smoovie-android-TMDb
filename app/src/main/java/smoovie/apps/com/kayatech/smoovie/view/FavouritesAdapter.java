@@ -65,7 +65,6 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
 
     public class FavouriteMovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        Movie movies;
         @BindView(R.id.tv_fav_movie_title)
         TextView mMovieTitleTextView;
         @BindView(R.id.tv_fav_movie_rating)
@@ -78,7 +77,6 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
         }
 
         private void bind(Movie movie) {
-            movies = movie;
             Context ctx = itemView.getContext();
             final Typeface custom_font = Typeface.createFromAsset(ctx.getAssets(), "fonts/Roboto-Thin.ttf");
             String title = movie.getMovieTitle();

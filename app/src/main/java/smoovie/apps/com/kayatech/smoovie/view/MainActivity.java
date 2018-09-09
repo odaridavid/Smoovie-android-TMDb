@@ -412,7 +412,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             @Override
             public void onChanged(@Nullable List<Movie> movies) {
                 favouritesAdapter.setmMovieReviewsList(movies);
-
                 if (!(movies.size() > 0)) {
                     //To Prevent Favourite views overlapping with other sort options
                     if (sortBy.equals(mFavouritesOption)) {
@@ -424,7 +423,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                         mFavDefaultText.setTypeface(custom_font);
                     }
                 }
-
             }
         });
     }

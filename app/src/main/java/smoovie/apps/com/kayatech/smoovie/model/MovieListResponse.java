@@ -20,6 +20,10 @@ public class MovieListResponse {
     @Expose
     private List<Movie> moviesResult;
 
+    MovieListResponse(){
+
+    }
+
     //Getters
     public int getPage() {
         return page;

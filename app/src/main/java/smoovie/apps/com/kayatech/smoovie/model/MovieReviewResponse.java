@@ -15,6 +15,9 @@ public class MovieReviewResponse {
     @Expose
     private List<MovieReviews> moviesResult;
 
+    MovieReviewResponse() {
+    }
+
     public int getPage() {
         return page;
     }
