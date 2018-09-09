@@ -278,6 +278,13 @@ public class DetailActivity extends AppCompatActivity {
         //Disable Reviewa and Trailers
         mMovieReviewLabelTextView.setVisibility(View.GONE);
         mMovieTrailerLabelTextView.setVisibility(View.GONE);
+        mFavouritesIconImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Click");
+                addToFavouritesDatabaseOperations(movie);
+            }
+        });
     }
 
     private void buildUi(Movie movie) {

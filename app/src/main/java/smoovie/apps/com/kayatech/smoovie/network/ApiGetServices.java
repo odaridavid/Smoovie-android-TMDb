@@ -10,7 +10,6 @@ import smoovie.apps.com.kayatech.smoovie.model.MovieListResponse;
 import smoovie.apps.com.kayatech.smoovie.model.MovieReviewResponse;
 import smoovie.apps.com.kayatech.smoovie.model.MovieVideoResponse;
 
-
 public interface ApiGetServices {
     //Retrofit http requests
     //Query parameter appended to the URL.
