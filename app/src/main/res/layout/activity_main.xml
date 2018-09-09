@@ -61,7 +61,7 @@
             android:layout_width="@dimen/video_width"
             android:layout_height="@dimen/video_width"
             android:layout_gravity="center"
-            android:contentDescription="@string/label_content_description_favicon"
+            android:contentDescription="@string/label_content_description"
             android:src="@drawable/ic_favorite_true"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"

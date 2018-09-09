@@ -39,11 +39,6 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
         void onItemClickListener(int movieId);
     }
 
-    public void clearMovies() {
-        mMovieList.clear();
-        notifyDataSetChanged();
-    }
-
     @NonNull
     @Override
     public FavouriteMovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

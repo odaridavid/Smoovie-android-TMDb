@@ -58,7 +58,6 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.MoviesRe
 
     public static class MoviesReviewViewHolder extends RecyclerView.ViewHolder {
 
-        MovieReviews moviesReview;
         @BindView(R.id.tv_reviews_author)
         TextView mMovieReviewsAuthorTextView;
         @BindView(R.id.tv_reviews_content)
@@ -71,7 +70,6 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.MoviesRe
 
         private void bind(MovieReviews movieReviews) {
 
-            this.moviesReview = movieReviews;
             if (movieReviews != null) {
                 String author = movieReviews.getAuthor();
                 String reviews = movieReviews.getContent();
