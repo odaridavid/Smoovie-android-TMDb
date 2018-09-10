@@ -11,18 +11,30 @@
         android:background="?attr/colorPrimary"
         android:elevation="@dimen/size_small"
         android:minHeight="?attr/actionBarSize"
-        app:title="@string/pref_settings"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/pref_settings" />
 
     <fragment
         android:id="@+id/settings_fragment"
         android:name="smoovie.apps.com.kayatech.smoovie.view.SettingsFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/size_medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/action_toolbar_settings" />
+
+    <ImageView
+        android:layout_width="@dimen/video_height"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/content_description_powered_by"
+        android:src="@drawable/powered_by_square_blue"
+        android:layout_marginTop="@dimen/size_large"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>

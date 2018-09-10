@@ -64,4 +64,7 @@
     <string name="default_favs">View Favourites Here</string>
     <string name="label_added_favs">Added To Favourites</string>
     <string name="label_removed_favs">Removed from Favourites</string>
+
+    <!--Attribution-->
+    <string name="content_description_powered_by">Powered by The Movie Database</string>
 </resources>
