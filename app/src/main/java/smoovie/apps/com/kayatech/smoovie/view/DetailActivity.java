@@ -305,7 +305,6 @@ public class DetailActivity extends AppCompatActivity {
         mMoviesReviewRecyclerView.setDrawingCacheEnabled(true);
         mMoviesReviewRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
 
-
         //Movie Video Recycler View
         mMoviesTrailerRecyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManagerVideo = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -316,7 +315,6 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     /**
-     *
      * @param movieResult Movie to be bound to views from intent
      */
     private void updateInterface(final Movie movieResult) {
@@ -333,7 +331,6 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     /**
-     *
      * @param movie movie to be bound to views from  room local database
      */
     private void populateUIfromRoomDatabase(final Movie movie) {
@@ -455,7 +452,6 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     /**
-     *
      * @param movieToAdd movie to be added or removed from database if exists
      */
     public void addToFavouritesDatabaseOperations(final Movie movieToAdd) {
@@ -479,16 +475,16 @@ public class DetailActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (mToast!=null){
-                                mToast = new StyleableToast.Builder(DetailActivity.this);
-                                mToast.text(getString(R.string.label_added_favs))
-                                        .length(Toast.LENGTH_SHORT)
-                                        .textColor(getResources().getColor(R.color.colorWhite))
-                                        .backgroundColor(getResources().getColor(R.color.colorAlternate))
-                                        .show();
-                                mFavouritesIconImageView.setImageDrawable(getDrawable(R.drawable.ic_favorite_true));
-                            }
-                            }
+
+                            mToast = new StyleableToast.Builder(DetailActivity.this);
+                            mToast.text(getString(R.string.label_added_favs))
+                                    .length(Toast.LENGTH_SHORT)
+                                    .textColor(getResources().getColor(R.color.colorWhite))
+                                    .backgroundColor(getResources().getColor(R.color.colorAlternate))
+                                    .show();
+                            mFavouritesIconImageView.setImageDrawable(getDrawable(R.drawable.ic_favorite_true));
+
+                        }
 
                     });
                 } else {
@@ -512,7 +508,6 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     /**
-     *
      * @param typeface custom font for labels
      */
     private void setupLabelsTypeface(Typeface typeface) {

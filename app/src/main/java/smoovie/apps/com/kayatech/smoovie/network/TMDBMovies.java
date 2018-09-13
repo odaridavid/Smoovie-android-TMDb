@@ -59,9 +59,14 @@ public class TMDBMovies {
         return tmdbMoviesRepo;
     }
 
-
+    /**
+     * Method retrieving movies on main view as list
+     *
+     * @param page           page of movies being loaded
+     * @param sortBy         sort option
+     * @param moviesCallback callback to hold movie result on success
+     */
     public void getMovies(int page, String sortBy, final IMovieListCallback moviesCallback) {
-
         Callback<MovieListResponse> call = new Callback<MovieListResponse>() {
             @Override
             public void onResponse(@NonNull Call<MovieListResponse> call, Response<MovieListResponse> response) {
@@ -90,7 +95,6 @@ public class TMDBMovies {
                 tmdbApiService.getTopRatedMovies(API_KEY, LANGUAGE, page)
                         .enqueue(call);
                 break;
-
             case POPULAR:
                 tmdbApiService.getPopularMovies(API_KEY, LANGUAGE, page)
                         .enqueue(call);
@@ -98,10 +102,7 @@ public class TMDBMovies {
             case UPCOMING:
                 tmdbApiService.getUpcomingMovies(API_KEY, LANGUAGE, page).enqueue(call);
                 break;
-
         }
-
-
     }
 
 

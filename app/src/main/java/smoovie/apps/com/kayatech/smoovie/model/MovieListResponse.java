@@ -21,7 +21,6 @@ public class MovieListResponse {
     private List<Movie> moviesResult;
 
     MovieListResponse(){
-
     }
 
     //Getters

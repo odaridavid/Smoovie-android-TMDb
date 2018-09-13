@@ -130,10 +130,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             if (isOnline()) {
                 if (!sortBy.equals(mFavouritesOption)) {
                     mProgressBar.setVisibility(View.VISIBLE);
-                    setTitleToolbar(sortBy);
-                    setFavouriteViewsVisibility();
-                    getMovies(currentPage);
-                    setupClickHandling();
+                    setupSortedMovie();
                     mErrorMessageTextView.setVisibility(View.GONE);
                 } else if (sortBy.equals(mFavouritesOption)) {
                     setupViewModel();
@@ -141,9 +138,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     setupFavouritesObserver();
                 } else {
                     mProgressBar.setVisibility(View.VISIBLE);
-                    setFavouriteViewsVisibility();
-                    getMovies(currentPage);
-                    setupClickHandling();
+                    setupSortedMovie();
                     mErrorMessageTextView.setVisibility(View.GONE);
                 }
             } else {
@@ -194,9 +189,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private void setUpRecyclerViewInstance(String sortBy) {
         if (!sortBy.equals(mFavouritesOption)) {
             mProgressBar.setVisibility(View.VISIBLE);
-            setFavouriteViewsVisibility();
-            getMovies(currentPage);
-            setupClickHandling();
+            setupSortedMovie();
             mErrorMessageTextView.setVisibility(View.GONE);
         } else {
             setupViewModel();
@@ -337,9 +330,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if (key.equals(getString(R.string.pref_language_key))) {
             TMDBMovies.LANGUAGE = sharedPreferences.getString(key, getResources().getString(R.string.pref_language_val_english));
             setUpLocale(TMDBMovies.LANGUAGE);
-            setTitleToolbar(sortBy);
-            getMovies(currentPage);
-            setupClickHandling();
+            setupSortedMovie();
             Log.d(TAG, "Language is :" + TMDBMovies.LANGUAGE);
         }
     }
@@ -407,10 +398,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     void setupSortedData(String sortBy) {
         if (isOnline()) {
             mProgressBar.setVisibility(View.VISIBLE);
-            setTitleToolbar(sortBy);
-            setFavouriteViewsVisibility();
-            getMovies(currentPage);
-            setupClickHandling();
+            setupSortedMovie();
         } else {
             setTitleToolbar(sortBy);
             mFavconImage.setVisibility(View.GONE);
@@ -491,5 +479,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
         Log.d(TAG, "Language is :" + TMDBMovies.LANGUAGE);
     }
+
+    void setupSortedMovie() {
+        setTitleToolbar(sortBy);
+        setFavouriteViewsVisibility();
+        getMovies(currentPage);
+        setupClickHandling();
+    }
+
 
 }
