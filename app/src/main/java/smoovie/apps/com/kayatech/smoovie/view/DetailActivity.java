@@ -45,6 +45,11 @@ import smoovie.apps.com.kayatech.smoovie.viewmodel.MovieDetailViewModel;
 public class DetailActivity extends AppCompatActivity {
 
     private static final String TAG = DetailActivity.class.getSimpleName();
+    private static final String KEY_LANGUAGE_SORT = "language";
+    private static final String KEY_MOVIE = "movie";
+    private static final String KEY_MOVIE_REVIEWS = "reviews";
+    private static final String KEY_MOVIE_VIDEOS = "videos";
+    private static final String KEY_MOVIE_REVIEW_PAGE = "page";
     public static final String MOVIE_ID = "movie_id";
     public static final String MOVIE_ID_DB = "movie_id_db";
     private ReviewsAdapter mReviewsAdapter;
@@ -53,6 +58,8 @@ public class DetailActivity extends AppCompatActivity {
     private IShareClickHandler iShareClickHandler;
     MovieDetailViewModel movieDetailViewModel;
     private MovieDatabase movieDatabase;
+    StyleableToast.Builder mToast;
+
 
     @BindView(R.id.tv_rating_value)
     TextView mRatingValueTextView;
@@ -89,6 +96,12 @@ public class DetailActivity extends AppCompatActivity {
     private static final int DEFAULT_TASK_ID = -1;
     FavouritesViewModelFactory factory;
     DetailViewModel detailViewModel;
+    Typeface customTypeface;
+    private static Movie movieInstance = null;
+    private static int movieReviewsPage;
+    private static List<MovieReviews> movieReviewsList;
+    private static List<MovieVideos> movieVideosList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,16 +111,29 @@ public class DetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         movieDatabase = MovieDatabase.getMovieDatabaseInstance(getApplicationContext());
         //Custom Font For Labels
-        Typeface custom_font_thin = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Light.ttf");
-        mLabelReleasedTextView.setTypeface(custom_font_thin);
-        mLabelOverviewTextView.setTypeface(custom_font_thin);
-        mMovieReviewLabelTextView.setTypeface(custom_font_thin);
-        mMovieTrailerLabelTextView.setTypeface(custom_font_thin);
+        customTypeface = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Light.ttf");
+        setupLabelsTypeface(customTypeface);
         setupToolbar();
         //Check if intent contains extras
         Intent intent = getIntent();
+
         if (intent.getExtras() != null) {
-            if (intent.hasExtra(MOVIE_ID)) {
+            if (savedInstanceState != null && intent.hasExtra(MOVIE_ID)) {
+                Log.d(TAG, "movie saved instance");
+                if (savedInstanceState.containsKey(KEY_MOVIE)) {
+                    setUpRecyclerView();
+                    Movie movieInstance = Parcels.unwrap(savedInstanceState.getParcelable(KEY_MOVIE));
+                    updateInterface(movieInstance);
+                    Log.d(TAG, "movie Exists" + movieInstance);
+                    List<MovieReviews> movieReviewsList = Parcels.unwrap(savedInstanceState.getParcelable(KEY_MOVIE_REVIEWS));
+                    int movieReviewsPage = savedInstanceState.getInt(KEY_MOVIE_REVIEW_PAGE);
+                    List<MovieVideos> movieVideosList = Parcels.unwrap(savedInstanceState.getParcelable(KEY_MOVIE_VIDEOS));
+                    setupReviewAapter(movieReviewsPage, movieReviewsList);
+                    setupVideoAdapter(movieVideosList);
+                    detailViewModel = ViewModelProviders.of(this, factory).get(DetailViewModel.class);
+                    detectDrawableChange();
+                }
+            } else if (intent.hasExtra(MOVIE_ID)) {
                 final int mMovieId = Parcels.unwrap(getIntent().getParcelableExtra(MOVIE_ID));
                 Log.d(TAG, "Movie Being Passed" + mMovieId);
                 //For Room Database will be used to compare loaded movie and  that in Database
@@ -115,40 +141,51 @@ public class DetailActivity extends AppCompatActivity {
                 detailViewModel = ViewModelProviders.of(this, factory).get(DetailViewModel.class);
                 //Handles Loading movie
                 movieDetailViewModel = ViewModelProviders.of(this).get(MovieDetailViewModel.class);
-                movieDetailViewModel.init(mMovieId, 1, new IMovieDetailsCallback() {
-                    @Override
-                    public void onSuccess(Movie movie) {
-                        if (movie != null) {
-                            setUpRecyclerView();
-                            updateInterface(movie);
-                        }
-                    }
+                movieDetailViewModel.init(mMovieId, 1,
+                        //Movie Details
+                        new IMovieDetailsCallback() {
+                            @Override
+                            public void onSuccess(Movie movie) {
+                                if (movie != null) {
+                                    setUpRecyclerView();
+                                    updateInterface(movie);
+                                    movieInstance = movie;
+                                }
+                            }
 
-                    @Override
-                    public void onError() {
-                        displayError();
-                    }
-                }, new IMovieVideosCallback() {
-                    @Override
-                    public void onSuccess(List<MovieVideos> movieVideos) {
-                        setupVideoAdapter(movieVideos);
-                    }
+                            @Override
+                            public void onError() {
+                                displayError();
+                            }
+                        },
+                        //Movie Trailers
+                        new IMovieVideosCallback() {
+                            @Override
+                            public void onSuccess(List<MovieVideos> movieVideos) {
+                                setupVideoAdapter(movieVideos);
+                                movieVideosList = movieVideos;
+                            }
 
-                    @Override
-                    public void onError() {
+                            @Override
+                            public void onError() {
 
-                    }
-                }, new IMovieReviewsCallback() {
-                    @Override
-                    public void onSuccess(int page, List<MovieReviews> movieReviews) {
-                        setupReviewAapter(page, movieReviews);
-                    }
+                            }
+                        },
+                        //Movie Reviewa
+                        new IMovieReviewsCallback() {
+                            @Override
+                            public void onSuccess(int page, List<MovieReviews> movieReviews) {
+                                setupReviewAapter(page, movieReviews);
+                                movieReviewsList = movieReviews;
+                                movieReviewsPage = page;
+                            }
 
-                    @Override
-                    public void onFailure() {
+                            @Override
+                            public void onFailure() {
 
-                    }
-                });
+                            }
+                        });
+                //Observe live data changes
                 movieDetailViewModel.getMovie().observe(this, new Observer<Movie>() {
                     @Override
                     public void onChanged(@Nullable Movie movie) {
@@ -160,8 +197,8 @@ public class DetailActivity extends AppCompatActivity {
                     }
                 });
                 detectDrawableChange();
-            }
-            if (intent.hasExtra(MOVIE_ID_DB)) {
+
+            } else if (intent.hasExtra(MOVIE_ID_DB)) {
                 int movieIdIn;
                 movieIdIn = intent.getIntExtra(MOVIE_ID_DB, DEFAULT_TASK_ID);
                 //View Model
@@ -172,6 +209,7 @@ public class DetailActivity extends AppCompatActivity {
                     public void onChanged(@Nullable Movie movie) {
                         detailViewModel.getMovieLiveData().removeObserver(this);
                         if (movie != null) {
+
                             setUpRecyclerView();
                             populateUIfromRoomDatabase(movie);
                         }
@@ -182,6 +220,13 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
+
+    /**
+     * Method to setup up reviewa
+     *
+     * @param page         page of review
+     * @param movieReviews list of movie reviews that will be set to adapter
+     */
     void setupReviewAapter(int page, List<MovieReviews> movieReviews) {
         if (mReviewsAdapter == null) {
             //Attach Reviews Adapter to Recycler View
@@ -196,12 +241,18 @@ public class DetailActivity extends AppCompatActivity {
         }
         if (!(movieReviews.size() > 0)) {
             final Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
+            mMoviesReviewRecyclerView.setVisibility(View.GONE);
             mMovieReviewEmptyTextView.setTypeface(custom_font);
             mMovieReviewEmptyTextView.setVisibility(View.VISIBLE);
-            mMoviesReviewRecyclerView.setVisibility(View.GONE);
+
         }
     }
 
+    /**
+     * Method to setup video adapter
+     *
+     * @param movieVideos list of movie videos to setup video adapter
+     */
     void setupVideoAdapter(List<MovieVideos> movieVideos) {
         //Attach Video Adapter to Recycler View
         if (mVideoAdapter == null) {
@@ -213,10 +264,11 @@ public class DetailActivity extends AppCompatActivity {
         //appends movie results to list and updates recycler view
         mVideoAdapter.setMovieVideoList(movieVideos);
         if (!(movieVideos.size() > 0)) {
+            mMoviesTrailerRecyclerView.setVisibility(View.GONE);
             final Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
             mMovieTrailerEmptyTextView.setTypeface(custom_font);
             mMovieTrailerEmptyTextView.setVisibility(View.VISIBLE);
-            mMoviesTrailerRecyclerView.setVisibility(View.GONE);
+
         }
     }
 
@@ -246,7 +298,7 @@ public class DetailActivity extends AppCompatActivity {
         mMoviesReviewRecyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManagerReview = new LinearLayoutManager(this);
         mMoviesReviewRecyclerView.setLayoutManager(linearLayoutManagerReview);
-        mMoviesReviewRecyclerView.setItemViewCacheSize(5);
+        mMoviesReviewRecyclerView.setItemViewCacheSize(2);
         mMoviesReviewRecyclerView.setDrawingCacheEnabled(true);
         mMoviesReviewRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
 
@@ -255,7 +307,7 @@ public class DetailActivity extends AppCompatActivity {
         mMoviesTrailerRecyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManagerVideo = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mMoviesTrailerRecyclerView.setLayoutManager(linearLayoutManagerVideo);
-        mMoviesTrailerRecyclerView.setItemViewCacheSize(5);
+        mMoviesTrailerRecyclerView.setItemViewCacheSize(2);
         mMoviesTrailerRecyclerView.setDrawingCacheEnabled(true);
         mMoviesTrailerRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
     }
@@ -304,7 +356,12 @@ public class DetailActivity extends AppCompatActivity {
         String movieAvgString = Float.toString(movieavg);
         mRatingValueTextView.setText(movieAvgString);
         mMovieReleaseDateTextView.setText(movie.getMovieReleaseDate());
-        mMovieOverviewTextView.setText(movie.getMovieOverview());
+        if (movie.getMovieOverview() == null || movie.getMovieOverview().equals("")) {
+            mMovieOverviewTextView.setText(getString(R.string.label_default));
+        } else {
+            mMovieOverviewTextView.setText(movie.getMovieOverview());
+        }
+
         if (!isFinishing()) {
             Picasso.with(DetailActivity.this)
                     .load(IMAGE_BASE_URL_BACKDROP + movie.getBackdrop())
@@ -405,8 +462,8 @@ public class DetailActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new StyleableToast.Builder(DetailActivity.this)
-                                    .text(getString(R.string.label_added_favs))
+                            mToast = new StyleableToast.Builder(DetailActivity.this);
+                            mToast.text(getString(R.string.label_added_favs))
                                     .length(Toast.LENGTH_SHORT)
                                     .textColor(getResources().getColor(R.color.colorWhite))
                                     .backgroundColor(getResources().getColor(R.color.colorAlternate))
@@ -420,8 +477,8 @@ public class DetailActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            new StyleableToast.Builder(DetailActivity.this)
-                                    .text(getString(R.string.label_removed_favs))
+                            mToast = new StyleableToast.Builder(DetailActivity.this);
+                            mToast.text(getString(R.string.label_removed_favs))
                                     .length(Toast.LENGTH_SHORT)
                                     .textColor(getResources().getColor(R.color.colorWhite))
                                     .backgroundColor(getResources().getColor(R.color.colorAccent))
@@ -432,6 +489,23 @@ public class DetailActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+
+    private void setupLabelsTypeface(Typeface typeface) {
+        mLabelReleasedTextView.setTypeface(typeface);
+        mLabelOverviewTextView.setTypeface(typeface);
+        mMovieReviewLabelTextView.setTypeface(typeface);
+        mMovieTrailerLabelTextView.setTypeface(typeface);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(KEY_MOVIE, Parcels.wrap(movieInstance));
+        outState.putParcelable(KEY_MOVIE_REVIEWS, Parcels.wrap(movieReviewsList));
+        outState.putInt(KEY_MOVIE_REVIEW_PAGE, movieReviewsPage);
+        outState.putParcelable(KEY_MOVIE_VIDEOS, Parcels.wrap(movieVideosList));
     }
 
 }
