@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private GridLayoutManager gridLayoutManager;
     private static IMovieClickHandler IMovieClickHandler;
     private MovieDatabase movieDatabase;
-    FavouritesViewModel favouritesViewModel;
+    private FavouritesViewModel favouritesViewModel;
     public static List<Movie> moviesPersistance;
     private FavouritesAdapter favouritesAdapter;
     private final String KEY_MOVIES_PARCELABLE = "movie_list";
@@ -133,9 +133,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                     setupSortedMovie();
                     mErrorMessageTextView.setVisibility(View.GONE);
                 } else if (sortBy.equals(mFavouritesOption)) {
-                    setupViewModel();
-                    setupFavouritesRecyclerViewAdapter();
-                    setupFavouritesObserver();
+                    setupFavourites();
                 } else {
                     mProgressBar.setVisibility(View.VISIBLE);
                     setupSortedMovie();
@@ -192,9 +190,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             setupSortedMovie();
             mErrorMessageTextView.setVisibility(View.GONE);
         } else {
-            setupViewModel();
-            setupFavouritesRecyclerViewAdapter();
-            setupFavouritesObserver();
+           setupFavourites();
         }
     }
 
@@ -480,11 +476,17 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         Log.d(TAG, "Language is :" + TMDBMovies.LANGUAGE);
     }
 
-    void setupSortedMovie() {
+    private void setupSortedMovie() {
         setTitleToolbar(sortBy);
         setFavouriteViewsVisibility();
         getMovies(currentPage);
         setupClickHandling();
+    }
+
+    private void setupFavourites() {
+        setupViewModel();
+        setupFavouritesRecyclerViewAdapter();
+        setupFavouritesObserver();
     }
 
 

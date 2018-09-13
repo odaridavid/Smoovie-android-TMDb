@@ -149,6 +149,7 @@ public class DetailActivity extends AppCompatActivity {
                                 if (movie != null) {
                                     setUpRecyclerView();
                                     updateInterface(movie);
+                                    //save movie for on rotate
                                     movieInstance = movie;
                                 }
                             }
@@ -163,12 +164,12 @@ public class DetailActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(List<MovieVideos> movieVideos) {
                                 setupVideoAdapter(movieVideos);
+                                //save movie  video list for on rotate
                                 movieVideosList = movieVideos;
                             }
 
                             @Override
                             public void onError() {
-
                             }
                         },
                         //Movie Reviewa
@@ -176,13 +177,13 @@ public class DetailActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(int page, List<MovieReviews> movieReviews) {
                                 setupReviewAapter(page, movieReviews);
+                                //save movie reviews for on rotate
                                 movieReviewsList = movieReviews;
                                 movieReviewsPage = page;
                             }
 
                             @Override
                             public void onFailure() {
-
                             }
                         });
                 //Observe live data changes
@@ -198,8 +199,9 @@ public class DetailActivity extends AppCompatActivity {
                 });
                 //on touch favourites icon update
                 detectDrawableChange();
-
-            } else if (intent.hasExtra(MOVIE_ID_ROOM_DB)) {
+            }
+            //for favourites view
+            else if (intent.hasExtra(MOVIE_ID_ROOM_DB)) {
                 int movieIdIn;
                 movieIdIn = intent.getIntExtra(MOVIE_ID_ROOM_DB, DEFAULT_TASK_ID);
                 //View Model
@@ -244,7 +246,6 @@ public class DetailActivity extends AppCompatActivity {
             mMoviesReviewRecyclerView.setVisibility(View.GONE);
             mMovieReviewEmptyTextView.setTypeface(custom_font);
             mMovieReviewEmptyTextView.setVisibility(View.VISIBLE);
-
         }
     }
 
@@ -268,7 +269,6 @@ public class DetailActivity extends AppCompatActivity {
             final Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
             mMovieTrailerEmptyTextView.setTypeface(custom_font);
             mMovieTrailerEmptyTextView.setVisibility(View.VISIBLE);
-
         }
     }
 
@@ -475,7 +475,6 @@ public class DetailActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-
                             mToast = new StyleableToast.Builder(DetailActivity.this);
                             mToast.text(getString(R.string.label_added_favs))
                                     .length(Toast.LENGTH_SHORT)
@@ -483,9 +482,7 @@ public class DetailActivity extends AppCompatActivity {
                                     .backgroundColor(getResources().getColor(R.color.colorAlternate))
                                     .show();
                             mFavouritesIconImageView.setImageDrawable(getDrawable(R.drawable.ic_favorite_true));
-
                         }
-
                     });
                 } else {
                     //Remove and display toast and change drawable
@@ -525,5 +522,4 @@ public class DetailActivity extends AppCompatActivity {
         outState.putInt(KEY_MOVIE_REVIEW_PAGE, movieReviewsPage);
         outState.putParcelable(KEY_MOVIE_VIDEOS, Parcels.wrap(movieVideosList));
     }
-
 }
