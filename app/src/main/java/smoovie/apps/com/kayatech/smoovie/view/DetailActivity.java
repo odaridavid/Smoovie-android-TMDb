@@ -45,21 +45,27 @@ import smoovie.apps.com.kayatech.smoovie.viewmodel.MovieDetailViewModel;
 public class DetailActivity extends AppCompatActivity {
 
     private static final String TAG = DetailActivity.class.getSimpleName();
-    private static final String KEY_LANGUAGE_SORT = "language";
     private static final String KEY_MOVIE = "movie";
     private static final String KEY_MOVIE_REVIEWS = "reviews";
     private static final String KEY_MOVIE_VIDEOS = "videos";
     private static final String KEY_MOVIE_REVIEW_PAGE = "page";
     public static final String MOVIE_ID = "movie_id";
-    public static final String MOVIE_ID_DB = "movie_id_db";
+    public static final String MOVIE_ID_ROOM_DB = "movie_id_db";
     private ReviewsAdapter mReviewsAdapter;
     private VideoAdapter mVideoAdapter;
     private IVideoClickHandler iVideoClickHandler;
     private IShareClickHandler iShareClickHandler;
-    MovieDetailViewModel movieDetailViewModel;
+    private MovieDetailViewModel movieDetailViewModel;
     private MovieDatabase movieDatabase;
-    StyleableToast.Builder mToast;
-
+    private StyleableToast.Builder mToast;
+    private static final int DEFAULT_TASK_ID = -1;
+    private FavouritesViewModelFactory factory;
+    private DetailViewModel detailViewModel;
+    private Typeface customTypeface;
+    private static Movie movieInstance = null;
+    private static int movieReviewsPage;
+    private static List<MovieReviews> movieReviewsList;
+    private static List<MovieVideos> movieVideosList;
 
     @BindView(R.id.tv_rating_value)
     TextView mRatingValueTextView;
@@ -93,15 +99,6 @@ public class DetailActivity extends AppCompatActivity {
     RecyclerView mMoviesTrailerRecyclerView;
     @BindView(R.id.iv_favcon)
     ImageView mFavouritesIconImageView;
-    private static final int DEFAULT_TASK_ID = -1;
-    FavouritesViewModelFactory factory;
-    DetailViewModel detailViewModel;
-    Typeface customTypeface;
-    private static Movie movieInstance = null;
-    private static int movieReviewsPage;
-    private static List<MovieReviews> movieReviewsList;
-    private static List<MovieVideos> movieVideosList;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,18 +110,20 @@ public class DetailActivity extends AppCompatActivity {
         //Custom Font For Labels
         customTypeface = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Light.ttf");
         setupLabelsTypeface(customTypeface);
+        //setup actionbar
         setupToolbar();
         //Check if intent contains extras
         Intent intent = getIntent();
-
         if (intent.getExtras() != null) {
+            //on rotate
             if (savedInstanceState != null && intent.hasExtra(MOVIE_ID)) {
+                //saved instance state for movies loaded over network
                 Log.d(TAG, "movie saved instance");
                 if (savedInstanceState.containsKey(KEY_MOVIE)) {
                     setUpRecyclerView();
+                    //saved movie
                     Movie movieInstance = Parcels.unwrap(savedInstanceState.getParcelable(KEY_MOVIE));
                     updateInterface(movieInstance);
-                    Log.d(TAG, "movie Exists" + movieInstance);
                     List<MovieReviews> movieReviewsList = Parcels.unwrap(savedInstanceState.getParcelable(KEY_MOVIE_REVIEWS));
                     int movieReviewsPage = savedInstanceState.getInt(KEY_MOVIE_REVIEW_PAGE);
                     List<MovieVideos> movieVideosList = Parcels.unwrap(savedInstanceState.getParcelable(KEY_MOVIE_VIDEOS));
@@ -134,6 +133,7 @@ public class DetailActivity extends AppCompatActivity {
                     detectDrawableChange();
                 }
             } else if (intent.hasExtra(MOVIE_ID)) {
+                //get movie clicked from intent
                 final int mMovieId = Parcels.unwrap(getIntent().getParcelableExtra(MOVIE_ID));
                 Log.d(TAG, "Movie Being Passed" + mMovieId);
                 //For Room Database will be used to compare loaded movie and  that in Database
@@ -196,11 +196,12 @@ public class DetailActivity extends AppCompatActivity {
                         }
                     }
                 });
+                //on touch favourites icon update
                 detectDrawableChange();
 
-            } else if (intent.hasExtra(MOVIE_ID_DB)) {
+            } else if (intent.hasExtra(MOVIE_ID_ROOM_DB)) {
                 int movieIdIn;
-                movieIdIn = intent.getIntExtra(MOVIE_ID_DB, DEFAULT_TASK_ID);
+                movieIdIn = intent.getIntExtra(MOVIE_ID_ROOM_DB, DEFAULT_TASK_ID);
                 //View Model
                 factory = new FavouritesViewModelFactory(movieDatabase, movieIdIn);
                 detailViewModel = ViewModelProviders.of(this, factory).get(DetailViewModel.class);
@@ -209,7 +210,6 @@ public class DetailActivity extends AppCompatActivity {
                     public void onChanged(@Nullable Movie movie) {
                         detailViewModel.getMovieLiveData().removeObserver(this);
                         if (movie != null) {
-
                             setUpRecyclerView();
                             populateUIfromRoomDatabase(movie);
                         }
@@ -272,6 +272,9 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * method to detect favourites icon change
+     */
     private void detectDrawableChange() {
         detailViewModel.isFavourites().observe(this, new Observer<Movie>() {
             @Override
@@ -312,6 +315,10 @@ public class DetailActivity extends AppCompatActivity {
         mMoviesTrailerRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
     }
 
+    /**
+     *
+     * @param movieResult Movie to be bound to views from intent
+     */
     private void updateInterface(final Movie movieResult) {
         buildUi(movieResult);
         shareVideo();
@@ -325,6 +332,10 @@ public class DetailActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     *
+     * @param movie movie to be bound to views from  room local database
+     */
     private void populateUIfromRoomDatabase(final Movie movie) {
         buildUi(movie);
         //Disable Reviewa and Trailers
@@ -339,6 +350,7 @@ public class DetailActivity extends AppCompatActivity {
         });
     }
 
+    //method to build ui -reused
     private void buildUi(Movie movie) {
         String IMAGE_BASE_URL_BACKDROP = "http://image.tmdb.org/t/p/w780";
         String IMAGE_BASE_URL_POSTER = "http://image.tmdb.org/t/p/w185";
@@ -378,6 +390,7 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
+    //Share Video intent and open video in youtube
     private void shareVideo() {
         final String YOUTUBE_VIDEO_BASE_URL = "http://www.youtube.com/watch?v=%s";
         //Click Handling Sharing for text
@@ -441,6 +454,10 @@ public class DetailActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     *
+     * @param movieToAdd movie to be added or removed from database if exists
+     */
     public void addToFavouritesDatabaseOperations(final Movie movieToAdd) {
         //Values To Be Saved to database
         int movieId = movieToAdd.getMovieId();
@@ -462,14 +479,17 @@ public class DetailActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mToast = new StyleableToast.Builder(DetailActivity.this);
-                            mToast.text(getString(R.string.label_added_favs))
-                                    .length(Toast.LENGTH_SHORT)
-                                    .textColor(getResources().getColor(R.color.colorWhite))
-                                    .backgroundColor(getResources().getColor(R.color.colorAlternate))
-                                    .show();
-                            mFavouritesIconImageView.setImageDrawable(getDrawable(R.drawable.ic_favorite_true));
-                        }
+                            if (mToast!=null){
+                                mToast = new StyleableToast.Builder(DetailActivity.this);
+                                mToast.text(getString(R.string.label_added_favs))
+                                        .length(Toast.LENGTH_SHORT)
+                                        .textColor(getResources().getColor(R.color.colorWhite))
+                                        .backgroundColor(getResources().getColor(R.color.colorAlternate))
+                                        .show();
+                                mFavouritesIconImageView.setImageDrawable(getDrawable(R.drawable.ic_favorite_true));
+                            }
+                            }
+
                     });
                 } else {
                     //Remove and display toast and change drawable
@@ -491,7 +511,10 @@ public class DetailActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     *
+     * @param typeface custom font for labels
+     */
     private void setupLabelsTypeface(Typeface typeface) {
         mLabelReleasedTextView.setTypeface(typeface);
         mLabelOverviewTextView.setTypeface(typeface);
