@@ -351,7 +351,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onItemClickListener(int movieId) {
         //Open Movie In Detail Activity
         Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-        intent.putExtra(DetailActivity.MOVIE_ID_DB, movieId);
+        intent.putExtra(DetailActivity.MOVIE_ID_ROOM_DB, movieId);
         Log.d(TAG, "onItemClickListener: " + movieId);
         startActivity(intent);
     }
