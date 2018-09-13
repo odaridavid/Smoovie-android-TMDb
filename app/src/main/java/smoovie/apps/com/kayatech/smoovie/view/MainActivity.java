@@ -14,13 +14,11 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,12 +38,9 @@ import butterknife.ButterKnife;
 import smoovie.apps.com.kayatech.smoovie.R;
 import smoovie.apps.com.kayatech.smoovie.model.Movie;
 import smoovie.apps.com.kayatech.smoovie.network.TMDBMovies;
-import smoovie.apps.com.kayatech.smoovie.room_database.AppExecutors;
 import smoovie.apps.com.kayatech.smoovie.room_database.MovieDatabase;
 import smoovie.apps.com.kayatech.smoovie.viewmodel.FavouritesViewModel;
 import smoovie.apps.com.kayatech.smoovie.viewmodel.IMovieListCallback;
-
-import static android.support.v7.widget.RecyclerView.VERTICAL;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, FavouritesAdapter.IFavMovieClickHandler {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -57,10 +52,13 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private static String sortBy;
     private MoviesAdapter mMoviesAdapter;
     private GridLayoutManager gridLayoutManager;
-    private IMovieClickHandler IMovieClickHandler;
+    private static IMovieClickHandler IMovieClickHandler;
     private MovieDatabase movieDatabase;
     FavouritesViewModel favouritesViewModel;
+    public static List<Movie> moviesPersistance;
     private FavouritesAdapter favouritesAdapter;
+    private final String KEY_MOVIES_PARCELABLE = "movie_list";
+
     @BindView(R.id.iv_favcon_view_default)
     ImageView mFavconImage;
 
@@ -79,10 +77,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @BindView(R.id.action_toolbar_main)
     Toolbar toolbarMainPage;
 
-    @BindView(R.id.rv_favourite_movies)
-    RecyclerView mFavouriteMoviesRecyclerView;
-
     final static String mFavouritesOption = "favourite";
+    private static List<Movie> movies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,26 +88,41 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         setSupportActionBar(toolbarMainPage);
         movieList = TMDBMovies.getInstance();
         sortBy = TMDBMovies.POPULAR;
-
+        //Setup recycler view
+        setupRecyclerView();
         //Get Db instance
         movieDatabase = MovieDatabase.getMovieDatabaseInstance(getApplicationContext());
+        //if saved instance state has values
         if (savedInstanceState != null) {
-
             if (savedInstanceState.containsKey(KEY_SORT)) {
                 if (savedInstanceState.containsKey(KEY_LANGUAGE_SORT)) {
-                   String lang = savedInstanceState.getString(KEY_LANGUAGE_SORT);
-
-                    sortBy = savedInstanceState.getString(KEY_SORT);//Setup Recycler view depending on sort option
-                    if (isOnline()) {
-                        if (sortBy != null) {
-                            setUpRecyclerViewInstance(sortBy);
-                            //Set Title for toolbar on rotate
-                            setUpLocale(lang);
-                            setTitleToolbar(sortBy);
+                    if (savedInstanceState.containsKey(KEY_MOVIES_PARCELABLE)) {
+                        //get saved movie list as parcel
+                        movies = Parcels.unwrap(savedInstanceState.getParcelable(KEY_MOVIES_PARCELABLE));
+                        Log.d(TAG, "movie exists::" + movies);
+                        //get language
+                        String lang = savedInstanceState.getString(KEY_LANGUAGE_SORT);
+                        Log.d(TAG, "movie language::" + lang);
+                        //get current sort option
+                        sortBy = savedInstanceState.getString(KEY_SORT);
+                        Log.d(TAG, "movie sort option::" + sortBy);
+                        //Setup Recycler view depending on sort option
+                        if (isOnline()) {
+                            if (sortBy != null) {
+                                if (movies != null && !sortBy.equals(mFavouritesOption)) {
+                                    setupRecyclerView();
+                                    setUpMoviesAdapter(movies, 1);
+                                } else {
+                                    setUpRecyclerViewInstance(sortBy);
+                                }
+                                //Set Title for toolbar on rotate
+                                setUpLocale(lang);
+                                setTitleToolbar(sortBy);
+                            }
+                        } else {
+                            mErrorMessageTextView.setVisibility(View.VISIBLE);
+                            mProgressBar.setVisibility(View.GONE);
                         }
-                    } else {
-                        mErrorMessageTextView.setVisibility(View.VISIBLE);
-                        mProgressBar.setVisibility(View.GONE);
                     }
                 }
             }
@@ -120,17 +131,17 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 if (!sortBy.equals(mFavouritesOption)) {
                     mProgressBar.setVisibility(View.VISIBLE);
                     setTitleToolbar(sortBy);
-                    setUpMovieQueryRecyclerView();
+                    setFavouriteViewsVisibility();
                     getMovies(currentPage);
                     setupClickHandling();
                     mErrorMessageTextView.setVisibility(View.GONE);
                 } else if (sortBy.equals(mFavouritesOption)) {
                     setupViewModel();
-                    setupFavouritesRecyclerView();
+                    setupFavouritesRecyclerViewAdapter();
                     setupFavouritesObserver();
                 } else {
                     mProgressBar.setVisibility(View.VISIBLE);
-                    setUpMovieQueryRecyclerView();
+                    setFavouriteViewsVisibility();
                     getMovies(currentPage);
                     setupClickHandling();
                     mErrorMessageTextView.setVisibility(View.GONE);
@@ -147,124 +158,49 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         sp.registerOnSharedPreferenceChangeListener(this);
     }
 
-    //Locale
-    private void setUpLocale(String language) {
-        if (language.equals(getString(R.string.pref_language_val_chinese))) {
-            Locale locale = new Locale("zh");
-            Configuration config = getBaseContext().getResources().getConfiguration();
-            Locale.setDefault(locale);
-            config.setLocale(locale);
-            getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-        }
-        if (language.equals(getString(R.string.pref_language_val_french))) {
-            Locale locale = new Locale("fr");
-            Configuration config = getBaseContext().getResources().getConfiguration();
-            Locale.setDefault(locale);
-            config.setLocale(locale);
-            getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-        }
-        if (language.equals(getString(R.string.pref_language_val_german))) {
-            Locale locale = new Locale("de");
-            Locale.setDefault(locale);
-            Configuration config = getBaseContext().getResources().getConfiguration();
-            config.setLocale(locale);
-            getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-        }
-        if (language.equals(getString(R.string.pref_language_val_english))) {
-            Locale locale = new Locale("en");
-            Locale.setDefault(locale);
-            Configuration config = getBaseContext().getResources().getConfiguration();
-            config.setLocale(locale);
-            getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-        }
-        Log.d(TAG, "Language is :" + TMDBMovies.LANGUAGE);
-    }
 
     //On Save Instance state
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        //s
         outState.putString(KEY_SORT, sortBy);
+        //save current language
         outState.putString(KEY_LANGUAGE_SORT, TMDBMovies.LANGUAGE);
+        //Save movie list
+        outState.putParcelable(KEY_MOVIES_PARCELABLE, Parcels.wrap(moviesPersistance));
     }
 
-    //Setup for Movies Recycler View
-    void setUpMovieQueryRecyclerView() {
+
+    void setFavouriteViewsVisibility() {
         //Disable Favourite Items
-        mFavouriteMoviesRecyclerView.setVisibility(View.GONE);
         mFavDefaultText.setVisibility(View.GONE);
         mFavconImage.setVisibility(View.GONE);
-        //Enable Recycler View Visibility
-        mMoviesRecyclerView.setVisibility(View.VISIBLE);
-        mMoviesRecyclerView.setHasFixedSize(true);
-        gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
-        mMoviesRecyclerView.setLayoutManager(gridLayoutManager);
-        mMoviesRecyclerView.setItemViewCacheSize(20);
-        mMoviesRecyclerView.setDrawingCacheEnabled(true);
-        mMoviesRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
-        //Gets Recycler width and card width and arranges elements in layout as per screen size
-        mMoviesRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                mMoviesRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                int viewWidth = mMoviesRecyclerView.getMeasuredWidth();
-                float cardViewWidth = getApplication().getResources().getDimension(R.dimen.size_layout);
-                int newSpanCunt = (int) Math.floor(viewWidth / cardViewWidth);
-                gridLayoutManager.setSpanCount(newSpanCunt);
-                gridLayoutManager.requestLayout();
-            }
-        });
-
     }
 
     //Setup for Favourite movie Recycler view
-    void setupFavouritesRecyclerView() {
+    void setupFavouritesRecyclerViewAdapter() {
         //Disable Movie Item Views
-        mMoviesRecyclerView.setVisibility(View.GONE);
         mErrorMessageTextView.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.GONE);
-        //Set Recycler Visiibility
-        mFavouriteMoviesRecyclerView.setVisibility(View.VISIBLE);
-        //Setup
-        mFavouriteMoviesRecyclerView.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManagerReview = new LinearLayoutManager(this);
-        mFavouriteMoviesRecyclerView.setLayoutManager(linearLayoutManagerReview);
+        //remove movies adapter
+        mMoviesAdapter = null;
+        //Set Adapter
         favouritesAdapter = new FavouritesAdapter(this, this);
-        DividerItemDecoration decoration = new DividerItemDecoration(getApplicationContext(), VERTICAL);
-        mFavouriteMoviesRecyclerView.addItemDecoration(decoration);
-        mFavouriteMoviesRecyclerView.setAdapter(favouritesAdapter);
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            // Called when a user swipes left or right on a ViewHolder
-            @Override
-            public void onSwiped(final RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        int position = viewHolder.getAdapterPosition();
-                        List<Movie> movies = favouritesAdapter.getMovies();
-                        movieDatabase.movieDAO().removeMovieFromFavourites(movies.get(position));
-                    }
-                });
-            }
-        }).attachToRecyclerView(mFavouriteMoviesRecyclerView);
+        mMoviesRecyclerView.setAdapter(favouritesAdapter);
     }
 
     //For on save insantace state
     private void setUpRecyclerViewInstance(String sortBy) {
         if (!sortBy.equals(mFavouritesOption)) {
             mProgressBar.setVisibility(View.VISIBLE);
-            setUpMovieQueryRecyclerView();
+            setFavouriteViewsVisibility();
             getMovies(currentPage);
             setupClickHandling();
             mErrorMessageTextView.setVisibility(View.GONE);
         } else {
             setupViewModel();
-            setupFavouritesRecyclerView();
+            setupFavouritesRecyclerViewAdapter();
             setupFavouritesObserver();
         }
     }
@@ -283,33 +219,41 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     void getMovies(int currentPage) {
-        if (sortBy != null) {
-            isFetchingMovies = true;
-            movieList.getMovies(currentPage, sortBy, new IMovieListCallback() {
-                @Override
-                public void onSuccess(int page, List<Movie> movies) {
-                    if (mMoviesAdapter == null) {
-                        mMoviesAdapter = new MoviesAdapter(movies, IMovieClickHandler);
-                        mMoviesRecyclerView.setAdapter(mMoviesAdapter);
-                    } else {
-                        if (page == 1) {
-                            mMoviesAdapter.clearMovies();
-                        }
-                        mProgressBar.setVisibility(View.GONE);
-                        //appends movie results to list and updates recycler view
-                        mMoviesAdapter.setmMovieList(movies);
-                    }
-                    isFetchingMovies = false;
-                    mErrorMessageTextView.setVisibility(View.GONE);
-                    mProgressBar.setVisibility(View.GONE);
-                }
+        isFetchingMovies = true;
+        movieList.getMovies(currentPage, sortBy, new IMovieListCallback() {
+            @Override
+            public void onSuccess(int page, List<Movie> movies) {
+                setUpMoviesAdapter(movies, page);
+                moviesPersistance = movies;
+            }
 
-                @Override
-                public void onFailure() {
-                    Log.d(TAG, getString(R.string.error_network_message));
-                }
-            });
+            @Override
+            public void onFailure() {
+                Log.d(TAG, getString(R.string.error_network_message));
+            }
+        });
+
+    }
+
+    void setUpMoviesAdapter(List<Movie> movies, int page) {
+        if (mMoviesAdapter == null) {
+            Log.d(TAG, "Movies Adpter::set::" + mMoviesAdapter);
+            mMoviesAdapter = new MoviesAdapter(movies, IMovieClickHandler);
+            mMoviesRecyclerView.setAdapter(mMoviesAdapter);
+
+        } else {
+            Log.d(TAG, "Movies Adpter::not set::" + mMoviesAdapter);
+            if (page == 1) {
+                mMoviesAdapter.clearMovies();
+            }
+            mProgressBar.setVisibility(View.GONE);
+            //appends movie results to list and updates recycler view
+            mMoviesAdapter.setmMovieList(movies);
+            mMoviesRecyclerView.setAdapter(mMoviesAdapter);
         }
+        isFetchingMovies = false;
+        mErrorMessageTextView.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -400,6 +344,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
     }
 
+    /**
+     * @param movieId movie id from favourites database to be opened in detail activity
+     */
     @Override
     public void onItemClickListener(int movieId) {
         //Open Movie In Detail Activity
@@ -418,16 +365,16 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
 
     private void setupFavouritesObserver() {
+
         favouritesViewModel.getMovies().observe(this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(@Nullable List<Movie> movies) {
-                favouritesAdapter.setmMovieReviewsList(movies);
+                favouritesAdapter.setFavouriteMoviesList(movies);
                 if (!(movies.size() > 0)) {
                     //To Prevent Favourite views overlapping with other sort options
                     if (sortBy.equals(mFavouritesOption)) {
                         //When List Is Empty
                         final Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Thin.ttf");
-                        mFavouriteMoviesRecyclerView.setVisibility(View.GONE);
                         mFavconImage.setVisibility(View.VISIBLE);
                         mFavDefaultText.setVisibility(View.VISIBLE);
                         mFavDefaultText.setTypeface(custom_font);
@@ -437,6 +384,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         });
     }
 
+    /**
+     * @param sortBy sort option to set title toolbar text
+     */
     private void setTitleToolbar(String sortBy) {
         switch (sortBy) {
             case TMDBMovies.TOP_RATED:
@@ -458,7 +408,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if (isOnline()) {
             mProgressBar.setVisibility(View.VISIBLE);
             setTitleToolbar(sortBy);
-            setUpRecyclerViewInstance(sortBy);
+            setFavouriteViewsVisibility();
             getMovies(currentPage);
             setupClickHandling();
         } else {
@@ -470,5 +420,76 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
     }
 
+    /**
+     * Methods to setup Recycler view and dynamic span count
+     */
+    void setupRecyclerView() {
+        mMoviesRecyclerView.setVisibility(View.VISIBLE);
+        mMoviesRecyclerView.setHasFixedSize(true);
+        gridLayoutManager = new GridLayoutManager(getApplicationContext(), calculateNoOfColumns(this));
+        mMoviesRecyclerView.setLayoutManager(gridLayoutManager);
+        mMoviesRecyclerView.setItemViewCacheSize(20);
+        mMoviesRecyclerView.setDrawingCacheEnabled(true);
+        mMoviesRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
+        //Gets Recycler width and card width and arranges elements in layout as per screen size
+        mMoviesRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mMoviesRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                int viewWidth = mMoviesRecyclerView.getMeasuredWidth();
+                float cardViewWidth = getApplication().getResources().getDimension(R.dimen.size_layout);
+                int newSpanCunt = (int) Math.floor(viewWidth / cardViewWidth);
+                gridLayoutManager.setSpanCount(newSpanCunt);
+                gridLayoutManager.requestLayout();
+            }
+        });
+    }
+
+    /**
+     * @param context Recycler view instance
+     * @return number of columns for span count
+     */
+    public static int calculateNoOfColumns(Context context) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+        int scaleFactor = 200;
+        int noOfColumns = (int) (dpWidth / scaleFactor);
+        if (noOfColumns < 2)
+            noOfColumns = 2;
+        return noOfColumns;
+    }
+
+    //Locale
+    private void setUpLocale(String language) {
+        if (language.equals(getString(R.string.pref_language_val_chinese))) {
+            Locale locale = new Locale("zh");
+            Configuration config = getBaseContext().getResources().getConfiguration();
+            Locale.setDefault(locale);
+            config.setLocale(locale);
+            getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        }
+        if (language.equals(getString(R.string.pref_language_val_french))) {
+            Locale locale = new Locale("fr");
+            Configuration config = getBaseContext().getResources().getConfiguration();
+            Locale.setDefault(locale);
+            config.setLocale(locale);
+            getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        }
+        if (language.equals(getString(R.string.pref_language_val_german))) {
+            Locale locale = new Locale("de");
+            Locale.setDefault(locale);
+            Configuration config = getBaseContext().getResources().getConfiguration();
+            config.setLocale(locale);
+            getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        }
+        if (language.equals(getString(R.string.pref_language_val_english))) {
+            Locale locale = new Locale("en");
+            Locale.setDefault(locale);
+            Configuration config = getBaseContext().getResources().getConfiguration();
+            config.setLocale(locale);
+            getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        }
+        Log.d(TAG, "Language is :" + TMDBMovies.LANGUAGE);
+    }
 
 }
