@@ -10,7 +10,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/size_app_bar_height"
+        android:layout_height="350dp"
         android:elevation="@dimen/size_large"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/label_content_description_poster"
                 android:fitsSystemWindows="true"
-                android:scaleType="centerCrop"
+                android:scaleType="fitXY"
                 app:layout_collapseMode="parallax" />
 
             <android.support.v7.widget.Toolbar
@@ -60,6 +60,7 @@
                 android:id="@+id/iv_poster_image"
                 android:layout_width="@dimen/size_image_view_poster"
                 android:layout_height="@dimen/size_width"
+                android:layout_marginEnd="@dimen/size_smallest"
                 android:layout_marginStart="@dimen/size_default"
                 android:layout_marginTop="@dimen/size_default"
                 android:contentDescription="@string/label_content_description_poster"
@@ -78,7 +79,7 @@
 
             <TextView
                 android:id="@+id/tv_label_movie_title"
-                android:layout_width="@dimen/size_width"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_default"
                 android:text="@string/label_default"
@@ -98,15 +99,13 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
             <RatingBar
                 android:id="@+id/rb_movie_rating"
-                style="?android:attr/ratingBarStyleSmall"
+                style="@style/Base.Widget.AppCompat.RatingBar.Small"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/size_default"
                 android:isIndicator="true"
-                android:requiresFadingEdge="vertical"
                 android:stepSize="0.1"
                 app:layout_constraintLeft_toLeftOf="@id/tv_rating_value"
                 app:layout_constraintTop_toBottomOf="@id/tv_label_movie_title"
@@ -201,7 +200,6 @@
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_movies_trailer"
-                android:layout_margin="@dimen/size_medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -212,16 +210,16 @@
 
             <TextView
                 android:id="@+id/tv_no_trailer"
+                style="@style/DetailViewMarginStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/size_medium"
                 android:text="@string/error_trailer_unavailable"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tv_label_trailers" />
+                app:layout_constraintTop_toBottomOf="@id/tv_label_trailers" />
 
             <TextView
                 android:id="@+id/tv_label_reviews"
@@ -247,18 +245,16 @@
 
             <TextView
                 android:id="@+id/tv_no_review"
+                style="@style/DetailViewMarginStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/size_medium"
                 android:text="@string/error_review_unavailable"
-
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tv_label_reviews" />
-
+                app:layout_constraintTop_toBottomOf="@id/tv_label_reviews" />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>
