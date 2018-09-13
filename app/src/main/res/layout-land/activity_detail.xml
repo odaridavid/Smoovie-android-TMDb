@@ -105,6 +105,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_default"
+                android:stepSize="0.1"
+                android:isIndicator="true"
                 android:requiresFadingEdge="vertical"
                 app:layout_constraintLeft_toLeftOf="@id/tv_rating_value"
                 app:layout_constraintTop_toBottomOf="@id/tv_label_movie_title"

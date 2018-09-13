@@ -7,7 +7,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 import java.util.Locale;
@@ -27,10 +30,9 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
     FavouritesAdapter(Context context, IFavMovieClickHandler iFavMovieClickHandler1) {
         this.context = context;
         iFavMovieClickHandler = iFavMovieClickHandler1;
-
     }
 
-    public void setmMovieReviewsList(List<Movie> movie) {
+    public void setFavouriteMoviesList(List<Movie> movie) {
         this.mMovieList = movie;
         notifyDataSetChanged();
     }
@@ -42,7 +44,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
     @NonNull
     @Override
     public FavouriteMovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        int layoutIdForListItem = R.layout.favourite_movie_list_item;
+        int layoutIdForListItem = R.layout.movie_grid_list_item;
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(layoutIdForListItem, parent, false);
         return new FavouriteMovieViewHolder(view);
@@ -65,10 +67,13 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
 
     public class FavouriteMovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @BindView(R.id.tv_fav_movie_title)
-        TextView mMovieTitleTextView;
-        @BindView(R.id.tv_fav_movie_rating)
-        TextView mMovieRatingTextView;
+        private final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w185";
+        @BindView(R.id.tv_movie_card_title)
+        TextView mMovieTitle;
+        @BindView(R.id.iv_poster_image)
+        ImageView mPosterImage;
+        @BindView(R.id.tv_rating_cardlabel)
+        TextView mMovieRatings;
 
         FavouriteMovieViewHolder(View itemView) {
             super(itemView);
@@ -78,15 +83,21 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Fa
 
         private void bind(Movie movie) {
             Context ctx = itemView.getContext();
-            final Typeface custom_font = Typeface.createFromAsset(ctx.getAssets(), "fonts/Roboto-Thin.ttf");
+            final Typeface customFontThin = Typeface.createFromAsset(ctx.getAssets(), "fonts/Roboto-Thin.ttf");
+            final Typeface customFontLight = Typeface.createFromAsset(ctx.getAssets(), "fonts/Roboto-Light.ttf");
             String title = movie.getMovieTitle();
             float rating = movie.getVoterAverage();
             String ratingString = String.format(Locale.getDefault(), "%.2f", rating);
 
-            mMovieRatingTextView.setText(ratingString);
-            mMovieTitleTextView.setTypeface(custom_font);
-            mMovieTitleTextView.setText(title);
-            mMovieTitleTextView.setTypeface(custom_font);
+            mMovieTitle.setTypeface(customFontThin);
+            mMovieTitle.setText(title);
+            mMovieRatings.setTypeface(customFontLight);
+            mMovieRatings.setText(ratingString);
+            Picasso.with(ctx)
+                    .load(IMAGE_BASE_URL+movie.getMoviePoster())
+                    .error(R.drawable.test)
+                    .placeholder(R.drawable.test)
+                    .into(mPosterImage);
 
 
         }

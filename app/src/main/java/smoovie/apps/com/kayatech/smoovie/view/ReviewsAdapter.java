@@ -1,6 +1,7 @@
 package smoovie.apps.com.kayatech.smoovie.view;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -62,6 +63,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.MoviesRe
         TextView mMovieReviewsAuthorTextView;
         @BindView(R.id.tv_reviews_content)
         TextView mMovieReviewsContentTextView;
+        Typeface customTypefaceThin,customTypefaceLight;
 
         MoviesReviewViewHolder(View itemView) {
             super(itemView);
@@ -69,10 +71,13 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.MoviesRe
         }
 
         private void bind(MovieReviews movieReviews) {
-
+            customTypefaceLight = Typeface.createFromAsset(itemView.getContext().getAssets(),"fonts/Roboto-Light.ttf");
+            customTypefaceThin = Typeface.createFromAsset(itemView.getContext().getAssets(),"fonts/Roboto-Bold.ttf");
             if (movieReviews != null) {
                 String author = movieReviews.getAuthor();
                 String reviews = movieReviews.getContent();
+                mMovieReviewsContentTextView.setTypeface(customTypefaceLight);
+                mMovieReviewsAuthorTextView.setTypeface(customTypefaceThin);
                 mMovieReviewsAuthorTextView.setText(author);
                 mMovieReviewsContentTextView.setText(reviews);
                 Log.d("MOVIES REVIEWS", author + " THE BODY " + reviews);
