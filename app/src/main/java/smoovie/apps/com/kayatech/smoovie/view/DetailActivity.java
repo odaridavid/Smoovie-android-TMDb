@@ -42,15 +42,17 @@ import smoovie.apps.com.kayatech.smoovie.viewmodel.IMovieReviewsCallback;
 import smoovie.apps.com.kayatech.smoovie.viewmodel.IMovieVideosCallback;
 import smoovie.apps.com.kayatech.smoovie.viewmodel.MovieDetailViewModel;
 
+import static smoovie.apps.com.kayatech.smoovie.util.Constants.KEY_MOVIE;
+import static smoovie.apps.com.kayatech.smoovie.util.Constants.KEY_MOVIE_REVIEWS;
+import static smoovie.apps.com.kayatech.smoovie.util.Constants.KEY_MOVIE_REVIEW_PAGE;
+import static smoovie.apps.com.kayatech.smoovie.util.Constants.KEY_MOVIE_VIDEOS;
+import static smoovie.apps.com.kayatech.smoovie.util.Constants.MOVIE_ID;
+import static smoovie.apps.com.kayatech.smoovie.util.Constants.MOVIE_ID_ROOM_DB;
+
 public class DetailActivity extends AppCompatActivity {
 
-    private static final String TAG = DetailActivity.class.getSimpleName();
-    private static final String KEY_MOVIE = "movie";
-    private static final String KEY_MOVIE_REVIEWS = "reviews";
-    private static final String KEY_MOVIE_VIDEOS = "videos";
-    private static final String KEY_MOVIE_REVIEW_PAGE = "page";
-    public static final String MOVIE_ID = "movie_id";
-    public static final String MOVIE_ID_ROOM_DB = "movie_id_db";
+    private final String TAG = getClass().getSimpleName();
+
     private ReviewsAdapter mReviewsAdapter;
     private VideoAdapter mVideoAdapter;
     private IVideoClickHandler iVideoClickHandler;
