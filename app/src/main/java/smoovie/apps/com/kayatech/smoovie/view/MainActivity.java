@@ -38,7 +38,7 @@ import butterknife.ButterKnife;
 import smoovie.apps.com.kayatech.smoovie.R;
 import smoovie.apps.com.kayatech.smoovie.model.Movie;
 import smoovie.apps.com.kayatech.smoovie.network.TMDBMovies;
-import smoovie.apps.com.kayatech.smoovie.room_database.MovieDatabase;
+import smoovie.apps.com.kayatech.smoovie.db.MovieDatabase;
 import smoovie.apps.com.kayatech.smoovie.viewmodel.FavouritesViewModel;
 import smoovie.apps.com.kayatech.smoovie.viewmodel.IMovieListCallback;
 

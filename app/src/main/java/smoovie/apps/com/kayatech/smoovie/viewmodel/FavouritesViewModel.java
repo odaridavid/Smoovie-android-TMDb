@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 import smoovie.apps.com.kayatech.smoovie.model.Movie;
-import smoovie.apps.com.kayatech.smoovie.room_database.MovieDatabase;
+import smoovie.apps.com.kayatech.smoovie.db.MovieDatabase;
 
 public class FavouritesViewModel extends AndroidViewModel {
     private LiveData<List<Movie>> movies;

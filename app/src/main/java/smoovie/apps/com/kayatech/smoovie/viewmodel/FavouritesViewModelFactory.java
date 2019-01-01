@@ -4,7 +4,7 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
-import smoovie.apps.com.kayatech.smoovie.room_database.MovieDatabase;
+import smoovie.apps.com.kayatech.smoovie.db.MovieDatabase;
 
 public class FavouritesViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 

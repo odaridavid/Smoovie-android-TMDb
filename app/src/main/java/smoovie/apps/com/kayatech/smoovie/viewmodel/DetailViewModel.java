@@ -5,7 +5,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
 import smoovie.apps.com.kayatech.smoovie.model.Movie;
-import smoovie.apps.com.kayatech.smoovie.room_database.MovieDatabase;
+import smoovie.apps.com.kayatech.smoovie.db.MovieDatabase;
 
 public class DetailViewModel extends ViewModel {
     private LiveData<Movie> movieLiveData;

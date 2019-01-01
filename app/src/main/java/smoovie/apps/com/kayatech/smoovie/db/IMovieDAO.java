@@ -1,4 +1,4 @@
-package smoovie.apps.com.kayatech.smoovie.room_database;
+package smoovie.apps.com.kayatech.smoovie.db;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
