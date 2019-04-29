@@ -1,25 +1,25 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion sdkVersion
     defaultConfig {
         applicationId "smoovie.apps.com.kayatech.smoovie"
         minSdkVersion 22
-        targetSdkVersion 27
+        targetSdkVersion sdkVersion
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-        // Please ensure you have a valid API KEY for themoviedb.org↵
-        // to use this app
-        // A valid key will need to be entered
-        buildConfigField("String", "API_KEY", SMOOVIE_API_KEY)
     }
     buildTypes {
+        //        An API Key will be required for a successful build,for more info checkout the README
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField("String", "API_KEY", SMOOVIE_API_KEY)
+            buildConfigField("String", "API_KEY", "\"${project.hasProperty("SMOOVIE_API_KEY") ? SMOOVIE_API_KEY : System.getenv("SMOOVIE_API_KEY")}\"")
+        }
+        debug{
+            buildConfigField("String", "API_KEY", "\"${project.hasProperty("SMOOVIE_API_KEY") ? SMOOVIE_API_KEY : System.getenv("SMOOVIE_API_KEY")}\"")
+            testCoverageEnabled true
         }
     }
 
@@ -46,6 +46,8 @@ dependencies {
     implementation 'android.arch.lifecycle:extensions:1.1.1'
     implementation 'com.jakewharton:butterknife:8.8.1'
     implementation 'com.muddzdev:styleabletoast:2.1.2'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
 //    Arch dependancies
     implementation 'android.arch.persistence.room:runtime:1.0.0'
     annotationProcessor 'android.arch.persistence.room:compiler:1.0.0'

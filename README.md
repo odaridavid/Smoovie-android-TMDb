@@ -52,7 +52,7 @@ In the `app` module `build.gradle` setup the Api Key
 ### Screenshots
 
 
-| [![Screen1](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/Screenshot1.png)]()  | [![Screen2](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/Screenshot_2.png)]() | [![Screen3](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/Screenshot_5.png)]() |[![Screen4](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/Screenshot_6.png)]() |[![Screen5](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/Screenshot_7.png)]() |
+| [![Screen1](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/screenshots/Screenshot1.png)]()  | [![Screen2](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/screenshots/Screenshot_2.png)]() | [![Screen3](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/screenshots/Screenshot_5.png)]() |[![Screen4](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/screenshots/Screenshot_6.png)]() |[![Screen5](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/screenshots/Screenshot_7.png)]() |
 |:---:|:---:|:---:|:---:|:---:|
 | Detail Activity | Main Activity | Detail Activity | Favourite Activity |Favouite Activity |
 

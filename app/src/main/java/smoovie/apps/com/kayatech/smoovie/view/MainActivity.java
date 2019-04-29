@@ -42,6 +42,9 @@ import smoovie.apps.com.kayatech.smoovie.db.MovieDatabase;
 import smoovie.apps.com.kayatech.smoovie.viewmodel.FavouritesViewModel;
 import smoovie.apps.com.kayatech.smoovie.viewmodel.IMovieListCallback;
 
+import static smoovie.apps.com.kayatech.smoovie.util.Constants.MOVIE_ID;
+import static smoovie.apps.com.kayatech.smoovie.util.Constants.MOVIE_ID_ROOM_DB;
+
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, FavouritesAdapter.IFavMovieClickHandler {
     private static final String TAG = MainActivity.class.getSimpleName();
     private boolean isFetchingMovies = false;
@@ -201,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             @Override
             public void onClick(Movie movie) {
                 Intent openDetailsActivity = new Intent(MainActivity.this, DetailActivity.class);
-                openDetailsActivity.putExtra(DetailActivity.MOVIE_ID, Parcels.wrap(movie.getMovieId()));
+                openDetailsActivity.putExtra(MOVIE_ID, Parcels.wrap(movie.getMovieId()));
                 startActivity(openDetailsActivity);
             }
         };
@@ -338,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public void onItemClickListener(int movieId) {
         //Open Movie In Detail Activity
         Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-        intent.putExtra(DetailActivity.MOVIE_ID_ROOM_DB, movieId);
+        intent.putExtra(MOVIE_ID_ROOM_DB, movieId);
         Log.d(TAG, "onItemClickListener: " + movieId);
         startActivity(intent);
     }

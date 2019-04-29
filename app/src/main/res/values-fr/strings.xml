@@ -20,4 +20,5 @@
     <string name="label_added_favs">Ajouté aux favoris</string>
     <string name="default_favs">Voir les favoris ici</string>
     <string name="label_removed_favs">Retiré des favoris</string>
+    <string name="content_description_powered_by">Propulsé par The Movie Database</string>
 </resources>
