@@ -20,4 +20,5 @@
     <string name="label_added_favs">Zu Favoriten hinzugefügt</string>
     <string name="default_favs">Favoriten hier anzeigen</string>
     <string name="label_removed_favs">Aus den Favoriten entfernt</string>
+    <string name="content_description_powered_by">Angetrieben durch die Filmdatenbank</string>
 </resources>
