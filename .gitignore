@@ -1,9 +1,7 @@
 *.iml
 .gradle
 /local.properties
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
+/.idea/*
 .DS_Store
 /build
 /captures
@@ -11,3 +9,8 @@
 codealike.json
 /gradle.properties
 gradle.properties
+.idea/caches/gradle_models.ser
+.idea/checkstyle-idea.xml
+.idea/dbnavigator.xml
+.idea/encodings.xml
+.idea/icon_dark.png
