@@ -6,11 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 
-public class MovieListResponse {
-
-    //@expose serialises as variable name
-    //@serialized name uses name params key
-    //Retrieves movies page by page ,JSON Response TMDB
+public class MovieList {
 
     @SerializedName("page")
     @Expose
@@ -20,14 +16,17 @@ public class MovieListResponse {
     @Expose
     private List<Movie> moviesResult;
 
-    MovieListResponse(){
-    }
+    @SerializedName("total_pages")
+    @Expose
+    private int totalPages;
 
-    //Getters
     public int getPage() {
         return page;
     }
 
+    public int getTotalPages() {
+        return totalPages;
+    }
 
     public List<Movie> getMoviesResult() {
         return moviesResult;

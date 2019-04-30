@@ -13,8 +13,7 @@ import org.parceler.Parcel;
 @Entity(tableName = "favourite_movie")
 @Parcel(Parcel.Serialization.BEAN)
 public class Movie {
-    //model class to map json data to pojo
-    //Movie GET Class objects from tmdb
+
     @ColumnInfo(name = "movie_title")
     @SerializedName("original_title")
     private String movieTitle;
@@ -39,10 +38,13 @@ public class Movie {
     @SerializedName("backdrop_path")
     private String backdrop;
 
-    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "movie_id")
     @SerializedName("id")
     private int movieId;
 
+    @ColumnInfo(name = "_id")
+    @PrimaryKey(autoGenerate = true)
+    private int _id;
 
     @ColumnInfo(name = "favourite")
     private boolean isFavourite;
@@ -77,10 +79,6 @@ public class Movie {
         return isFavourite;
     }
 
-    public void isFavourite(boolean isFavourite) {
-        this.isFavourite = isFavourite;
-    }
-
     public String getMovieTitle() {
         return movieTitle;
     }
@@ -111,5 +109,31 @@ public class Movie {
 
     public void setMovieId(int movieId) {
         this.movieId = movieId;
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "movieTitle='" + movieTitle + '\'' +
+                ", movieReleaseDate='" + movieReleaseDate + '\'' +
+                ", voterAverage=" + voterAverage +
+                ", movieId=" + movieId +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object vo) {
+        if (this == vo) return true;
+        if (vo == null || getClass() != vo.getClass()) return false;
+        Movie vvMovie = (Movie) vo;
+        return getMovieId() == vvMovie.getMovieId() &&
+                getMovieTitle().equals(vvMovie.getMovieTitle());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = String.valueOf(getMovieId()).hashCode();
+        result = 31 * result + getMovieTitle().hashCode();
+        return result;
     }
 }
