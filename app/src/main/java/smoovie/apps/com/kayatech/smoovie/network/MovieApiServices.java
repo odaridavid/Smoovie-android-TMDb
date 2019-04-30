@@ -6,45 +6,43 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import smoovie.apps.com.kayatech.smoovie.model.Movie;
-import smoovie.apps.com.kayatech.smoovie.model.MovieListResponse;
-import smoovie.apps.com.kayatech.smoovie.model.MovieReviewResponse;
-import smoovie.apps.com.kayatech.smoovie.model.MovieVideoResponse;
+import smoovie.apps.com.kayatech.smoovie.model.responses.MovieListResponse;
+import smoovie.apps.com.kayatech.smoovie.model.responses.MovieReviewResponse;
+import smoovie.apps.com.kayatech.smoovie.model.responses.MovieVideoResponse;
 
-public interface ApiGetServices {
-    //Retrofit http requests
-    //Query parameter appended to the URL.
-    //Call - An invocation of a Retrofit method that sends a request to a webserver and returns a response
+public interface MovieApiServices {
 
-    //Response to display List on Main UI
-    //Most Popular
+    /**
+     * Api Interface that facilitates request calls to TMDB Api and returns response similaro to
+     * model in cast
+     *
+     * @param apiKey   Api Key from TMDB
+     * @param language Based on language preference
+     * @param page     page to load ,min 1 max 1000
+     * @return json response
+     */
+
     @GET("movie/popular")
     Call<MovieListResponse> getPopularMovies(
             @Query("api_key") String apiKey,
             @Query("language") String language,
             @Query("page") int page
-
     );
 
-    //Highest Rated
     @GET("movie/top_rated")
     Call<MovieListResponse> getTopRatedMovies(
             @Query("api_key") String apiKey,
             @Query("language") String language,
             @Query("page") int page
-
     );
 
-    //upcoming
     @GET("movie/upcoming")
     Call<MovieListResponse> getUpcomingMovies(
             @Query("api_key") String apiKey,
             @Query("language") String language,
             @Query("page") int page
-
     );
 
-    //Response to get movie details to display on Details UI
-    //@Path sets value for {args}
     @GET("movie/{movie_id}")
     Call<Movie> getMovie(
             @Path("movie_id") int id,
