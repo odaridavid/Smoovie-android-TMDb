@@ -9,19 +9,14 @@ import com.squareup.leakcanary.LeakCanary;
  * On 30/04/19
  **/
 public final class SmoovieApplication extends Application {
-    private SmoovieApplication instance;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        instance = this;
-        if (LeakCanary.isInAnalyzerProcess(instance)) {
+        SmoovieApplication vInstance = this;
+        if (LeakCanary.isInAnalyzerProcess(vInstance)) {
             return;
         }
-        LeakCanary.install(instance);
-    }
-
-    public SmoovieApplication getInstance() {
-        return instance;
+        LeakCanary.install(vInstance);
     }
 }

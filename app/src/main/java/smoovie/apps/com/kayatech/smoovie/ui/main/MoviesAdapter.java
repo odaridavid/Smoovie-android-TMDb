@@ -1,4 +1,4 @@
-package smoovie.apps.com.kayatech.smoovie.view;
+package smoovie.apps.com.kayatech.smoovie.ui.main;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -19,9 +19,10 @@ import butterknife.ButterKnife;
 import smoovie.apps.com.kayatech.smoovie.R;
 import smoovie.apps.com.kayatech.smoovie.model.Movie;
 
+import static smoovie.apps.com.kayatech.smoovie.util.Constants.IMAGE_BASE_URL;
+
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder> {
 
-    //Adapter Class
     private List<Movie> mMovieList;
     private static IMovieClickHandler mIMovieClickHandler;
 
@@ -31,12 +32,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         mIMovieClickHandler = IMovieClickHandler;
     }
 
-    public void setmMovieList(List<Movie> mMovieList) {
+    void setMovieList(List<Movie> mMovieList) {
         this.mMovieList = mMovieList;
         notifyDataSetChanged();
     }
 
-    public void clearMovies() {
+    void clearMovies() {
         //called when user sorts list starting from page 1
         mMovieList.clear();
         notifyDataSetChanged();
@@ -59,7 +60,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
 
     @Override
     public int getItemCount() {
-        //check for null
         return (mMovieList == null) ? 0 : mMovieList.size();
     }
 
@@ -67,8 +67,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     public static class MoviesViewHolder extends RecyclerView.ViewHolder {
 
         Movie movies;
-        private Context ctx;
-        private final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w185";
         @BindView(R.id.tv_movie_card_title)
         TextView mMovieTitle;
         @BindView(R.id.iv_poster_image)
@@ -89,22 +87,20 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
 
         private void bind(Movie movie) {
             this.movies = movie;
-            //Main Activity UI
-            //Movie Title and Typeface
-            ctx = itemView.getContext();
+            Context ctx = itemView.getContext();
             final Typeface custom_font = Typeface.createFromAsset(ctx.getAssets(), "fonts/Roboto-Thin.ttf");
             mMovieTitle.setTypeface(custom_font);
             mMovieTitle.setText(movie.getMovieTitle());
-            //Poster Image
             Picasso.with(ctx)
                     .load(IMAGE_BASE_URL + movie.getMoviePoster())
                     .error(R.drawable.test)
                     .placeholder(R.drawable.test)
                     .into(mPosterImage);
-            //Movie Rating
             String rating = " " + Float.toString(movie.getVoterAverage()) + " ";
             mMovieRatings.setText(rating);
-
         }
+    }
+    interface IMovieClickHandler {
+        void onClick(Movie movie);
     }
 }
