@@ -29,7 +29,9 @@ with an option of saving ones favourite movies in a wishlist.
  If it doesn't exist create one and add in your API key like so
  
  ```properties
- PROJECT_API_KEY=API_KEY_VALUE
+ 
+ PROJECT_API_KEY = 'API_KEY_VALUE'
+ 
  ```
  
  3. **Configure build.gradle**
@@ -59,6 +61,7 @@ with an option of saving ones favourite movies in a wishlist.
  - [Butterknife](http://jakewharton.github.io/butterknife/) - View Binding Library
  - [Styleable Toast](https://github.com/Muddz/StyleableToast) - Custom Android Toast Library
  - [Architecture Components](https://developer.android.com/topic/libraries/architecture) - Room ORM
+ - [Parceler](https://github.com/johncarl81/parceler)
 
 ## License
 

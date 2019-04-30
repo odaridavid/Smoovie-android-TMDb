@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-
+    apply from : 'dependencies.gradle'
     repositories {
         google()
         jcenter()
@@ -25,8 +25,4 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
-}
-ext{
-    sdkVersion = 27
-    supportLibVersion = '27.1.1'
 }
