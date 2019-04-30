@@ -46,7 +46,7 @@ with an option of saving ones favourite movies in a wishlist.
 
 | [![Screen1](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/screenshots/Screenshot1.png)]()  | [![Screen2](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/screenshots/Screenshot_2.png)]() | [![Screen3](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/screenshots/Screenshot_5.png)]() |[![Screen4](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/screenshots/Screenshot_6.png)]() |[![Screen5](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/screenshots/Screenshot_7.png)]() |
 |:---:|:---:|:---:|:---:|:---:|
-| Detail Activity | Main Activity | Detail Activity | Favourite Activity |Favouite Activity |
+| Detail Activity | Main Activity | Detail Activity | Favourite Activity |Favourite Activity |
 
 ### Libraries Used
 
