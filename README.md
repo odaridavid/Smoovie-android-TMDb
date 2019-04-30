@@ -38,8 +38,9 @@ with an option of saving ones favourite movies in a wishlist.
  to have access to the API key.
  
  ```groovy
-  def API_KEY = hasProperty('PROJECT_API_KEY')? PROJECT_API_KEY : System.getenv("PROJECT_API_KEY")
-   buildConfigField("String", "API_KEY", "\"${project.hasProperty("SMOOVIE_API_KEY") ? SMOOVIE_API_KEY : System.getenv("SMOOVIE_API_KEY")}\"")
+ 
+  buildConfigField("String", "API_KEY", "\"${project.hasProperty("SMOOVIE_API_KEY") ? SMOOVIE_API_KEY : System.getenv("SMOOVIE_API_KEY")}\"")
+ 
   ```
 
 ### Screenshots
