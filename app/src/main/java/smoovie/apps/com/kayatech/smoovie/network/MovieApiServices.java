@@ -8,7 +8,7 @@ import retrofit2.http.Query;
 import smoovie.apps.com.kayatech.smoovie.model.Movie;
 import smoovie.apps.com.kayatech.smoovie.model.responses.MovieListResponse;
 import smoovie.apps.com.kayatech.smoovie.model.responses.MovieReviewResponse;
-import smoovie.apps.com.kayatech.smoovie.model.responses.MovieVideoResponse;
+import smoovie.apps.com.kayatech.smoovie.model.responses.MovieTrailerResponse;
 
 public interface MovieApiServices {
 
@@ -58,7 +58,7 @@ public interface MovieApiServices {
     );
 
     @GET("movie/{movie_id}/videos")
-    Call<MovieVideoResponse> getMovieVideos(
+    Call<MovieTrailerResponse> getMovieTrailers(
             @Path("movie_id") int id,
             @Query("api_key") String apiKEy,
             @Query("language") String language

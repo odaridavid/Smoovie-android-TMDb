@@ -7,7 +7,7 @@ import java.util.List;
 
 import smoovie.apps.com.kayatech.smoovie.model.Trailers;
 
-public class MovieVideoResponse {
+public class MovieTrailerResponse {
 
     @SerializedName("id")
     @Expose

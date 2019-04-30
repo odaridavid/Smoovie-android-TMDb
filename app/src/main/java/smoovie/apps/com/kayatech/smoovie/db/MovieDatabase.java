@@ -17,7 +17,7 @@ public abstract class MovieDatabase extends RoomDatabase {
     private static final String DATABASE_NAME = "movie_database";
     private static MovieDatabase movieDatabaseInstance;
 
-    public static MovieDatabase getMovieDatabaseInstance(Context context) {
+    public static MovieDatabase getInstance(Context context) {
         if (movieDatabaseInstance == null) {
             synchronized (LOCK) {
                 Log.d(TAG, "Creating DB Instance");
