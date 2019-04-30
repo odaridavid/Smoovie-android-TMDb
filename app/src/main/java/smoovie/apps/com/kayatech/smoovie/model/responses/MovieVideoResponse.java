@@ -1,9 +1,11 @@
-package smoovie.apps.com.kayatech.smoovie.model;
+package smoovie.apps.com.kayatech.smoovie.model.responses;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
+
+import smoovie.apps.com.kayatech.smoovie.model.Trailers;
 
 public class MovieVideoResponse {
 
@@ -13,13 +15,13 @@ public class MovieVideoResponse {
 
     @SerializedName("results")
     @Expose
-    private List<MovieVideos> moviesResult;
+    private List<Trailers> moviesResult;
 
     public int getId() {
         return id;
     }
 
-    public List<MovieVideos> getMoviesResult() {
+    public List<Trailers> getMoviesResult() {
         return moviesResult;
     }
 }

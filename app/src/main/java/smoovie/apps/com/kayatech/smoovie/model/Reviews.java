@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import org.parceler.Parcel;
 
 @Parcel(Parcel.Serialization.BEAN)
-public class MovieReviews {
+public class Reviews {
 
     @SerializedName("id")
     private String id;
@@ -17,13 +17,8 @@ public class MovieReviews {
     @SerializedName("content")
     private String content;
 
-    @SerializedName("url")
-    private String url;
 
-    public MovieReviews() {
-    }
-
-    public void setAuthor(String author) {
+    void setAuthor(String author) {
         this.author = author;
     }
 
@@ -43,7 +38,4 @@ public class MovieReviews {
         return content;
     }
 
-    public String getUrl() {
-        return url;
-    }
 }

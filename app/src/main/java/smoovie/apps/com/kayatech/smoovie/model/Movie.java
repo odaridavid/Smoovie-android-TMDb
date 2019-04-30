@@ -107,7 +107,7 @@ public class Movie {
         return movieId;
     }
 
-    public void setMovieId(int movieId) {
+    void setMovieId(int movieId) {
         this.movieId = movieId;
     }
 
