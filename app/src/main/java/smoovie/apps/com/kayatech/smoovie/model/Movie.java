@@ -136,4 +136,12 @@ public class Movie {
         result = 31 * result + getMovieTitle().hashCode();
         return result;
     }
+
+    public int get_id() {
+        return _id;
+    }
+
+    public void set_id(int _id) {
+        this._id = _id;
+    }
 }

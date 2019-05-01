@@ -14,7 +14,7 @@ public final class NetworkUtils {
      *
      * @return Network State
      */
-    private boolean isOnline(Context context) {
+    public static boolean isOnline(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager != null) {
             NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();

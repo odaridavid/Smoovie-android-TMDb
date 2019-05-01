@@ -1,6 +1,7 @@
 package smoovie.apps.com.kayatech.smoovie.util;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -18,7 +19,7 @@ public final class ViewUtils {
      * @param context Recycler view instance
      * @return number of columns for span count
      */
-    public static int calculateNoOfColumns(Context context) {
+    public static int calculateNoOfColumns(@NonNull Context context) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
         int scaleFactor = 200;
@@ -31,7 +32,7 @@ public final class ViewUtils {
     /**
      * Methods to setup Recycler view and dynamic span count
      */
-    void setupRecyclerView(final RecyclerView recyclerView, final GridLayoutManager gridLayoutManager, final Context context) {
+    public static void setupRecyclerView(@NonNull final RecyclerView recyclerView, @NonNull final GridLayoutManager gridLayoutManager, @NonNull final Context context) {
         recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(gridLayoutManager);

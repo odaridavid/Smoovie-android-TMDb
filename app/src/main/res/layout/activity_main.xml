@@ -5,10 +5,10 @@
     android:id="@+id/coordinator_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.MainActivity">
+    tools:context=".ui.main.MainActivity">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/action_toolbar_main"
+        android:id="@+id/toolbar_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
@@ -20,22 +20,22 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_movies"
+        android:id="@+id/recycler_view_movies"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/size_extra_large"
         android:layoutAnimation="@anim/layout_animation_main"
         android:scrollbars="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/action_toolbar_main" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_main" />
 
     <ProgressBar
-        android:id="@+id/pb_getmovie_progress"
+        android:id="@+id/pb_movies_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center" />
 
     <TextView
-        android:id="@+id/tv_error_message_display"
+        android:id="@+id/textview_error_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -50,7 +50,7 @@
         android:layout_gravity="center">
 
         <ImageView
-            android:id="@+id/iv_favcon_view_default"
+            android:id="@+id/imageview_fav_default"
             android:layout_width="@dimen/video_width"
             android:layout_height="@dimen/video_width"
             android:layout_gravity="center"
@@ -63,14 +63,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_fav_default"
+            android:id="@+id/textview_fav_default"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/default_favs"
             android:textSize="18sp"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/iv_favcon_view_default" />
+            app:layout_constraintTop_toBottomOf="@id/imageview_fav_default" />
     </android.support.constraint.ConstraintLayout>
 
 

@@ -6,6 +6,7 @@ import smoovie.apps.com.kayatech.smoovie.MoviesRepository;
 import smoovie.apps.com.kayatech.smoovie.db.MovieDatabase;
 import smoovie.apps.com.kayatech.smoovie.network.MovieApiServices;
 import smoovie.apps.com.kayatech.smoovie.network.NetworkAdapter;
+import smoovie.apps.com.kayatech.smoovie.ui.main.viewmodel.MainViewModelFactory;
 import smoovie.apps.com.kayatech.smoovie.util.threads.AppExecutors;
 
 /**
@@ -21,5 +22,10 @@ public final class InjectorUtils {
                 .getRetrofitInstance()
                 .create(MovieApiServices.class);
         return MoviesRepository.getInstance(database.movieDAO(), vApiServices, executors);
+    }
+
+    public static MainViewModelFactory provideMainViewModelFactory(Context context) {
+        MoviesRepository repository = provideRepository(context.getApplicationContext());
+        return new MainViewModelFactory(repository);
     }
 }
