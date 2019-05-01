@@ -18,7 +18,7 @@ public final class MovieListAsync extends AsyncTask<Void, Void, List<Movie>> {
     private MovieListCallBack mMovieListCallBack;
     private Category mCategory;
 
-    MovieListAsync(MainViewModel mainViewModel, Category category, MovieListCallBack movieListCallBack) {
+    public MovieListAsync(MainViewModel mainViewModel, Category category, MovieListCallBack movieListCallBack) {
         mMainViewModel = mainViewModel;
         mMovieListCallBack = movieListCallBack;
         mCategory = category;

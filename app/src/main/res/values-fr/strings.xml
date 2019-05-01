@@ -6,7 +6,7 @@
     <string name="label_released">Sorti le</string>
     <string name="error_network_message">S\'il vous plait, vérifiez votre connexion internet</string>
     <string name="label_overview">Vue d\'ensemble</string>
-    <string name="action_sort_high_ratings">Notes élevées</string>
+    <string name="action_sort_top_rated">Les mieux notés</string>
     <string name="pref_language_title">La langue</string>
     <string name="label_content_description">Icône de favori</string>
     <string name="action_sort_favourites">Préféré</string>

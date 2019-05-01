@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_sort_high_rating"
-        android:title="@string/action_sort_high_ratings"
+        android:id="@+id/action_sort_top_rated"
+        android:title="@string/action_sort_top_rated"
         android:orderInCategory="1"
         app:showAsAction="never"/>
     <item

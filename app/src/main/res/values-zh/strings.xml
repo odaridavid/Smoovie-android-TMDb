@@ -2,7 +2,7 @@
 <resources>
     <string name="action_sort_most_popular">最受欢迎</string>
     <string name="action_sort_upcoming">即将到来</string>
-    <string name="action_sort_high_ratings">高评级</string>
+    <string name="action_sort_top_rated">评分最高</string>
     <string name="error_network_message">请检查您的互联网连接</string>
     <string name="label_overview">概观</string>
     <string name="label_released">发布了</string>
