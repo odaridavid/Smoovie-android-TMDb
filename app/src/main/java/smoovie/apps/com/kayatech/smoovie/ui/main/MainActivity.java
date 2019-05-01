@@ -32,10 +32,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private MainViewModel mMainViewModel;
 
-    @BindView(R.id.imageview_fav_default)
-    ImageView mFavconImage;
-    @BindView(R.id.textview_fav_default)
-    TextView mFavDefaultText;
+//    @BindView(R.id.imageview_fav_default)
+//    ImageView mFavconImage;
+//    @BindView(R.id.textview_fav_default)
+//    TextView mFavDefaultText;
     @BindView(R.id.pb_movies_loading)
     ProgressBar mProgressBar;
     @BindView(R.id.recycler_view_movies)
@@ -59,10 +59,15 @@ public class MainActivity extends AppCompatActivity {
             mMovieList = Parcels.unwrap(savedInstanceState.getParcelable(KEY_MOVIE_LIST_PERSISTENCE));
         } else {
             if (NetworkUtils.isOnline(this)) {
-                mMovieList = mMainViewModel.getMovies(Category.POPULAR, "en-US", 1);
+//                Default Popular Movies
+                mMovieList = getMovies(Category.POPULAR, "en-US", 1);
             }
         }
         setUpMovieView(mMovieList);
+    }
+
+    private List<Movie> getMovies(Category category, String language, int page) {
+        return mMainViewModel.getMovies(category, language, page);
     }
 
     void setUpMovieView(List<Movie> movies) {
