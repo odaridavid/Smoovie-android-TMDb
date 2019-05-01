@@ -83,52 +83,37 @@ public final class MoviesRepository {
     public MovieListResponse getMovies(Category category, final String language, final int page) {
         switch (category) {
             case POPULAR:
-                mThreadAppExecutors.networkIO().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            mMovieListResponse = mMovieApiServices
-                                    .getPopularMovies(BuildConfig.API_KEY, language, page)
-                                    .execute()
-                                    .body();
-                            Log.d(TAG, "Popular Movies Loaded");
-                        } catch (IOException e) {
-                            Log.e(TAG, e.getMessage());
-                        }
-                    }
-                });
+                try {
+                    mMovieListResponse = mMovieApiServices
+                            .getPopularMovies(BuildConfig.API_KEY, language, page)
+                            .execute()
+                            .body();
+                    Log.d(TAG, "Popular Movies Loaded");
+                } catch (IOException e) {
+                    Log.e(TAG, e.getMessage());
+                }
                 break;
             case UPCOMING:
-                mThreadAppExecutors.networkIO().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            mMovieListResponse = mMovieApiServices
-                                    .getTopRatedMovies(BuildConfig.API_KEY, language, page)
-                                    .execute()
-                                    .body();
-                            Log.d(TAG, "Top Rated Movies Loaded");
-                        } catch (IOException e) {
-                            Log.e(TAG, e.getMessage());
-                        }
-                    }
-                });
+                try {
+                    mMovieListResponse = mMovieApiServices
+                            .getUpcomingMovies(BuildConfig.API_KEY, language, page)
+                            .execute()
+                            .body();
+                    Log.d(TAG, "Top Rated Movies Loaded");
+                } catch (IOException e) {
+                    Log.e(TAG, e.getMessage());
+                }
                 break;
             case TOP_RATED:
-                mThreadAppExecutors.networkIO().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            mMovieListResponse = mMovieApiServices
-                                    .getUpcomingMovies(BuildConfig.API_KEY, language, page)
-                                    .execute()
-                                    .body();
-                            Log.d(TAG, "Upcoming Movies Loaded");
-                        } catch (IOException e) {
-                            Log.e(TAG, e.getMessage());
-                        }
-                    }
-                });
+                try {
+                    mMovieListResponse = mMovieApiServices
+                            .getTopRatedMovies(BuildConfig.API_KEY, language, page)
+                            .execute()
+                            .body();
+                    Log.d(TAG, "Upcoming Movies Loaded");
+                } catch (IOException e) {
+                    Log.e(TAG, e.getMessage());
+                }
                 break;
         }
         return mMovieListResponse != null ? mMovieListResponse : new MovieListResponse();

@@ -1,4 +1,4 @@
-package smoovie.apps.com.kayatech.smoovie.ui.main;
+package smoovie.apps.com.kayatech.smoovie.ui.main.adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -27,7 +27,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     private static IMovieClickHandler mIMovieClickHandler;
 
 
-    MoviesAdapter(List<Movie> movies, IMovieClickHandler IMovieClickHandler) {
+    public MoviesAdapter(List<Movie> movies, IMovieClickHandler IMovieClickHandler) {
         this.mMovieList = movies;
         mIMovieClickHandler = IMovieClickHandler;
     }
@@ -100,6 +100,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
             mMovieRatings.setText(rating);
         }
     }
+
     interface IMovieClickHandler {
         void onClick(Movie movie);
     }
