@@ -7,15 +7,11 @@
     android:id="@+id/cv_movie"
     android:layout_width="match_parent"
     android:layout_height="@dimen/size_height"
-    android:layout_alignParentEnd="true"
     android:layout_alignParentStart="true"
-    android:layout_marginBottom="@dimen/size_medium"
-    android:layout_marginEnd="@dimen/size_small"
-    android:layout_marginStart="@dimen/size_small"
-    android:layout_marginTop="@dimen/size_medium"
+    android:layout_alignParentEnd="true"
+    app:cardElevation="@dimen/size_small"
     android:focusable="true"
-    app:cardCornerRadius="@dimen/size_small"
-    app:cardElevation="@dimen/size_medium"
+    app:cardCornerRadius="@dimen/size_medium"
     app:contentPadding="4dp">
 
     <FrameLayout
@@ -59,29 +55,6 @@
             android:padding="@dimen/size_small"
             android:scaleType="fitXY"
             android:src="@drawable/test" />
-
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/size_frame_layout"
-            android:layout_alignBottom="@+id/iv_poster_image"
-            android:background="@color/colorPrimary"
-            android:backgroundTint="@color/colorAccent"
-            android:backgroundTintMode="src_over"
-            android:padding="@dimen/size_small">
-
-            <TextView
-                android:id="@+id/tv_movie_card_title"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="@dimen/size_small"
-                android:layout_marginStart="@dimen/size_small"
-                android:textAlignment="textStart"
-                android:textColor="@color/colorWhite"
-                android:textSize="12sp"
-                tools:text="@string/label_text_placeholder" />
-
-        </FrameLayout>
 
     </RelativeLayout>
 

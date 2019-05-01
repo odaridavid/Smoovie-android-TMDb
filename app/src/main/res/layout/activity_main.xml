@@ -21,9 +21,9 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
@@ -36,51 +36,31 @@
             android:scrollbars="vertical" />
 
         <ProgressBar
-            android:id="@+id/pb_movies_loading"
+            android:id="@+id/progressbar_movies_loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
 
         <TextView
-            android:id="@+id/textview_error_message"
+            android:id="@+id/text_view_info_message"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="8dp"
             android:text="@string/error_network_message"
             android:textAlignment="center"
             android:textSize="15sp"
             android:visibility="gone" />
-    </LinearLayout>
 
-    <!--<android.support.constraint.ConstraintLayout-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="center">-->
-
-    <!--<ImageView-->
-    <!--android:id="@+id/imageview_fav_default"-->
-    <!--android:layout_width="@dimen/video_width"-->
-    <!--android:layout_height="@dimen/video_width"-->
-    <!--android:layout_gravity="center"-->
-    <!--android:contentDescription="@string/label_content_description"-->
-    <!--android:src="@drawable/ic_favorite_true"-->
-    <!--android:visibility="gone"-->
-    <!--app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--app:layout_constraintLeft_toLeftOf="parent"-->
-    <!--app:layout_constraintRight_toRightOf="parent"-->
-    <!--app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/textview_fav_default"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="center"-->
-    <!--android:text="@string/default_favs"-->
-    <!--android:textSize="18sp"-->
-    <!--android:visibility="gone"-->
-    <!--app:layout_constraintTop_toBottomOf="@id/imageview_fav_default" />-->
-    <!--</android.support.constraint.ConstraintLayout>-->
-
-
+        <TextView
+            android:id="@+id/text_view_favourites_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:text="@string/default_favs"
+            android:textAlignment="center"
+            android:textSize="15sp"
+            android:visibility="gone" />
+    </FrameLayout>
 </android.support.design.widget.CoordinatorLayout>
