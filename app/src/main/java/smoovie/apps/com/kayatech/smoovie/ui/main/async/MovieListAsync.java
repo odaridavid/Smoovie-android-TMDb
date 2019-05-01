@@ -1,4 +1,4 @@
-package smoovie.apps.com.kayatech.smoovie.ui.main;
+package smoovie.apps.com.kayatech.smoovie.ui.main.async;
 
 import android.os.AsyncTask;
 

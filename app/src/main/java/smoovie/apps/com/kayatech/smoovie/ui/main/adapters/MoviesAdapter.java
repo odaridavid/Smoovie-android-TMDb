@@ -67,8 +67,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     public static class MoviesViewHolder extends RecyclerView.ViewHolder {
 
         Movie movies;
-        @BindView(R.id.tv_movie_card_title)
-        TextView mMovieTitle;
+//        @BindView(R.id.tv_movie_card_title)
+//        TextView mMovieTitle;
         @BindView(R.id.iv_poster_image)
         ImageView mPosterImage;
         @BindView(R.id.tv_rating_cardlabel)
@@ -89,8 +89,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
             this.movies = movie;
             Context ctx = itemView.getContext();
             final Typeface custom_font = Typeface.createFromAsset(ctx.getAssets(), "fonts/Roboto-Thin.ttf");
-            mMovieTitle.setTypeface(custom_font);
-            mMovieTitle.setText(movie.getMovieTitle());
+//            mMovieTitle.setTypeface(custom_font);
+//            mMovieTitle.setText(movie.getMovieTitle());
             Picasso.with(ctx)
                     .load(IMAGE_BASE_URL + movie.getMoviePoster())
                     .error(R.drawable.test)

@@ -5,7 +5,8 @@ import android.view.MenuItem;
 
 import smoovie.apps.com.kayatech.smoovie.R;
 import smoovie.apps.com.kayatech.smoovie.model.Category;
-import smoovie.apps.com.kayatech.smoovie.ui.main.MovieListAsync;
+import smoovie.apps.com.kayatech.smoovie.ui.main.async.MovieListAsync;
+import smoovie.apps.com.kayatech.smoovie.ui.main.callbacks.FavouriteMoviesCallback;
 import smoovie.apps.com.kayatech.smoovie.ui.main.callbacks.MovieListCallBack;
 import smoovie.apps.com.kayatech.smoovie.ui.main.viewmodel.MainViewModel;
 
@@ -15,31 +16,30 @@ import smoovie.apps.com.kayatech.smoovie.ui.main.viewmodel.MainViewModel;
  **/
 public class CategoryMenuListener implements PopupMenu.OnMenuItemClickListener {
 
-    private String language;
-    private MovieListCallBack mCallbackContext;
-    private int page = 1;
+    private MovieListCallBack mMovieListCallBackContext;
+    private FavouriteMoviesCallback mFavouriteMoviesCallbackContext;
     private MainViewModel mMainViewModel;
 
-    public CategoryMenuListener(MainViewModel mainViewModel, String language, MovieListCallBack callbackContext) {
-        this.language = language;
-        this.mCallbackContext = callbackContext;
+    public CategoryMenuListener(MainViewModel mainViewModel, MovieListCallBack movieListCallBackContext, FavouriteMoviesCallback favouriteMoviesCallbackContext) {
+        this.mMovieListCallBackContext = movieListCallBackContext;
         this.mMainViewModel = mainViewModel;
+        this.mFavouriteMoviesCallbackContext = favouriteMoviesCallbackContext;
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_sort_top_rated:
-                new MovieListAsync(mMainViewModel, Category.TOP_RATED, mCallbackContext).execute();
+                new MovieListAsync(mMainViewModel, Category.TOP_RATED, mMovieListCallBackContext).execute();
                 return true;
             case R.id.action_sort_upcoming:
-                new MovieListAsync(mMainViewModel, Category.UPCOMING, mCallbackContext).execute();
+                new MovieListAsync(mMainViewModel, Category.UPCOMING, mMovieListCallBackContext).execute();
                 return true;
             case R.id.action_sort_most_popular:
-                new MovieListAsync(mMainViewModel, Category.POPULAR, mCallbackContext).execute();
+                new MovieListAsync(mMainViewModel, Category.POPULAR, mMovieListCallBackContext).execute();
                 return true;
             case R.id.action_sort_favourites:
-//                TODO Implement Favourites with room
+                mFavouriteMoviesCallbackContext.loadFavouriteMovies();
                 return true;
         }
         return false;

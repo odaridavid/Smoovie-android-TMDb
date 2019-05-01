@@ -1,9 +1,11 @@
 package smoovie.apps.com.kayatech.smoovie.ui.main;
 
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -25,6 +27,8 @@ import smoovie.apps.com.kayatech.smoovie.R;
 import smoovie.apps.com.kayatech.smoovie.model.Category;
 import smoovie.apps.com.kayatech.smoovie.model.Movie;
 import smoovie.apps.com.kayatech.smoovie.ui.main.adapters.MoviesAdapter;
+import smoovie.apps.com.kayatech.smoovie.ui.main.async.MovieListAsync;
+import smoovie.apps.com.kayatech.smoovie.ui.main.callbacks.FavouriteMoviesCallback;
 import smoovie.apps.com.kayatech.smoovie.ui.main.callbacks.MovieListCallBack;
 import smoovie.apps.com.kayatech.smoovie.ui.main.menu.CategoryMenuListener;
 import smoovie.apps.com.kayatech.smoovie.ui.main.viewmodel.MainViewModel;
@@ -34,24 +38,21 @@ import smoovie.apps.com.kayatech.smoovie.util.InjectorUtils;
 import smoovie.apps.com.kayatech.smoovie.util.NetworkUtils;
 import smoovie.apps.com.kayatech.smoovie.util.ViewUtils;
 
-public class MainActivity extends AppCompatActivity implements MovieListCallBack {
+public class MainActivity extends AppCompatActivity implements MovieListCallBack, FavouriteMoviesCallback {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
     private final String KEY_APPBAR_TITLE_PERSISTENCE = "movie_category";
     private final String KEY_MOVIE_LIST_PERSISTENCE = "movie_list";
     private List<Movie> mMovieList;
-    //    @BindView(R.id.imageview_fav_default)
-//    ImageView mFavconImage;
-//    @BindView(R.id.textview_fav_default)
-//    TextView mFavDefaultText;
-    @BindView(R.id.pb_movies_loading)
+    private MainViewModel mMainViewModel;
+
+    @BindView(R.id.progressbar_movies_loading)
     ProgressBar pbLoadMovies;
     @BindView(R.id.recycler_view_movies)
     RecyclerView rvMovies;
-    @BindView(R.id.textview_error_message)
-    TextView tvNetworkError;
-    private MainViewModel mMainViewModel;
-
+    @BindView(R.id.text_view_info_message)
+    TextView tvInfoMessage;
+    @BindView(R.id.text_view_favourites_message)
+    TextView tvFavMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,15 +63,33 @@ public class MainActivity extends AppCompatActivity implements MovieListCallBack
         setSupportActionBar(vTbMain);
         MainViewModelFactory vMainViewModelFactory = InjectorUtils.provideMainViewModelFactory(this);
         mMainViewModel = ViewModelProviders.of(this, vMainViewModelFactory).get(MainViewModel.class);
+
         if (savedInstanceState != null && savedInstanceState.containsKey(KEY_MOVIE_LIST_PERSISTENCE)) {
             mMovieList = Parcels.unwrap(savedInstanceState.getParcelable(KEY_MOVIE_LIST_PERSISTENCE));
-            setUpMovieView(mMovieList);
             setTitle(savedInstanceState.getCharSequence(KEY_APPBAR_TITLE_PERSISTENCE));
-        } else {
-            if (NetworkUtils.isOnline(this)) {
-                new MovieListAsync(mMainViewModel, Category.UPCOMING, this).execute();
-            }
+            setUpMovieView(mMovieList);
+        } else if (NetworkUtils.isOnline(this)) {
+            new MovieListAsync(mMainViewModel, Category.UPCOMING, this).execute();
         }
+    }
+
+    @Override
+    public void loadFavouriteMovies() {
+        mMainViewModel.getFavouriteMovies().observe(this, new Observer<List<Movie>>() {
+            @Override
+            public void onChanged(@Nullable List<Movie> movies) {
+                if (movies != null) {
+                    mMovieList = movies;
+                    if (getSupportActionBar() != null)
+                        getSupportActionBar().setTitle(getString(R.string.action_sort_favourites));
+                    if (!(movies.isEmpty())) {
+                        setUpMovieView(mMovieList);
+                    } else {
+                        showDefaultFavMessage();
+                    }
+                }
+            }
+        });
     }
 
     private void setAppBarTitle(Category category) {
@@ -90,17 +109,31 @@ public class MainActivity extends AppCompatActivity implements MovieListCallBack
 
     void setUpMovieView(List<Movie> movies) {
         if (movies != null) {
-            MoviesAdapter vMoviesAdapter = new MoviesAdapter(movies, null);
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(),
-                    ViewUtils.calculateNoOfColumns(this));
-            ViewUtils.setupRecyclerView(rvMovies, gridLayoutManager, this);
-            rvMovies.setAdapter(vMoviesAdapter);
-            pbLoadMovies.setVisibility(View.GONE);
+            if (getSupportActionBar().getTitle().equals(getString(R.string.action_sort_favourites)) && movies.isEmpty()) {
+                showDefaultFavMessage();
+            } else {
+                MoviesAdapter vMoviesAdapter = new MoviesAdapter(movies, null);
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(),
+                        ViewUtils.calculateNoOfColumns(this));
+                ViewUtils.setupRecyclerView(rvMovies, gridLayoutManager, this);
+                rvMovies.setAdapter(vMoviesAdapter);
+                pbLoadMovies.setVisibility(View.GONE);
+            }
         } else {
-            rvMovies.setVisibility(View.GONE);
-            tvNetworkError.setVisibility(View.VISIBLE);
-            pbLoadMovies.setVisibility(View.GONE);
+            showNoConnectionMessage();
         }
+    }
+
+    private void showNoConnectionMessage() {
+        rvMovies.setVisibility(View.GONE);
+        tvInfoMessage.setVisibility(View.VISIBLE);
+        pbLoadMovies.setVisibility(View.GONE);
+    }
+
+    private void showDefaultFavMessage() {
+        rvMovies.setVisibility(View.GONE);
+        pbLoadMovies.setVisibility(View.GONE);
+        tvFavMessage.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -113,6 +146,8 @@ public class MainActivity extends AppCompatActivity implements MovieListCallBack
 
     @Override
     public void inProgress() {
+        if (tvFavMessage.getVisibility() == View.VISIBLE)
+            tvFavMessage.setVisibility(View.GONE);
         pbLoadMovies.setVisibility(View.VISIBLE);
     }
 
@@ -144,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements MovieListCallBack
 
     private void showSortPopUpMenu() {
         PopupMenu sortMenu = new PopupMenu(this, findViewById(R.id.action_sort));
-        sortMenu.setOnMenuItemClickListener(new CategoryMenuListener(mMainViewModel, "en-US", this));
+        sortMenu.setOnMenuItemClickListener(new CategoryMenuListener(mMainViewModel, this, this));
         sortMenu.inflate(R.menu.category_menu);
         sortMenu.show();
     }
