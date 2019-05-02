@@ -77,28 +77,24 @@ public class MainActivity extends AppCompatActivity implements MovieListCallBack
         if (savedInstanceState != null && savedInstanceState.containsKey(KEY_MOVIE_LIST_PERSISTENCE)) {
             mMovieList = Parcels.unwrap(savedInstanceState.getParcelable(KEY_MOVIE_LIST_PERSISTENCE));
             setTitle(savedInstanceState.getCharSequence(KEY_APPBAR_TITLE_PERSISTENCE));
-            setUpMovieView(mMovieList);
+            bindNetworkMovies(mMovieList);
         } else if (savedInstanceState != null && savedInstanceState.containsKey(KEY_FAV_MOVIE_LIST_PERSISTENCE)) {
             favouriteMovies = Parcels.unwrap(savedInstanceState.getParcelable(KEY_FAV_MOVIE_LIST_PERSISTENCE));
             setTitle(savedInstanceState.getCharSequence(KEY_APPBAR_TITLE_PERSISTENCE));
-            setUpFavView(favouriteMovies);
+            bindFavouriteMovies(favouriteMovies);
         } else if (NetworkUtils.isOnline(this)) {
             removeMessageInfo(tvInfoMessage);
             new MovieListAsync(mMainViewModel, Category.UPCOMING, this).execute();
         }
     }
 
-    private void setUpFavView(List<Movie> favouriteMovies) {
-        if (favouriteMovies != null) {
-            if (getSupportActionBar().getTitle().equals(getString(R.string.action_sort_favourites)) && favouriteMovies.isEmpty()) {
-                removeMessageInfo(tvInfoMessage);
-                showDefaultFavMessage();
-            } else {
-                MoviesAdapter vMoviesAdapter = new MoviesAdapter(null, favouriteMovies, this);
-                setupRecyclerView(vMoviesAdapter);
-            }
+    private void bindFavouriteMovies(List<Movie> favouriteMovies) {
+        if (favouriteMovies.isEmpty()) {
+            removeMessageInfo(tvInfoMessage);
+            showDefaultFavMessage();
         } else {
-            showNoConnectionMessage();
+            MoviesAdapter vMoviesAdapter = new MoviesAdapter(null, favouriteMovies, this);
+            setupRecyclerView(vMoviesAdapter);
         }
     }
 
@@ -121,15 +117,11 @@ public class MainActivity extends AppCompatActivity implements MovieListCallBack
             @Override
             public void onChanged(@Nullable List<Movie> movies) {
                 mMovieList = null;
-                favouriteMovies = movies;
                 if (movies != null) {
+                    favouriteMovies = movies;
                     if (getSupportActionBar() != null)
                         getSupportActionBar().setTitle(getString(R.string.action_sort_favourites));
-                    if (!(movies.isEmpty())) {
-                        setUpFavView(favouriteMovies);
-                    } else {
-                        showDefaultFavMessage();
-                    }
+                    bindFavouriteMovies(favouriteMovies);
                 }
             }
         });
@@ -150,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements MovieListCallBack
             }
     }
 
-    void setUpMovieView(List<MovieNetworkLite> movies) {
+    void bindNetworkMovies(List<MovieNetworkLite> movies) {
         if (movies != null) {
             MoviesAdapter vMoviesAdapter = new MoviesAdapter(movies, null, this);
             setupRecyclerView(vMoviesAdapter);
@@ -192,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements MovieListCallBack
     public void onFinished(List<MovieNetworkLite> movies, Category category) {
         setAppBarTitle(category);
         mMovieList = movies;
-        setUpMovieView(mMovieList);
+        bindNetworkMovies(mMovieList);
     }
 
     @Override
