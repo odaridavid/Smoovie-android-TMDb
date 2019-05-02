@@ -10,16 +10,16 @@ import android.util.AttributeSet;
  * Created By blackcoder
  * On 05/04/19
  **/
-public class SmoovieImageView extends AppCompatImageView {
-    public SmoovieImageView(Context context) {
+public class SmooviePosterImageView extends AppCompatImageView {
+    public SmooviePosterImageView(Context context) {
         super(context);
     }
 
-    public SmoovieImageView(Context context, AttributeSet attrs) {
+    public SmooviePosterImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public SmoovieImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SmooviePosterImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

@@ -15,27 +15,30 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import smoovie.apps.com.kayatech.smoovie.R;
+import smoovie.apps.com.kayatech.smoovie.model.IMovie;
 import smoovie.apps.com.kayatech.smoovie.model.Movie;
-import smoovie.apps.com.kayatech.smoovie.util.SmoovieImageView;
+import smoovie.apps.com.kayatech.smoovie.model.MovieNetworkLite;
+import smoovie.apps.com.kayatech.smoovie.util.SmooviePosterImageView;
 
 import static smoovie.apps.com.kayatech.smoovie.util.Constants.IMAGE_BASE_URL;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder> {
 
-    private List<Movie> mMovieList;
-    private static IMovieClickHandler mIMovieClickHandler;
+    private List<MovieNetworkLite> mMovieList;
+    private IMovieClickHandler mIMovieClickHandler;
+    private List<Movie> favouriteMovie;
 
-
-    public MoviesAdapter(List<Movie> movies, IMovieClickHandler IMovieClickHandler) {
+    public MoviesAdapter(List<MovieNetworkLite> movies, List<Movie> favMovies, IMovieClickHandler IMovieClickHandler) {
         this.mMovieList = movies;
         mIMovieClickHandler = IMovieClickHandler;
+        favouriteMovie = favMovies;
     }
 
     @NonNull
     @Override
     public MoviesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
-        int layoutIdForListItem = R.layout.movie_grid_list_item;
+        int layoutIdForListItem = R.layout.movie_layout;
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(layoutIdForListItem, parent, false);
         return new MoviesViewHolder(view);
@@ -43,7 +46,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
 
     @Override
     public void onBindViewHolder(@NonNull MoviesViewHolder holder, int position) {
-        holder.bind(mMovieList.get(position));
+        if (mMovieList != null)
+            holder.bind(mMovieList.get(position));
+        if (favouriteMovie != null)
+            holder.bind(favouriteMovie.get(position));
     }
 
     @Override
@@ -52,39 +58,39 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     }
 
 
-    public static class MoviesViewHolder extends RecyclerView.ViewHolder {
+    public class MoviesViewHolder extends RecyclerView.ViewHolder {
 
-        Movie movies;
+        MovieNetworkLite movie;
         @BindView(R.id.iv_poster_image)
-        SmoovieImageView mPosterImage;
+        SmooviePosterImageView mPosterImage;
         @BindView(R.id.tv_rating_cardlabel)
         TextView mMovieRatings;
 
-        MoviesViewHolder(View itemView) {
+        MoviesViewHolder(final View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mIMovieClickHandler.onClick(movies);
+                    movie = mMovieList.get(getAdapterPosition());
+                    mIMovieClickHandler.viewMovieDetails(movie, mPosterImage);
                 }
             });
         }
 
-        private void bind(Movie movie) {
-            this.movies = movie;
+        private void bind(IMovie movie) {
             Context ctx = itemView.getContext();
             Picasso.with(ctx)
                     .load(IMAGE_BASE_URL + movie.getMoviePoster())
                     .error(R.drawable.test)
                     .placeholder(R.drawable.test)
                     .into(mPosterImage);
-            String rating = " " + Float.toString(movie.getVoterAverage()) + " ";
+            String rating = " " + movie.getVoterAverage() + " ";
             mMovieRatings.setText(rating);
         }
     }
 
-    interface IMovieClickHandler {
-        void onClick(Movie movie);
+    public interface IMovieClickHandler {
+        void viewMovieDetails(MovieNetworkLite movie, SmooviePosterImageView view);
     }
 }

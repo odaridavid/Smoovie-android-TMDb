@@ -6,14 +6,17 @@ import java.util.List;
 
 import smoovie.apps.com.kayatech.smoovie.model.Category;
 import smoovie.apps.com.kayatech.smoovie.model.Movie;
+import smoovie.apps.com.kayatech.smoovie.model.MovieNetworkLite;
 import smoovie.apps.com.kayatech.smoovie.ui.main.callbacks.MovieListCallBack;
 import smoovie.apps.com.kayatech.smoovie.ui.main.viewmodel.MainViewModel;
+
+import static smoovie.apps.com.kayatech.smoovie.util.Constants.LANGUAGE;
 
 /**
  * Created By blackcoder
  * On 01/05/19
  **/
-public final class MovieListAsync extends AsyncTask<Void, Void, List<Movie>> {
+public final class MovieListAsync extends AsyncTask<Void, Void, List<MovieNetworkLite>> {
     private MainViewModel mMainViewModel;
     private MovieListCallBack mMovieListCallBack;
     private Category mCategory;
@@ -31,15 +34,15 @@ public final class MovieListAsync extends AsyncTask<Void, Void, List<Movie>> {
     }
 
     @Override
-    protected List<Movie> doInBackground(Void... voids) {
+    protected List<MovieNetworkLite> doInBackground(Void... voids) {
 //                TODO Load Language From Preferences
 //                TODO Add Pagination on Scrolling page to page
 //                TODO Sort By Category
-        return mMainViewModel.getMovies(mCategory, "en-US", 1);
+        return mMainViewModel.getMovies(mCategory, LANGUAGE, 1);
     }
 
     @Override
-    protected void onPostExecute(List<Movie> movies) {
+    protected void onPostExecute(List<MovieNetworkLite> movies) {
         super.onPostExecute(movies);
         mMovieListCallBack.onFinished(movies, mCategory);
     }

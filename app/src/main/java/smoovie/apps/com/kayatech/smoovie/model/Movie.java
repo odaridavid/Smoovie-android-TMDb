@@ -12,7 +12,7 @@ import org.parceler.Parcel;
 
 @Entity(tableName = "favourite_movie")
 @Parcel(Parcel.Serialization.BEAN)
-public class Movie {
+public class Movie implements IMovie {
 
     @ColumnInfo(name = "movie_title")
     @SerializedName("original_title")
@@ -91,10 +91,12 @@ public class Movie {
         return movieReleaseDate;
     }
 
+    @Override
     public String getMoviePoster() {
         return moviePoster;
     }
 
+    @Override
     public float getVoterAverage() {
         return voterAverage;
     }

@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 import smoovie.apps.com.kayatech.smoovie.model.Movie;
+import smoovie.apps.com.kayatech.smoovie.model.MovieNetworkLite;
 
 
 public class MovieListResponse {
@@ -16,7 +17,7 @@ public class MovieListResponse {
 
     @SerializedName("results")
     @Expose
-    private List<Movie> moviesResult;
+    private List<MovieNetworkLite> moviesResult;
 
     @SerializedName("total_pages")
     @Expose
@@ -30,7 +31,7 @@ public class MovieListResponse {
         return totalPages;
     }
 
-    public List<Movie> getMoviesResult() {
+    public List<MovieNetworkLite> getMoviesResult() {
         return moviesResult;
     }
 

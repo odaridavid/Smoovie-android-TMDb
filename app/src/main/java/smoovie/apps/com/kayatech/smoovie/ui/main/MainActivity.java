@@ -6,6 +6,8 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -26,6 +28,8 @@ import butterknife.ButterKnife;
 import smoovie.apps.com.kayatech.smoovie.R;
 import smoovie.apps.com.kayatech.smoovie.model.Category;
 import smoovie.apps.com.kayatech.smoovie.model.Movie;
+import smoovie.apps.com.kayatech.smoovie.model.MovieNetworkLite;
+import smoovie.apps.com.kayatech.smoovie.ui.detail.MovieDetailActivity;
 import smoovie.apps.com.kayatech.smoovie.ui.main.adapters.MoviesAdapter;
 import smoovie.apps.com.kayatech.smoovie.ui.main.async.MovieListAsync;
 import smoovie.apps.com.kayatech.smoovie.ui.main.callbacks.FavouriteMoviesCallback;
@@ -36,13 +40,19 @@ import smoovie.apps.com.kayatech.smoovie.ui.main.viewmodel.MainViewModelFactory;
 import smoovie.apps.com.kayatech.smoovie.ui.settings.SettingsActivity;
 import smoovie.apps.com.kayatech.smoovie.util.InjectorUtils;
 import smoovie.apps.com.kayatech.smoovie.util.NetworkUtils;
+import smoovie.apps.com.kayatech.smoovie.util.SmooviePosterImageView;
 import smoovie.apps.com.kayatech.smoovie.util.ViewUtils;
 
-public class MainActivity extends AppCompatActivity implements MovieListCallBack, FavouriteMoviesCallback {
+import static smoovie.apps.com.kayatech.smoovie.util.Constants.KEY_MOVIE_ID;
+import static smoovie.apps.com.kayatech.smoovie.util.Constants.KEY_MOVIE_POSTER;
+
+public class MainActivity extends AppCompatActivity implements MovieListCallBack, FavouriteMoviesCallback, MoviesAdapter.IMovieClickHandler {
 
     private final String KEY_APPBAR_TITLE_PERSISTENCE = "movie_category";
     private final String KEY_MOVIE_LIST_PERSISTENCE = "movie_list";
-    private List<Movie> mMovieList;
+    private final String KEY_FAV_MOVIE_LIST_PERSISTENCE = "fav_movie_list";
+    private List<MovieNetworkLite> mMovieList;
+    private List<Movie> favouriteMovies;
     private MainViewModel mMainViewModel;
 
     @BindView(R.id.progressbar_movies_loading)
@@ -68,9 +78,41 @@ public class MainActivity extends AppCompatActivity implements MovieListCallBack
             mMovieList = Parcels.unwrap(savedInstanceState.getParcelable(KEY_MOVIE_LIST_PERSISTENCE));
             setTitle(savedInstanceState.getCharSequence(KEY_APPBAR_TITLE_PERSISTENCE));
             setUpMovieView(mMovieList);
+        } else if (savedInstanceState != null && savedInstanceState.containsKey(KEY_FAV_MOVIE_LIST_PERSISTENCE)) {
+            favouriteMovies = Parcels.unwrap(savedInstanceState.getParcelable(KEY_FAV_MOVIE_LIST_PERSISTENCE));
+            setTitle(savedInstanceState.getCharSequence(KEY_APPBAR_TITLE_PERSISTENCE));
+            setUpFavView(favouriteMovies);
         } else if (NetworkUtils.isOnline(this)) {
+            removeMessageInfo(tvInfoMessage);
             new MovieListAsync(mMainViewModel, Category.UPCOMING, this).execute();
         }
+    }
+
+    private void setUpFavView(List<Movie> favouriteMovies) {
+        if (favouriteMovies != null) {
+            if (getSupportActionBar().getTitle().equals(getString(R.string.action_sort_favourites)) && favouriteMovies.isEmpty()) {
+                removeMessageInfo(tvInfoMessage);
+                showDefaultFavMessage();
+            } else {
+                MoviesAdapter vMoviesAdapter = new MoviesAdapter(null, favouriteMovies, this);
+                setupRecyclerView(vMoviesAdapter);
+            }
+        } else {
+            showNoConnectionMessage();
+        }
+    }
+
+    private void setupRecyclerView(MoviesAdapter moviesAdapter) {
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(),
+                ViewUtils.calculateNoOfColumns(this));
+        ViewUtils.setupRecyclerView(rvMovies, gridLayoutManager, this);
+        rvMovies.setAdapter(moviesAdapter);
+        pbLoadMovies.setVisibility(View.GONE);
+    }
+
+    private void removeMessageInfo(TextView tvInfoMessage) {
+        if (tvInfoMessage.getVisibility() == View.VISIBLE)
+            tvInfoMessage.setVisibility(View.GONE);
     }
 
     @Override
@@ -78,12 +120,13 @@ public class MainActivity extends AppCompatActivity implements MovieListCallBack
         mMainViewModel.getFavouriteMovies().observe(this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(@Nullable List<Movie> movies) {
+                mMovieList = null;
+                favouriteMovies = movies;
                 if (movies != null) {
-                    mMovieList = movies;
                     if (getSupportActionBar() != null)
                         getSupportActionBar().setTitle(getString(R.string.action_sort_favourites));
                     if (!(movies.isEmpty())) {
-                        setUpMovieView(mMovieList);
+                        setUpFavView(favouriteMovies);
                     } else {
                         showDefaultFavMessage();
                     }
@@ -107,18 +150,10 @@ public class MainActivity extends AppCompatActivity implements MovieListCallBack
             }
     }
 
-    void setUpMovieView(List<Movie> movies) {
+    void setUpMovieView(List<MovieNetworkLite> movies) {
         if (movies != null) {
-            if (getSupportActionBar().getTitle().equals(getString(R.string.action_sort_favourites)) && movies.isEmpty()) {
-                showDefaultFavMessage();
-            } else {
-                MoviesAdapter vMoviesAdapter = new MoviesAdapter(movies, null);
-                GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(),
-                        ViewUtils.calculateNoOfColumns(this));
-                ViewUtils.setupRecyclerView(rvMovies, gridLayoutManager, this);
-                rvMovies.setAdapter(vMoviesAdapter);
-                pbLoadMovies.setVisibility(View.GONE);
-            }
+            MoviesAdapter vMoviesAdapter = new MoviesAdapter(movies, null, this);
+            setupRecyclerView(vMoviesAdapter);
         } else {
             showNoConnectionMessage();
         }
@@ -139,20 +174,22 @@ public class MainActivity extends AppCompatActivity implements MovieListCallBack
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(KEY_MOVIE_LIST_PERSISTENCE, Parcels.wrap(mMovieList));
+        if (mMovieList != null)
+            outState.putParcelable(KEY_MOVIE_LIST_PERSISTENCE, Parcels.wrap(mMovieList));
+        if (favouriteMovies != null)
+            outState.putParcelable(KEY_FAV_MOVIE_LIST_PERSISTENCE, Parcels.wrap(favouriteMovies));
         if (getSupportActionBar() != null)
             outState.putCharSequence(KEY_APPBAR_TITLE_PERSISTENCE, getSupportActionBar().getTitle());
     }
 
     @Override
     public void inProgress() {
-        if (tvFavMessage.getVisibility() == View.VISIBLE)
-            tvFavMessage.setVisibility(View.GONE);
+        removeMessageInfo(tvFavMessage);
         pbLoadMovies.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void onFinished(List<Movie> movies, Category category) {
+    public void onFinished(List<MovieNetworkLite> movies, Category category) {
         setAppBarTitle(category);
         mMovieList = movies;
         setUpMovieView(mMovieList);
@@ -182,5 +219,15 @@ public class MainActivity extends AppCompatActivity implements MovieListCallBack
         sortMenu.setOnMenuItemClickListener(new CategoryMenuListener(mMainViewModel, this, this));
         sortMenu.inflate(R.menu.category_menu);
         sortMenu.show();
+    }
+
+    @Override
+    public void viewMovieDetails(MovieNetworkLite movie, SmooviePosterImageView view) {
+        Intent vIntent = new Intent(this, MovieDetailActivity.class);
+        vIntent.putExtra(KEY_MOVIE_ID, movie.getMovieId());
+        vIntent.putExtra(KEY_MOVIE_POSTER, movie.getMoviePoster());
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(this, view, ViewCompat.getTransitionName(view));
+        startActivity(vIntent, options.toBundle());
     }
 }

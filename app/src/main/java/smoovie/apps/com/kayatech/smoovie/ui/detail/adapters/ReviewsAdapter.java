@@ -1,4 +1,4 @@
-package smoovie.apps.com.kayatech.smoovie.view;
+package smoovie.apps.com.kayatech.smoovie.ui.detail.adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -15,24 +15,24 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import smoovie.apps.com.kayatech.smoovie.R;
-import smoovie.apps.com.kayatech.smoovie.model.MovieReviews;
+import smoovie.apps.com.kayatech.smoovie.model.Reviews;
 
 public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.MoviesReviewViewHolder> {
 
     //Adapter Class
-    private List<MovieReviews> mMovieReviewsList;
+    private List<Reviews> mReviewsList;
 
-    ReviewsAdapter(List<MovieReviews> moviesReview) {
-        mMovieReviewsList = moviesReview;
+    ReviewsAdapter(List<Reviews> moviesReview) {
+        mReviewsList = moviesReview;
     }
 
-    public void setmMovieReviewsList(List<MovieReviews> movieReviews) {
-        this.mMovieReviewsList = movieReviews;
+    public void setmMovieReviewsList(List<Reviews> reviews) {
+        this.mReviewsList = reviews;
         notifyDataSetChanged();
     }
 
     public void clearMovies() {
-        mMovieReviewsList.clear();
+        mReviewsList.clear();
         notifyDataSetChanged();
     }
 
@@ -40,7 +40,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.MoviesRe
     @Override
     public MoviesReviewViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
-        int layoutIdForListItem = R.layout.review_item_layout;
+        int layoutIdForListItem = R.layout.review_layout;
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(layoutIdForListItem, parent, false);
         return new MoviesReviewViewHolder(view);
@@ -48,13 +48,13 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.MoviesRe
 
     @Override
     public void onBindViewHolder(@NonNull MoviesReviewViewHolder holder, int position) {
-        holder.bind(mMovieReviewsList.get(position));
+        holder.bind(mReviewsList.get(position));
     }
 
     @Override
     public int getItemCount() {
         //check for null
-        return (mMovieReviewsList == null) ? 0 : mMovieReviewsList.size();
+        return (mReviewsList == null) ? 0 : mReviewsList.size();
     }
 
     public static class MoviesReviewViewHolder extends RecyclerView.ViewHolder {
@@ -70,7 +70,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.MoviesRe
             ButterKnife.bind(this, itemView);
         }
 
-        private void bind(MovieReviews movieReviews) {
+        private void bind(Reviews movieReviews) {
             customTypefaceLight = Typeface.createFromAsset(itemView.getContext().getAssets(),"fonts/Roboto-Light.ttf");
             customTypefaceThin = Typeface.createFromAsset(itemView.getContext().getAssets(),"fonts/Roboto-Bold.ttf");
             if (movieReviews != null) {

@@ -3,7 +3,7 @@ package smoovie.apps.com.kayatech.smoovie.ui.main.callbacks;
 import java.util.List;
 
 import smoovie.apps.com.kayatech.smoovie.model.Category;
-import smoovie.apps.com.kayatech.smoovie.model.Movie;
+import smoovie.apps.com.kayatech.smoovie.model.MovieNetworkLite;
 
 /**
  * Created By blackcoder
@@ -13,5 +13,5 @@ public interface MovieListCallBack {
 
     void inProgress();
 
-    void onFinished(List<Movie> movies, Category category);
+    void onFinished(List<MovieNetworkLite> movies, Category category);
 }

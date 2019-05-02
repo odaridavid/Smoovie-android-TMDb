@@ -40,6 +40,7 @@ dependencies {
     implementation architecture_component.extensions
     implementation architecture_component.room
     implementation architecture_component.paging
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     annotationProcessor architecture_component.room_compiler
     annotationProcessor architecture_component.lifecycle_compiler
 
