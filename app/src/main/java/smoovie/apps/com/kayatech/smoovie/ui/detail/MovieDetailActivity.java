@@ -141,8 +141,6 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
                         getWindow().setStatusBarColor(backGroundColor);
                     }
                 });
-
-
             }
         });
 

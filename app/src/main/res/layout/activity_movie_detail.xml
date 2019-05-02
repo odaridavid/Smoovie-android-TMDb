@@ -21,13 +21,21 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             android:textAlignment="gravity"
+            app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <smoovie.apps.com.kayatech.smoovie.util.SmoovieBackdropImageView
                 android:id="@+id/backdrop_image_view"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:scaleType="centerCrop" />
+                android:scaleType="fitXY"
+                app:layout_collapseMode="parallax" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_app_bar_height"
+                android:background="@drawable/image_view_scrim" />
+
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar_details"

@@ -38,6 +38,5 @@ public final class MovieDetailsAsyncTask extends AsyncTask<Integer, Void, Movie>
     protected void onPostExecute(Movie movie) {
         super.onPostExecute(movie);
         mMovieDetailsCallBack.complete(movie);
-        Log.d("Async", "DOne");
     }
 }
