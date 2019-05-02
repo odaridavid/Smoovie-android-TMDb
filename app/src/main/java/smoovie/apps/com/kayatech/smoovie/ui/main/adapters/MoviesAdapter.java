@@ -1,13 +1,11 @@
 package smoovie.apps.com.kayatech.smoovie.ui.main.adapters;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -18,6 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import smoovie.apps.com.kayatech.smoovie.R;
 import smoovie.apps.com.kayatech.smoovie.model.Movie;
+import smoovie.apps.com.kayatech.smoovie.util.SmoovieImageView;
 
 import static smoovie.apps.com.kayatech.smoovie.util.Constants.IMAGE_BASE_URL;
 
@@ -30,17 +29,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     public MoviesAdapter(List<Movie> movies, IMovieClickHandler IMovieClickHandler) {
         this.mMovieList = movies;
         mIMovieClickHandler = IMovieClickHandler;
-    }
-
-    void setMovieList(List<Movie> mMovieList) {
-        this.mMovieList = mMovieList;
-        notifyDataSetChanged();
-    }
-
-    void clearMovies() {
-        //called when user sorts list starting from page 1
-        mMovieList.clear();
-        notifyDataSetChanged();
     }
 
     @NonNull
@@ -67,10 +55,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     public static class MoviesViewHolder extends RecyclerView.ViewHolder {
 
         Movie movies;
-//        @BindView(R.id.tv_movie_card_title)
-//        TextView mMovieTitle;
         @BindView(R.id.iv_poster_image)
-        ImageView mPosterImage;
+        SmoovieImageView mPosterImage;
         @BindView(R.id.tv_rating_cardlabel)
         TextView mMovieRatings;
 
@@ -88,9 +74,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         private void bind(Movie movie) {
             this.movies = movie;
             Context ctx = itemView.getContext();
-            final Typeface custom_font = Typeface.createFromAsset(ctx.getAssets(), "fonts/Roboto-Thin.ttf");
-//            mMovieTitle.setTypeface(custom_font);
-//            mMovieTitle.setText(movie.getMovieTitle());
             Picasso.with(ctx)
                     .load(IMAGE_BASE_URL + movie.getMoviePoster())
                     .error(R.drawable.test)
