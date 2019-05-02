@@ -20,7 +20,7 @@ import smoovie.apps.com.kayatech.smoovie.model.Movie;
 import smoovie.apps.com.kayatech.smoovie.model.MovieNetworkLite;
 import smoovie.apps.com.kayatech.smoovie.util.SmooviePosterImageView;
 
-import static smoovie.apps.com.kayatech.smoovie.util.Constants.IMAGE_BASE_URL;
+import static smoovie.apps.com.kayatech.smoovie.util.Constants.POSTER_BASE_URL;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder> {
 
@@ -81,7 +81,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         private void bind(IMovie movie) {
             Context ctx = itemView.getContext();
             Picasso.with(ctx)
-                    .load(IMAGE_BASE_URL + movie.getMoviePoster())
+                    .load(POSTER_BASE_URL + movie.getMoviePoster())
                     .error(R.drawable.test)
                     .placeholder(R.drawable.test)
                     .into(mPosterImage);

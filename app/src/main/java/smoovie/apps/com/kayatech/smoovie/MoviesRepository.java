@@ -21,6 +21,8 @@ import smoovie.apps.com.kayatech.smoovie.util.threads.AppExecutors;
  **/
 public final class MoviesRepository {
 
+//    TODO 1.(MoviesRepository) - Use MutableLiveData with Network Calls and set Value
+
     private static MoviesRepository sMoviesRepository;
     private MovieApiServices mMovieApiServices;
     private IFavouriteMovieDao mMovieDao;
@@ -120,20 +122,14 @@ public final class MoviesRepository {
     }
 
     public Movie getMovieDetails(final int movieId, final String language) {
-        mThreadAppExecutors.networkIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    mMovie = mMovieApiServices
-                            .getMovie(movieId, BuildConfig.API_KEY, language)
-                            .execute()
-                            .body();
-                } catch (IOException e) {
-                    Log.e(TAG, e.getMessage());
-                }
-            }
-        });
-
+        try {
+            mMovie = mMovieApiServices
+                    .getMovie(movieId, BuildConfig.API_KEY, language)
+                    .execute()
+                    .body();
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage());
+        }
         return mMovie != null ? mMovie : getDefaultMovie();
     }
 

@@ -2,7 +2,6 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cl_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.detail.MovieDetailActivity">
@@ -69,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_default"
                 android:layout_marginEnd="@dimen/size_smallest"
-                app:constraint_referenced_ids="tv_label_movie_title,rb_movie_rating,tv_rating_value,tv_rating_total" />
+                app:constraint_referenced_ids="tv_label_movie_title,rb_movie_rating" />
 
             <TextView
                 android:id="@+id/tv_label_movie_title"
@@ -99,39 +98,14 @@
                 style="?android:attr/ratingBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="@dimen/size_default"
                 android:isIndicator="true"
-                android:requiresFadingEdge="vertical"
                 android:stepSize="0.1"
-                app:layout_constraintLeft_toLeftOf="@id/tv_rating_value"
+                app:layout_constraintLeft_toRightOf="@id/iv_poster_image_details"
                 app:layout_constraintTop_toBottomOf="@id/tv_label_movie_title"
                 tools:rating="6.2" />
 
-
-            <TextView
-                android:id="@+id/tv_rating_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_default"
-                android:layout_marginTop="@dimen/size_default"
-                android:layout_marginEnd="@dimen/size_smallest"
-                android:layout_marginBottom="@dimen/size_default"
-                android:text="@string/label_default"
-                android:textSize="14sp"
-                app:layout_constraintLeft_toRightOf="@id/iv_poster_image_details"
-                app:layout_constraintTop_toBottomOf="@id/rb_movie_rating"
-                tools:text="@string/movie_rating_dummy_text" />
-
-            <TextView
-                android:id="@+id/tv_rating_total"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/size_default"
-                android:layout_marginEnd="@dimen/size_default"
-                android:text="@string/label_rating_total"
-                android:textSize="14sp"
-                app:layout_constraintLeft_toRightOf="@id/tv_rating_value"
-                app:layout_constraintTop_toBottomOf="@id/rb_movie_rating" />
 
             <TextView
                 android:id="@+id/tv_label_overview"

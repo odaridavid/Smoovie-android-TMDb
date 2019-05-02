@@ -32,6 +32,7 @@ dependencies {
     implementation support.preference_v7
     implementation support.recyclerview
     implementation support.cardview
+    implementation support.palette_v7
 
 //    Google Libraries
     implementation google.gson
@@ -40,7 +41,6 @@ dependencies {
     implementation architecture_component.extensions
     implementation architecture_component.room
     implementation architecture_component.paging
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     annotationProcessor architecture_component.room_compiler
     annotationProcessor architecture_component.lifecycle_compiler
 

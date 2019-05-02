@@ -27,7 +27,7 @@ public class SmoovieBackdropImageView extends AppCompatImageView {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         //Unpack given dimens to new aspect ratio
-        int threeTwoHeight = MeasureSpec.getSize(widthMeasureSpec) * 3 / 2;
+        int threeTwoHeight = MeasureSpec.getSize(widthMeasureSpec) * 2 / 3;
         int threeTwoHeightSpec = MeasureSpec.makeMeasureSpec(threeTwoHeight, MeasureSpec.EXACTLY);
         super.onMeasure(widthMeasureSpec, threeTwoHeightSpec);
     }

@@ -48,6 +48,10 @@ import static smoovie.apps.com.kayatech.smoovie.util.Constants.KEY_MOVIE_POSTER;
 
 public class MainActivity extends AppCompatActivity implements MovieListCallBack, FavouriteMoviesCallback, MoviesAdapter.IMovieClickHandler {
 
+//    TODO 1.(Main Activity) - Shared Preferences Sync with language Selection
+//    TODO 2.(Main Activity) - Endless Scrolling,Pagination
+//    TODO 3.(Main Activity) - Navigate To Settings Smoothly
+
     private final String KEY_APPBAR_TITLE_PERSISTENCE = "movie_category";
     private final String KEY_MOVIE_LIST_PERSISTENCE = "movie_list";
     private final String KEY_FAV_MOVIE_LIST_PERSISTENCE = "fav_movie_list";
