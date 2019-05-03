@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ShareCompat;
@@ -13,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -21,6 +21,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -52,6 +54,7 @@ import static smoovie.apps.com.kayatech.smoovie.util.PaletteExtractorUtil.getBit
 import static smoovie.apps.com.kayatech.smoovie.util.PaletteExtractorUtil.getDarkVibrantColor;
 
 public class MovieDetailActivity extends AppCompatActivity implements MovieDetailsCallBack {
+    private final String KEY_MOVIE_PERSISTENCE = "movie";
 
 //    TODO 1.(Detail Activity) - Build Material Designed UI,Refactor Existing UI,Add Shimmer Effect
 //    TODO 2.(Detail Activity) - Save Movie or Remove  Movie from favourites
@@ -84,7 +87,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
 
     private int mMovieId;
     private String mMoviePoster;
-    private AsyncTask mAsync;
+    private Movie mMovie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +110,18 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
         posterImageTransition();
         DetailViewModelFactory vDetailViewModelFactory = InjectorUtils.provideDetailViewModelFactory(this);
         DetailViewModel mDetailViewModel = ViewModelProviders.of(this, vDetailViewModelFactory).get(DetailViewModel.class);
-        mAsync = new MovieDetailsAsyncTask(mDetailViewModel, "en-US", this).execute(mMovieId);
+        if (savedInstanceState != null) {
+            mMovie = Parcels.unwrap(savedInstanceState.getParcelable(KEY_MOVIE_PERSISTENCE));
+            Log.d(MovieDetailActivity.class.getSimpleName(), "Saved Instance: " + mMovie.toString());
+            complete(mMovie);
+        } else {
+            Log.d(MovieDetailActivity.class.getSimpleName(), "Network");
+            loadMovie(mDetailViewModel);
+        }
+    }
+
+    private void loadMovie(DetailViewModel mDetailViewModel) {
+        new MovieDetailsAsyncTask(mDetailViewModel, "en-US", this).execute(mMovieId);
     }
 
     private void posterImageTransition() {
@@ -129,6 +143,8 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        if (mMovie != null)
+            outState.putParcelable(KEY_MOVIE_PERSISTENCE, Parcels.wrap(mMovie));
     }
 
     @Override
@@ -140,25 +156,6 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void loading() {
-
-    }
-
-    @Override
-    public void complete(final Movie movie) {
-        setStatusBarColorFromBackdrop(BACKDROP_BASE_URL + movie.getBackdrop());
-        Picasso.with(this)
-                .load(BACKDROP_BASE_URL + movie.getBackdrop())
-                .into(mSmoovieBackdropImageView);
-        vCollapsingToolbarLayout.setTitleEnabled(false);
-        tvMovieTitle.setText(movie.getMovieTitle());
-        rbMovieRating.setRating(movie.getVoterAverage() / 2);
-        tvReleaseDate.setText(movie.getMovieReleaseDate());
-        tvOverview.setText(movie.getMovieOverview());
-        setupTrailers(movie.getTrailers());
-        setupReviews(movie.getReviews());
-    }
 
     private void setupReviews(List<Reviews> reviews) {
         if (reviews != null && !reviews.isEmpty()) {
@@ -215,12 +212,6 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
                 .startChooser();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mAsync.cancel(true);
-    }
-
     public void setStatusBarColorFromBackdrop(final String url) {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -241,6 +232,26 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
                 });
             }
         });
+    }
 
+    @Override
+    public void loading() {
+
+    }
+
+    @Override
+    public void complete(Movie movie) {
+        setStatusBarColorFromBackdrop(BACKDROP_BASE_URL + movie.getBackdrop());
+        Picasso.with(MovieDetailActivity.this)
+                .load(BACKDROP_BASE_URL + movie.getBackdrop())
+                .into(mSmoovieBackdropImageView);
+        vCollapsingToolbarLayout.setTitleEnabled(false);
+        tvMovieTitle.setText(movie.getMovieTitle());
+        rbMovieRating.setRating(movie.getVoterAverage() / 2);
+        tvReleaseDate.setText(movie.getMovieReleaseDate());
+        tvOverview.setText(movie.getMovieOverview());
+        setupTrailers(movie.getTrailers());
+        setupReviews(movie.getReviews());
+        mMovie = movie;
     }
 }
