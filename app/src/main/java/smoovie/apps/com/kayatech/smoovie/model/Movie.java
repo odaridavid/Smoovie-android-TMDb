@@ -10,6 +10,8 @@ import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
 
+import java.util.List;
+
 @Entity(tableName = "favourite_movie")
 @Parcel(Parcel.Serialization.BEAN)
 public class Movie implements IMovie {
@@ -50,6 +52,12 @@ public class Movie implements IMovie {
     private boolean isFavourite;
 
     @Ignore
+    private List<Reviews> mReviews;
+
+    @Ignore
+    private List<Trailers> mTrailers;
+
+    @Ignore
     public Movie() {
     }
 
@@ -73,6 +81,22 @@ public class Movie implements IMovie {
         this.backdrop = backdrop;
         this.voterAverage = voterAverage;
         this.isFavourite = isFavourite;
+    }
+
+    public List<Reviews> getReviews() {
+        return mReviews;
+    }
+
+    public void setReviews(List<Reviews> reviews) {
+        mReviews = reviews;
+    }
+
+    public List<Trailers> getTrailers() {
+        return mTrailers;
+    }
+
+    public void setTrailers(List<Trailers> trailers) {
+        mTrailers = trailers;
     }
 
     public boolean isFavourite() {

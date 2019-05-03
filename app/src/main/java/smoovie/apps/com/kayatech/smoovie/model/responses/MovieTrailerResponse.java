@@ -21,7 +21,7 @@ public class MovieTrailerResponse {
         return id;
     }
 
-    public List<Trailers> getMoviesResult() {
+    public List<Trailers> getTrailers() {
         return moviesResult;
     }
 }

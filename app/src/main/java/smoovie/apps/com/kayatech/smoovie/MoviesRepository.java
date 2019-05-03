@@ -139,38 +139,28 @@ public final class MoviesRepository {
     }
 
     public MovieReviewResponse getMovieReviews(final int movieId, final String language) {
-        mThreadAppExecutors.networkIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    mMovieReviewResponse = mMovieApiServices
-                            .getMovieReviews(movieId, BuildConfig.API_KEY, language)
-                            .execute()
-                            .body();
-                    Log.e(TAG, "Reviews Loaded");
-                } catch (IOException e) {
-                    Log.e(TAG, e.getMessage());
-                }
-            }
-        });
+        try {
+            mMovieReviewResponse = mMovieApiServices
+                    .getMovieReviews(movieId, BuildConfig.API_KEY, language)
+                    .execute()
+                    .body();
+            Log.e(TAG, "Reviews Loaded");
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage());
+        }
         return mMovieReviewResponse != null ? mMovieReviewResponse : new MovieReviewResponse();
     }
 
     public MovieTrailerResponse getMovieTrailers(final int movieId, final String language) {
-        mThreadAppExecutors.networkIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    mMMovieTrailerResponse = mMovieApiServices
-                            .getMovieTrailers(movieId, BuildConfig.API_KEY, language)
-                            .execute()
-                            .body();
-                    Log.e(TAG, "Trailers Loaded");
-                } catch (IOException e) {
-                    Log.e(TAG, e.getMessage());
-                }
-            }
-        });
+        try {
+            mMMovieTrailerResponse = mMovieApiServices
+                    .getMovieTrailers(movieId, BuildConfig.API_KEY, language)
+                    .execute()
+                    .body();
+            Log.e(TAG, "Trailers Loaded");
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage());
+        }
         return mMMovieTrailerResponse != null ? mMMovieTrailerResponse : new MovieTrailerResponse();
     }
 

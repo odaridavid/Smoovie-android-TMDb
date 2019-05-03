@@ -20,8 +20,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            android:textAlignment="gravity"
-            app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <smoovie.apps.com.kayatech.smoovie.util.SmoovieBackdropImageView
@@ -76,17 +74,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_default"
                 android:layout_marginEnd="@dimen/size_smallest"
-                app:constraint_referenced_ids="tv_label_movie_title,rb_movie_rating" />
+                app:constraint_referenced_ids="text_view_movie_title,rating_bar_movie_avg" />
 
             <TextView
-                android:id="@+id/tv_label_movie_title"
+                android:id="@+id/text_view_movie_title"
                 android:layout_width="@dimen/size_width"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_default"
                 android:text="@string/label_default"
                 android:textColor="@color/colorAccent"
                 android:textSize="18sp"
-                app:layout_constraintLeft_toLeftOf="@id/rb_movie_rating"
+                app:layout_constraintLeft_toLeftOf="@id/rating_bar_movie_avg"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="@string/movie_title_dummy_text" />
 
@@ -102,7 +100,7 @@
 
 
             <RatingBar
-                android:id="@+id/rb_movie_rating"
+                android:id="@+id/rating_bar_movie_avg"
                 style="?android:attr/ratingBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -111,8 +109,21 @@
                 android:isIndicator="true"
                 android:stepSize="0.1"
                 app:layout_constraintLeft_toRightOf="@id/iv_poster_image_details"
-                app:layout_constraintTop_toBottomOf="@id/tv_label_movie_title"
-                tools:rating="6.2" />
+                app:layout_constraintTop_toBottomOf="@id/text_view_movie_title"
+                tools:rating="2.5" />
+
+            <TextView
+                android:id="@+id/text_view_release_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/label_default"
+                android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toLeftOf="@id/rating_bar_movie_avg"
+                app:layout_constraintTop_toBottomOf="@id/rating_bar_movie_avg"
+                tools:text="@string/movie_release_date_dummy_text" />
 
 
             <TextView
@@ -120,6 +131,7 @@
                 style="@style/DetailViewMarginStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-black"
                 android:text="@string/label_overview"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -128,40 +140,17 @@
                 app:layout_constraintTop_toBottomOf="@id/iv_poster_image_details" />
 
             <TextView
-                android:id="@+id/tv_overview"
+                android:id="@+id/text_view_overview"
                 style="@style/DetailViewMarginStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
                 android:text="@string/label_default"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 app:layout_constraintTop_toBottomOf="@id/tv_label_overview"
                 tools:text="@string/movie_overview_dummy_text" />
 
-            <TextView
-                android:id="@+id/tv_label_release_date"
-                style="@style/DetailViewMarginStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/label_released"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_overview" />
-
-            <TextView
-                android:id="@+id/tv_release_date"
-                style="@style/DetailViewMarginStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/label_default"
-                android:textAlignment="center"
-                android:textSize="18sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_label_release_date"
-                tools:text="@string/movie_release_date_dummy_text" />
 
             <TextView
                 android:id="@+id/tv_label_trailers"
@@ -174,18 +163,20 @@
                 android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_release_date" />
+                app:layout_constraintTop_toBottomOf="@id/text_view_overview" />
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_movies_trailer"
+                android:id="@+id/recycler_view_trailers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/size_medium"
+                android:clipToPadding="false"
                 android:orientation="horizontal"
-                android:scrollbars="horizontal"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_label_trailers" />
+                app:layout_constraintTop_toBottomOf="@id/tv_label_trailers"
+                tools:itemCount="1"
+                tools:listitem="@layout/trailer_layout" />
 
             <TextView
                 android:id="@+id/tv_no_trailer"
@@ -211,13 +202,13 @@
                 android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rv_movies_trailer" />
+                app:layout_constraintTop_toBottomOf="@id/recycler_view_trailers" />
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_movies_review"
+                android:id="@+id/recycler_view_reviews"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scrollbars="vertical"
+                android:clipToPadding="false"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_label_reviews" />
@@ -228,14 +219,13 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/size_medium"
                 android:text="@string/error_review_unavailable"
-
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tv_label_reviews" />
-
+                app:layout_constraintTop_toBottomOf="@id/tv_label_reviews"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>

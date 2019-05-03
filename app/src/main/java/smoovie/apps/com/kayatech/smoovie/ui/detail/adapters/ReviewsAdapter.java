@@ -1,10 +1,8 @@
 package smoovie.apps.com.kayatech.smoovie.ui.detail.adapters;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,21 +17,10 @@ import smoovie.apps.com.kayatech.smoovie.model.Reviews;
 
 public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.MoviesReviewViewHolder> {
 
-    //Adapter Class
     private List<Reviews> mReviewsList;
 
-    ReviewsAdapter(List<Reviews> moviesReview) {
+    public ReviewsAdapter(List<Reviews> moviesReview) {
         mReviewsList = moviesReview;
-    }
-
-    public void setmMovieReviewsList(List<Reviews> reviews) {
-        this.mReviewsList = reviews;
-        notifyDataSetChanged();
-    }
-
-    public void clearMovies() {
-        mReviewsList.clear();
-        notifyDataSetChanged();
     }
 
     @NonNull
@@ -53,17 +40,15 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.MoviesRe
 
     @Override
     public int getItemCount() {
-        //check for null
         return (mReviewsList == null) ? 0 : mReviewsList.size();
     }
 
     public static class MoviesReviewViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tv_reviews_author)
-        TextView mMovieReviewsAuthorTextView;
+        TextView tvAuthor;
         @BindView(R.id.tv_reviews_content)
-        TextView mMovieReviewsContentTextView;
-        Typeface customTypefaceThin,customTypefaceLight;
+        TextView tvContent;
 
         MoviesReviewViewHolder(View itemView) {
             super(itemView);
@@ -71,18 +56,12 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.MoviesRe
         }
 
         private void bind(Reviews movieReviews) {
-            customTypefaceLight = Typeface.createFromAsset(itemView.getContext().getAssets(),"fonts/Roboto-Light.ttf");
-            customTypefaceThin = Typeface.createFromAsset(itemView.getContext().getAssets(),"fonts/Roboto-Bold.ttf");
             if (movieReviews != null) {
                 String author = movieReviews.getAuthor();
                 String reviews = movieReviews.getContent();
-                mMovieReviewsContentTextView.setTypeface(customTypefaceLight);
-                mMovieReviewsAuthorTextView.setTypeface(customTypefaceThin);
-                mMovieReviewsAuthorTextView.setText(author);
-                mMovieReviewsContentTextView.setText(reviews);
-                Log.d("MOVIES REVIEWS", author + " THE BODY " + reviews);
+                tvAuthor.setText(author);
+                tvContent.setText(reviews);
             }
         }
     }
-
 }

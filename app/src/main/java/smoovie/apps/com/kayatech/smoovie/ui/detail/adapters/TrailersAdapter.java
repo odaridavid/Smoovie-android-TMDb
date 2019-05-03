@@ -17,28 +17,17 @@ import butterknife.ButterKnife;
 import smoovie.apps.com.kayatech.smoovie.R;
 import smoovie.apps.com.kayatech.smoovie.model.Trailers;
 
-public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.MoviesVideoViewHolder> {
+public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.MoviesVideoViewHolder> {
 
-    //Adapter Class
-    private List<Trailers> mMovieVideoList;
-    private static ITrailerClickHandler sMITrailerClickHandler;
-    private static IShareClickHandler mIShareClickHandler;
+    private List<Trailers> mTrailersList;
+    private static IWatchTrailerClickHandler sMIWatchTrailerClickHandler;
+    private static IShareTrailerHandler sMIShareTrailerHandler;
 
 
-    VideoAdapter(List<Trailers> mMovieVideoList, ITrailerClickHandler iTrailerClickHandler, IShareClickHandler iShareClickHandler) {
-        this.mMovieVideoList = mMovieVideoList;
-        sMITrailerClickHandler = iTrailerClickHandler;
-        mIShareClickHandler = iShareClickHandler;
-    }
-
-    public void setMovieVideoList(List<Trailers> mMovieVideoList) {
-        this.mMovieVideoList = mMovieVideoList;
-        notifyDataSetChanged();
-    }
-
-    public void clearMovies() {
-        mMovieVideoList.clear();
-        notifyDataSetChanged();
+    public TrailersAdapter(List<Trailers> mMovieTrailerList, IWatchTrailerClickHandler iWatchTrailerClickHandler, IShareTrailerHandler iShareTrailerHandler) {
+        mTrailersList = mMovieTrailerList;
+        sMIWatchTrailerClickHandler = iWatchTrailerClickHandler;
+        sMIShareTrailerHandler = iShareTrailerHandler;
     }
 
     @NonNull
@@ -51,20 +40,19 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.MoviesVideoV
         return new MoviesVideoViewHolder(view);
     }
 
-
     @Override
     public void onBindViewHolder(@NonNull MoviesVideoViewHolder holder, int position) {
-        holder.bind(mMovieVideoList.get(position));
+        holder.bind(mTrailersList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return (mMovieVideoList == null) ? 0 : mMovieVideoList.size();
+        return (mTrailersList == null) ? 0 : mTrailersList.size();
     }
 
-    public static class MoviesVideoViewHolder extends RecyclerView.ViewHolder {
+    public class MoviesVideoViewHolder extends RecyclerView.ViewHolder {
 
-        private static String YOUTUBE_THUMBNAIL_URL = "http://img.youtube.com/vi/%s/0.jpg";
+        private String YOUTUBE_THUMBNAIL_URL = "http://img.youtube.com/vi/%s/0.jpg";
         Trailers mTrailers;
         private Context ctx;
         @BindView(R.id.iv_trailer)
@@ -76,25 +64,24 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.MoviesVideoV
 
         MoviesVideoViewHolder(View itemView) {
             super(itemView);
-            // get the reference of item view's
             ButterKnife.bind(this, itemView);
             mMovieTrailerPlay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    sMITrailerClickHandler.onClick(mTrailers);
+                    mTrailers = mTrailersList.get(getAdapterPosition());
+                    sMIWatchTrailerClickHandler.onClick(mTrailers);
                 }
             });
             mMovieTrailerShareImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mIShareClickHandler.onClick(mTrailers);
+                    mTrailers = mTrailersList.get(getAdapterPosition());
+                    sMIShareTrailerHandler.onClick(mTrailers);
                 }
             });
         }
 
         private void bind(Trailers trailers) {
-            //Set Trailer image view thumbnail
-            this.mTrailers = trailers;
             ctx = itemView.getContext();
             Picasso.with(ctx)
                     .load(String.format(YOUTUBE_THUMBNAIL_URL, trailers.getKey()))

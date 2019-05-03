@@ -26,7 +26,7 @@ public class MovieReviewResponse {
         return page;
     }
 
-    public List<Reviews> getMoviesReviews() {
+    public List<Reviews> getReviews() {
         return mReviews;
     }
 

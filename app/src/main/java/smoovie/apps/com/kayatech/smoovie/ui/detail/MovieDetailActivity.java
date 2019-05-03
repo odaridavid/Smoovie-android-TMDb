@@ -3,21 +3,37 @@ package smoovie.apps.com.kayatech.smoovie.ui.detail;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import smoovie.apps.com.kayatech.smoovie.R;
 import smoovie.apps.com.kayatech.smoovie.model.Movie;
+import smoovie.apps.com.kayatech.smoovie.model.Reviews;
+import smoovie.apps.com.kayatech.smoovie.model.Trailers;
+import smoovie.apps.com.kayatech.smoovie.ui.detail.adapters.IShareTrailerHandler;
+import smoovie.apps.com.kayatech.smoovie.ui.detail.adapters.IWatchTrailerClickHandler;
+import smoovie.apps.com.kayatech.smoovie.ui.detail.adapters.ReviewsAdapter;
+import smoovie.apps.com.kayatech.smoovie.ui.detail.adapters.TrailersAdapter;
 import smoovie.apps.com.kayatech.smoovie.ui.detail.async.MovieDetailsAsyncTask;
 import smoovie.apps.com.kayatech.smoovie.ui.detail.async.MovieDetailsCallBack;
 import smoovie.apps.com.kayatech.smoovie.ui.detail.viewmodel.DetailViewModel;
@@ -31,16 +47,15 @@ import static smoovie.apps.com.kayatech.smoovie.util.Constants.BACKDROP_BASE_URL
 import static smoovie.apps.com.kayatech.smoovie.util.Constants.KEY_MOVIE_ID;
 import static smoovie.apps.com.kayatech.smoovie.util.Constants.KEY_MOVIE_POSTER;
 import static smoovie.apps.com.kayatech.smoovie.util.Constants.POSTER_BASE_URL;
+import static smoovie.apps.com.kayatech.smoovie.util.Constants.YOUTUBE_TRAILER_BASE_URL;
 import static smoovie.apps.com.kayatech.smoovie.util.PaletteExtractorUtil.getBitmapFromUrl;
 import static smoovie.apps.com.kayatech.smoovie.util.PaletteExtractorUtil.getDarkVibrantColor;
 
 public class MovieDetailActivity extends AppCompatActivity implements MovieDetailsCallBack {
 
-//    TODO 1.(Detail Activity) - Build Material Designed UI,Refactor Existing UI,Add Shimmer Effect and Pick Color from poster image
+//    TODO 1.(Detail Activity) - Build Material Designed UI,Refactor Existing UI,Add Shimmer Effect
 //    TODO 2.(Detail Activity) - Save Movie or Remove  Movie from favourites
-//    TODO 3.(Detail Activity) - Ensures Content is loaded by language,Pass in Intent
-
-    private final String TAG = getClass().getSimpleName();
+//    TODO 3.(Detail Activity) - Ensures Content is loaded by language from shared pref
 
     @BindView(R.id.toolbar_details)
     Toolbar mToolbar;
@@ -48,6 +63,25 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     SmooviePosterImageView vSmooviePosterImageView;
     @BindView(R.id.backdrop_image_view)
     SmoovieBackdropImageView mSmoovieBackdropImageView;
+    @BindView(R.id.collapsingToolbar)
+    CollapsingToolbarLayout vCollapsingToolbarLayout;
+    @BindView(R.id.text_view_movie_title)
+    TextView tvMovieTitle;
+    @BindView(R.id.rating_bar_movie_avg)
+    RatingBar rbMovieRating;
+    @BindView(R.id.text_view_release_date)
+    TextView tvReleaseDate;
+    @BindView(R.id.text_view_overview)
+    TextView tvOverview;
+    @BindView(R.id.recycler_view_reviews)
+    RecyclerView rvReviews;
+    @BindView(R.id.recycler_view_trailers)
+    RecyclerView rvTrailers;
+    @BindView(R.id.tv_no_review)
+    TextView tvNoReview;
+    @BindView(R.id.tv_no_trailer)
+    TextView tvNoTrailer;
+
     private int mMovieId;
     private String mMoviePoster;
     private AsyncTask mAsync;
@@ -62,6 +96,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         vSmooviePosterImageView.setTransitionName("poster");
         Intent intent = getIntent();
@@ -112,10 +147,72 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
 
     @Override
     public void complete(final Movie movie) {
-        setStatusBarColor(BACKDROP_BASE_URL + movie.getBackdrop());
+        setStatusBarColorFromBackdrop(BACKDROP_BASE_URL + movie.getBackdrop());
         Picasso.with(this)
                 .load(BACKDROP_BASE_URL + movie.getBackdrop())
                 .into(mSmoovieBackdropImageView);
+        vCollapsingToolbarLayout.setTitleEnabled(false);
+        tvMovieTitle.setText(movie.getMovieTitle());
+        rbMovieRating.setRating(movie.getVoterAverage() / 2);
+        tvReleaseDate.setText(movie.getMovieReleaseDate());
+        tvOverview.setText(movie.getMovieOverview());
+        setupTrailers(movie.getTrailers());
+        setupReviews(movie.getReviews());
+    }
+
+    private void setupReviews(List<Reviews> reviews) {
+        if (reviews != null && !reviews.isEmpty()) {
+            ReviewsAdapter vReviewsAdapter = new ReviewsAdapter(reviews);
+            rvReviews.setHasFixedSize(true);
+            rvReviews.setLayoutManager(new LinearLayoutManager(this));
+            rvReviews.setAdapter(vReviewsAdapter);
+        } else {
+            rvReviews.setVisibility(View.GONE);
+            tvNoReview.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void setupTrailers(List<Trailers> trailers) {
+        if (trailers != null && !trailers.isEmpty()) {
+            TrailersAdapter vTrailersAdapter = new TrailersAdapter(trailers, new IWatchTrailerClickHandler() {
+                @Override
+                public void onClick(Trailers trailers) {
+                    viewTrailer(trailers);
+                }
+            }, new IShareTrailerHandler() {
+                @Override
+                public void onClick(Trailers trailers) {
+                    shareTrailerLink(trailers);
+                }
+            });
+            rvTrailers.setHasFixedSize(true);
+            rvTrailers.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+            rvTrailers.setAdapter(vTrailersAdapter);
+        } else {
+            rvTrailers.setVisibility(View.GONE);
+            tvNoTrailer.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void viewTrailer(Trailers trailers) {
+        String trailerLink = String.format(YOUTUBE_TRAILER_BASE_URL, trailers.getKey());
+        Intent videoPlayerIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(trailerLink));
+        if (videoPlayerIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(videoPlayerIntent);
+        }
+    }
+
+    private void shareTrailerLink(Trailers trailers) {
+        String trailerLink = String.format(YOUTUBE_TRAILER_BASE_URL, trailers.getKey());
+        String mimeType = "text/plain";
+        String title = getString(R.string.label_share);
+        ShareCompat
+                .IntentBuilder
+                .from(MovieDetailActivity.this)
+                .setType(mimeType)
+                .setChooserTitle(title)
+                .setText("Check Out This Trailer \n" + trailerLink + " \n For More Reviews and Trailers,check out Smoovie at {Smoovie Google Play Link Here} ")
+                .startChooser();
     }
 
     @Override
@@ -124,7 +221,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
         mAsync.cancel(true);
     }
 
-    public void setStatusBarColor(final String url) {
+    public void setStatusBarColorFromBackdrop(final String url) {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         AppExecutors.getInstance().networkIO().execute(new Runnable() {
@@ -139,6 +236,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
                             backGroundColor = getDarkVibrantColor(sBitmap).getRgb();
                         }
                         getWindow().setStatusBarColor(backGroundColor);
+                        vCollapsingToolbarLayout.setContentScrimColor(backGroundColor);
                     }
                 });
             }
