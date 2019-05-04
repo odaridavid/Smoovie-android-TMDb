@@ -5,7 +5,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-import smoovie.apps.com.kayatech.smoovie.model.Movie;
 import smoovie.apps.com.kayatech.smoovie.model.MovieNetworkLite;
 
 
