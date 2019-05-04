@@ -47,7 +47,7 @@ with an option of saving ones favourite movies in a wishlist.
 
 ### Screenshots
 
-| [![Screen1](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/screenshots/Screenshot1.png)]()  | [![Screen2](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/screenshots/Screenshot_2.png)]() | [![Screen3](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/screenshots/Screenshot_5.png)]() |[![Screen4](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/screenshots/Screenshot_6.png)]() |[![Screen5](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/screenshots/Screenshot_7.png)]() |
+| [![Screen1](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/screenshots/screenshot_1.png)]()  | [![Screen2](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/screenshots/screenshot_2.png)]() | [![Screen3](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/screenshots/screenshot_3.png)]() |[![Screen4](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/screenshots/screenshot_4.png)]() |[![Screen5](https://github.com/Davidodari/Smoovie-android-TMDb/blob/master/screenshots/screenshot_5.png)]() |
 |:---:|:---:|:---:|:---:|:---:|
 | Detail Activity | Main Activity | Detail Activity | Favourite Activity |Favourite Activity |
 
@@ -62,6 +62,7 @@ with an option of saving ones favourite movies in a wishlist.
  - [Styleable Toast](https://github.com/Muddz/StyleableToast) - Custom Android Toast Library
  - [Architecture Components](https://developer.android.com/topic/libraries/architecture) - Room ORM
  - [Parceler](https://github.com/johncarl81/parceler)
+ - [Palette]()
 
 ## License
 

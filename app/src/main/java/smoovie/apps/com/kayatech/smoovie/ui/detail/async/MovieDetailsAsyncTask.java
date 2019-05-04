@@ -28,12 +28,6 @@ public final class MovieDetailsAsyncTask extends AsyncTask<Integer, Void, Movie>
     }
 
     @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        mMovieDetailsCallBack.loading();
-    }
-
-    @Override
     protected Movie doInBackground(Integer... integers) {
         Movie vMovie = mDetailViewModel.getMovieDetails(integers[0]);
         reviews = mDetailViewModel.getMovieReviewsResponse(integers[0]).getReviews();

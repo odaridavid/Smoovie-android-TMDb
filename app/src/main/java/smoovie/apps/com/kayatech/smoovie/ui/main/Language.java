@@ -11,35 +11,27 @@ import smoovie.apps.com.kayatech.smoovie.R;
  * Created By blackcoder
  * On 04/05/19
  **/
-public final class Language {
-    public static void setUpLocale(String language, Context context) {
+final class Language {
+    static void setUpLocale(String language, Context context) {
         if (language.equals(context.getString(R.string.pref_language_val_chinese))) {
             Locale locale = new Locale("zh");
-            Configuration config = context.getResources().getConfiguration();
-            Locale.setDefault(locale);
-            config.setLocale(locale);
-            context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
-        }
-        if (language.equals(context.getString(R.string.pref_language_val_french))) {
+            configLocale(context, locale);
+        } else if (language.equals(context.getString(R.string.pref_language_val_french))) {
             Locale locale = new Locale("fr");
-            Configuration config = context.getResources().getConfiguration();
-            Locale.setDefault(locale);
-            config.setLocale(locale);
-            context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
-        }
-        if (language.equals(context.getString(R.string.pref_language_val_german))) {
+            configLocale(context, locale);
+        } else if (language.equals(context.getString(R.string.pref_language_val_german))) {
             Locale locale = new Locale("de");
-            Locale.setDefault(locale);
-            Configuration config = context.getResources().getConfiguration();
-            config.setLocale(locale);
-            context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
-        }
-        if (language.equals(context.getString(R.string.pref_language_val_english))) {
+            configLocale(context, locale);
+        } else if (language.equals(context.getString(R.string.pref_language_val_english))) {
             Locale locale = new Locale("en");
-            Locale.setDefault(locale);
-            Configuration config = context.getResources().getConfiguration();
-            config.setLocale(locale);
-            context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
+            configLocale(context, locale);
         }
+    }
+
+    private static void configLocale(Context context, Locale locale) {
+        Locale.setDefault(locale);
+        Configuration config = context.getResources().getConfiguration();
+        config.setLocale(locale);
+        context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
     }
 }

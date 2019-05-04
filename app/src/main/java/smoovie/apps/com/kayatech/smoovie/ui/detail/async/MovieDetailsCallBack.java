@@ -8,7 +8,5 @@ import smoovie.apps.com.kayatech.smoovie.model.Movie;
  **/
 public interface MovieDetailsCallBack {
 
-    void loading();
-
     void complete(Movie movie);
 }

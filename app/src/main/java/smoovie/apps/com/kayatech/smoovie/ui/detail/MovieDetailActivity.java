@@ -5,12 +5,9 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.app.ShareCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -54,16 +51,11 @@ import static smoovie.apps.com.kayatech.smoovie.util.Constants.KEY_MOVIE_ID;
 import static smoovie.apps.com.kayatech.smoovie.util.Constants.KEY_MOVIE_IS_FAVOURITE;
 import static smoovie.apps.com.kayatech.smoovie.util.Constants.KEY_MOVIE_POSTER;
 import static smoovie.apps.com.kayatech.smoovie.util.Constants.POSTER_BASE_URL;
-import static smoovie.apps.com.kayatech.smoovie.util.Constants.YOUTUBE_TRAILER_BASE_URL;
 import static smoovie.apps.com.kayatech.smoovie.util.PaletteExtractorUtil.getBitmapFromUrl;
 import static smoovie.apps.com.kayatech.smoovie.util.PaletteExtractorUtil.getDarkVibrantColor;
 
 public class MovieDetailActivity extends AppCompatActivity implements MovieDetailsCallBack, SharedPreferences.OnSharedPreferenceChangeListener {
     private final String KEY_MOVIE_PERSISTENCE = "movie";
-
-//    TODO 1.(Detail Activity) - Build Material Designed UI,Refactor Existing UI,Add Shimmer Effect
-//    TODO 3.(Detail Activity) - Ensures Content is loaded by language from shared pref
-
     @BindView(R.id.toolbar_details)
     Toolbar mToolbar;
     @BindView(R.id.iv_poster_image_details)
@@ -112,7 +104,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
             mIsFavourite = intent.getBooleanExtra(KEY_MOVIE_IS_FAVOURITE, false);
         }
         posterImageTransition();
-        DetailViewModelFactory vDetailViewModelFactory = InjectorUtils.provideDetailViewModelFactory(this,this);
+        DetailViewModelFactory vDetailViewModelFactory = InjectorUtils.provideDetailViewModelFactory(this, this);
         detailViewModel = ViewModelProviders.of(this, vDetailViewModelFactory).get(DetailViewModel.class);
         checkIfFavourite(mMovieId);
         if (savedInstanceState != null) {
@@ -120,7 +112,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
             complete(mMovie);
         } else {
             if (!mIsFavourite) {
-                loadMovieDetailsFromNetwork(detailViewModel);
+                new MovieDetailsAsyncTask(detailViewModel, this).execute(mMovieId);
             } else {
                 loadMovieDetailsFromCache();
             }
@@ -159,15 +151,6 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
                 }
             }
         });
-    }
-
-    private void favOperations(@NonNull final Movie movies) {
-        detailViewModel.favouriteMovie(movies);
-    }
-
-
-    private void loadMovieDetailsFromNetwork(DetailViewModel mDetailViewModel) {
-        new MovieDetailsAsyncTask(mDetailViewModel,  this).execute(mMovieId);
     }
 
     private void posterImageTransition() {
@@ -220,12 +203,12 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
             TrailersAdapter vTrailersAdapter = new TrailersAdapter(trailers, new IWatchTrailerClickHandler() {
                 @Override
                 public void onClick(Trailers trailers) {
-                    viewTrailer(trailers);
+                    TrailerIntentHandler.viewTrailer(trailers, MovieDetailActivity.this);
                 }
             }, new IShareTrailerHandler() {
                 @Override
                 public void onClick(Trailers trailers) {
-                    shareTrailerLink(trailers);
+                    TrailerIntentHandler.shareTrailerLink(trailers, MovieDetailActivity.this);
                 }
             });
             rvTrailers.setHasFixedSize(true);
@@ -235,27 +218,6 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
             rvTrailers.setVisibility(View.GONE);
             tvNoTrailer.setVisibility(View.VISIBLE);
         }
-    }
-
-    private void viewTrailer(Trailers trailers) {
-        String trailerLink = String.format(YOUTUBE_TRAILER_BASE_URL, trailers.getKey());
-        Intent videoPlayerIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(trailerLink));
-        if (videoPlayerIntent.resolveActivity(getPackageManager()) != null) {
-            startActivity(videoPlayerIntent);
-        }
-    }
-
-    private void shareTrailerLink(Trailers trailers) {
-        String trailerLink = String.format(YOUTUBE_TRAILER_BASE_URL, trailers.getKey());
-        String mimeType = "text/plain";
-        String title = getString(R.string.label_share);
-        ShareCompat
-                .IntentBuilder
-                .from(MovieDetailActivity.this)
-                .setType(mimeType)
-                .setChooserTitle(title)
-                .setText("Check Out This Trailer \n" + trailerLink + " \n For More Reviews and Trailers,check out Smoovie at {Smoovie Google Play Link Here} ")
-                .startChooser();
     }
 
     public void setStatusBarColorFromBackdrop(final String url) {
@@ -281,11 +243,6 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     }
 
     @Override
-    public void loading() {
-
-    }
-
-    @Override
     public void complete(final Movie movie) {
         setStatusBarColorFromBackdrop(BACKDROP_BASE_URL + movie.getBackdrop());
         Picasso.with(MovieDetailActivity.this)
@@ -302,7 +259,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
         ivFavourites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                favOperations(movie);
+                detailViewModel.favouriteMovie(movie);
             }
         });
     }
