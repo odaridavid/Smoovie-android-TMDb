@@ -15,7 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -62,7 +61,6 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     private final String KEY_MOVIE_PERSISTENCE = "movie";
 
 //    TODO 1.(Detail Activity) - Build Material Designed UI,Refactor Existing UI,Add Shimmer Effect
-//    TODO 2.(Detail Activity) - Save Movie or Remove  Movie from favourites
 //    TODO 3.(Detail Activity) - Ensures Content is loaded by language from shared pref
 
     @BindView(R.id.toolbar_details)
@@ -97,7 +95,6 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     private Movie mMovie;
     private DetailViewModel detailViewModel;
     private boolean mIsFavourite;
-    private Movie mTest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +116,6 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
         checkIfFavourite(mMovieId);
         if (savedInstanceState != null) {
             mMovie = Parcels.unwrap(savedInstanceState.getParcelable(KEY_MOVIE_PERSISTENCE));
-            Log.d(MovieDetailActivity.class.getSimpleName(), "Saved Instance: " + mMovie.toString());
             complete(mMovie);
         } else {
             if (!mIsFavourite) {
@@ -165,13 +161,6 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     }
 
     private void favOperations(@NonNull final Movie movies) {
-//        detailViewModel.getFav(movies.getMovieId()).observe(this, new Observer<Movie>() {
-//            @Override
-//            public void onChanged(@Nullable Movie movie) {
-//                detailViewModel.favouriteMovie(movie);
-//            }
-//        });
-        Log.d("Movie", String.valueOf(movies));
         detailViewModel.favouriteMovie(movies);
     }
 

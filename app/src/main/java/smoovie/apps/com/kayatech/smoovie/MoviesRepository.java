@@ -59,11 +59,10 @@ public final class MoviesRepository {
     }
 
     public void favouriteMovieOps(final Movie movie) {
-//        TODO Fix Saving and removing fav movies
         mThreadAppExecutors.diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                if (getSpecificFavouriteMovie(movie.getMovieId()) != null) {
+                if (mMovieDao.checkForFavs(movie.getMovieId(), movie.getMovieTitle()) != null) {
                     mMovieDao.removeFromFavourites(movie);
                     Log.d(TAG, "Movie Deleted");
                 } else {

@@ -30,4 +30,7 @@ public interface IFavouriteMovieDao {
     @Query("SELECT * FROM favourite_movie WHERE movie_id = :id")
     LiveData<Movie> loadById(int id);
 
+    @Query("SELECT * FROM favourite_movie WHERE movie_id = :id AND movie_title = :title")
+    Movie checkForFavs(int id, String title);
+
 }
