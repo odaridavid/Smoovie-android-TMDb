@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cv_movie"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/size_height"
+    android:layout_height="wrap_content"
     android:layout_margin="4dp"
     android:focusable="true"
     app:cardCornerRadius="8dp"
