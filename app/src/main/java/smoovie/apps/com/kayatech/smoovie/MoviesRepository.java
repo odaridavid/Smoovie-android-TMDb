@@ -21,8 +21,7 @@ import smoovie.apps.com.kayatech.smoovie.util.threads.AppExecutors;
  **/
 public final class MoviesRepository {
 
-//    TODO 1.(MoviesRepository) - Use MutableLiveData with Network Calls and set Value
-
+    //    TODO 1.(MoviesRepository) - Use MutableLiveData with Network Calls and set Value
     private static MoviesRepository sMoviesRepository;
     private MovieApiServices mMovieApiServices;
     private IFavouriteMovieDao mMovieDao;
@@ -41,7 +40,6 @@ public final class MoviesRepository {
         mMovieDao = movieDao;
         mThreadAppExecutors = threadAppExecutors;
         this.language = language;
-
     }
 
     public synchronized static MoviesRepository getInstance(IFavouriteMovieDao movieDao, MovieApiServices movieApiServices, AppExecutors threadAppExecutors, String language) {
@@ -79,40 +77,52 @@ public final class MoviesRepository {
     public MovieListResponse getMovies(Category category, final int page) {
         switch (category) {
             case POPULAR:
-                try {
-                    mMovieListResponse = mMovieApiServices
-                            .getPopularMovies(BuildConfig.API_KEY, language, page)
-                            .execute()
-                            .body();
-                    Log.d(TAG, "Popular Movies Loaded");
-                } catch (IOException e) {
-                    Log.e(TAG, e.getMessage());
-                }
+                loadPopularMovies(page);
                 break;
             case UPCOMING:
-                try {
-                    mMovieListResponse = mMovieApiServices
-                            .getUpcomingMovies(BuildConfig.API_KEY, language, page)
-                            .execute()
-                            .body();
-                    Log.d(TAG, "Top Rated Movies Loaded");
-                } catch (IOException e) {
-                    Log.e(TAG, e.getMessage());
-                }
+                loadUpcomingMovies(page);
                 break;
             case TOP_RATED:
-                try {
-                    mMovieListResponse = mMovieApiServices
-                            .getTopRatedMovies(BuildConfig.API_KEY, language, page)
-                            .execute()
-                            .body();
-                    Log.d(TAG, "Upcoming Movies Loaded");
-                } catch (IOException e) {
-                    Log.e(TAG, e.getMessage());
-                }
+                loadTopRatedMovies(page);
                 break;
         }
         return mMovieListResponse != null ? mMovieListResponse : new MovieListResponse();
+    }
+
+    private void loadTopRatedMovies(int page) {
+        try {
+            mMovieListResponse = mMovieApiServices
+                    .getTopRatedMovies(BuildConfig.API_KEY, language, page)
+                    .execute()
+                    .body();
+            Log.d(TAG, "Upcoming Movies Loaded");
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage());
+        }
+    }
+
+    private void loadUpcomingMovies(int page) {
+        try {
+            mMovieListResponse = mMovieApiServices
+                    .getUpcomingMovies(BuildConfig.API_KEY, language, page)
+                    .execute()
+                    .body();
+            Log.d(TAG, "Top Rated Movies Loaded");
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage());
+        }
+    }
+
+    private void loadPopularMovies(int page) {
+        try {
+            mMovieListResponse = mMovieApiServices
+                    .getPopularMovies(BuildConfig.API_KEY, language, page)
+                    .execute()
+                    .body();
+            Log.d(TAG, "Popular Movies Loaded");
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     public Movie getMovieDetails(final int movieId) {
