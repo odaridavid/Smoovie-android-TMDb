@@ -11,5 +11,6 @@ public final class Constants {
     //    Intent
     public static final String KEY_MOVIE_ID = "movie";
     public static final String KEY_MOVIE_POSTER = "movie_poster";
+    public static final String KEY_MOVIE_IS_FAVOURITE = "favourite";
 
 }

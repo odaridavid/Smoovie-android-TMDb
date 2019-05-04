@@ -22,7 +22,7 @@ public final class MovieNetworkLite implements IMovie {
     @SerializedName("id")
     private int movieId;
 
-    public MovieNetworkLite() {
+    MovieNetworkLite() {
     }
 
     public MovieNetworkLite(float voterAverage, String moviePoster, int movieId) {
@@ -41,6 +41,7 @@ public final class MovieNetworkLite implements IMovie {
         return moviePoster;
     }
 
+    @Override
     public int getMovieId() {
         return movieId;
     }

@@ -28,8 +28,6 @@ public interface IFavouriteMovieDao {
     void removeFromFavourites(Movie movie);
 
     @Query("SELECT * FROM favourite_movie WHERE movie_id = :id")
-    LiveData<List<Movie>> loadById(int id);
+    LiveData<Movie> loadById(int id);
 
-    @Query("SELECT * FROM favourite_movie WHERE movie_title = :movieTitle")
-    LiveData<List<Movie>> loadByTitle(String movieTitle);
 }

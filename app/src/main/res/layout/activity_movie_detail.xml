@@ -89,7 +89,7 @@
                 tools:text="@string/movie_title_dummy_text" />
 
             <ImageView
-                android:id="@+id/iv_favcon"
+                android:id="@+id/image_view_favourites"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/size_default"

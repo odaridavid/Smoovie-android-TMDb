@@ -4,7 +4,6 @@ package smoovie.apps.com.kayatech.smoovie.model;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -12,7 +11,7 @@ import org.parceler.Parcel;
 
 import java.util.List;
 
-@Entity(tableName = "favourite_movie")
+@Entity(tableName = "favourite_movie", primaryKeys = {"movie_id"})
 @Parcel(Parcel.Serialization.BEAN)
 public class Movie implements IMovie {
 
@@ -43,10 +42,6 @@ public class Movie implements IMovie {
     @ColumnInfo(name = "movie_id")
     @SerializedName("id")
     private int movieId;
-
-    @ColumnInfo(name = "_id")
-    @PrimaryKey(autoGenerate = true)
-    private int _id;
 
     @ColumnInfo(name = "favourite")
     private boolean isFavourite;
@@ -129,6 +124,7 @@ public class Movie implements IMovie {
         return backdrop;
     }
 
+    @Override
     public int getMovieId() {
         return movieId;
     }
@@ -161,13 +157,5 @@ public class Movie implements IMovie {
         int result = String.valueOf(getMovieId()).hashCode();
         result = 31 * result + getMovieTitle().hashCode();
         return result;
-    }
-
-    public int get_id() {
-        return _id;
-    }
-
-    public void set_id(int _id) {
-        this._id = _id;
     }
 }

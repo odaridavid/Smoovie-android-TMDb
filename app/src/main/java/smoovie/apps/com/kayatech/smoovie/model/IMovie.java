@@ -9,5 +9,7 @@ public interface IMovie {
     String getMoviePoster();
 
     float getVoterAverage();
+
+    int getMovieId();
 }
 

@@ -54,32 +54,24 @@ public final class MoviesRepository {
         return mMovieDao.loadAll();
     }
 
-    public LiveData<List<Movie>> getSpecificFavouriteMovieById(int id) {
+    public LiveData<Movie> getSpecificFavouriteMovie(int id) {
         return mMovieDao.loadById(id);
     }
 
-    public LiveData<List<Movie>> getSpecificFavouriteMovieByTitle(String title) {
-        return mMovieDao.loadByTitle(title);
-    }
-
-    public void addToFavouriteMovies(final Movie movie) {
+    public void favouriteMovieOps(final Movie movie) {
+//        TODO Fix Saving and removing fav movies
         mThreadAppExecutors.diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                mMovieDao.addToFavourites(movie);
+                if (getSpecificFavouriteMovie(movie.getMovieId()) != null) {
+                    mMovieDao.removeFromFavourites(movie);
+                    Log.d(TAG, "Movie Deleted");
+                } else {
+                    mMovieDao.addToFavourites(movie);
+                    Log.d(TAG, "Movie Saved");
+                }
             }
         });
-        Log.d(TAG, "Movie Saved");
-    }
-
-    public void removeFromFavouriteMovies(final Movie movie) {
-        mThreadAppExecutors.diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mMovieDao.removeFromFavourites(movie);
-            }
-        });
-        Log.d(TAG, "Movie Deleted");
     }
 
     public MovieListResponse getMovies(Category category, final String language, final int page) {

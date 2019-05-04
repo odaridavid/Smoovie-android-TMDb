@@ -13,6 +13,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +28,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import smoovie.apps.com.kayatech.smoovie.R;
 import smoovie.apps.com.kayatech.smoovie.model.Category;
+import smoovie.apps.com.kayatech.smoovie.model.IMovie;
 import smoovie.apps.com.kayatech.smoovie.model.Movie;
 import smoovie.apps.com.kayatech.smoovie.model.MovieNetworkLite;
 import smoovie.apps.com.kayatech.smoovie.ui.detail.MovieDetailActivity;
@@ -44,9 +46,11 @@ import smoovie.apps.com.kayatech.smoovie.util.SmooviePosterImageView;
 import smoovie.apps.com.kayatech.smoovie.util.ViewUtils;
 
 import static smoovie.apps.com.kayatech.smoovie.util.Constants.KEY_MOVIE_ID;
+import static smoovie.apps.com.kayatech.smoovie.util.Constants.KEY_MOVIE_IS_FAVOURITE;
 import static smoovie.apps.com.kayatech.smoovie.util.Constants.KEY_MOVIE_POSTER;
 
-public class MainActivity extends AppCompatActivity implements MovieListCallBack, FavouriteMoviesCallback, MoviesAdapter.IMovieClickHandler {
+public class MainActivity extends AppCompatActivity implements MovieListCallBack, FavouriteMoviesCallback,
+        MoviesAdapter.IMovieClickHandler {
 
 //    TODO 1.(Main Activity) - Shared Preferences Sync with language Selection
 //    TODO 2.(Main Activity) - Endless Scrolling,Pagination
@@ -94,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements MovieListCallBack
 
     private void bindFavouriteMovies(List<Movie> favouriteMovies) {
         if (favouriteMovies.isEmpty()) {
+            Log.d("Empty", "");
             removeMessageInfo(tvInfoMessage);
             showDefaultFavMessage();
         } else {
@@ -218,12 +223,14 @@ public class MainActivity extends AppCompatActivity implements MovieListCallBack
     }
 
     @Override
-    public void viewMovieDetails(MovieNetworkLite movie, SmooviePosterImageView view) {
+    public void viewMovieDetails(IMovie movie, SmooviePosterImageView view, boolean isFavourite) {
         Intent vIntent = new Intent(this, MovieDetailActivity.class);
         vIntent.putExtra(KEY_MOVIE_ID, movie.getMovieId());
         vIntent.putExtra(KEY_MOVIE_POSTER, movie.getMoviePoster());
+        vIntent.putExtra(KEY_MOVIE_IS_FAVOURITE, isFavourite);
         ActivityOptionsCompat options = ActivityOptionsCompat.
                 makeSceneTransitionAnimation(this, view, ViewCompat.getTransitionName(view));
         startActivity(vIntent, options.toBundle());
     }
+
 }

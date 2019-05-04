@@ -1,10 +1,13 @@
 package smoovie.apps.com.kayatech.smoovie.ui.detail;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.content.ContextCompat;
@@ -16,6 +19,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -47,6 +51,7 @@ import smoovie.apps.com.kayatech.smoovie.util.threads.AppExecutors;
 
 import static smoovie.apps.com.kayatech.smoovie.util.Constants.BACKDROP_BASE_URL;
 import static smoovie.apps.com.kayatech.smoovie.util.Constants.KEY_MOVIE_ID;
+import static smoovie.apps.com.kayatech.smoovie.util.Constants.KEY_MOVIE_IS_FAVOURITE;
 import static smoovie.apps.com.kayatech.smoovie.util.Constants.KEY_MOVIE_POSTER;
 import static smoovie.apps.com.kayatech.smoovie.util.Constants.POSTER_BASE_URL;
 import static smoovie.apps.com.kayatech.smoovie.util.Constants.YOUTUBE_TRAILER_BASE_URL;
@@ -84,43 +89,94 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     TextView tvNoReview;
     @BindView(R.id.tv_no_trailer)
     TextView tvNoTrailer;
+    @BindView(R.id.image_view_favourites)
+    ImageView ivFavourites;
 
     private int mMovieId;
     private String mMoviePoster;
     private Movie mMovie;
+    private DetailViewModel detailViewModel;
+    private boolean mIsFavourite;
+    private Movie mTest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
         ButterKnife.bind(this);
-        setSupportActionBar(mToolbar);
         supportPostponeEnterTransition();
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }
+        setupToolBar();
         vSmooviePosterImageView.setTransitionName("poster");
         Intent intent = getIntent();
         if (intent.getExtras() != null) {
             mMovieId = intent.getExtras().getInt(KEY_MOVIE_ID, -1);
             mMoviePoster = intent.getStringExtra(KEY_MOVIE_POSTER);
+            mIsFavourite = intent.getBooleanExtra(KEY_MOVIE_IS_FAVOURITE, false);
         }
         posterImageTransition();
         DetailViewModelFactory vDetailViewModelFactory = InjectorUtils.provideDetailViewModelFactory(this);
-        DetailViewModel mDetailViewModel = ViewModelProviders.of(this, vDetailViewModelFactory).get(DetailViewModel.class);
+        detailViewModel = ViewModelProviders.of(this, vDetailViewModelFactory).get(DetailViewModel.class);
+        checkIfFavourite(mMovieId);
         if (savedInstanceState != null) {
             mMovie = Parcels.unwrap(savedInstanceState.getParcelable(KEY_MOVIE_PERSISTENCE));
             Log.d(MovieDetailActivity.class.getSimpleName(), "Saved Instance: " + mMovie.toString());
             complete(mMovie);
         } else {
-            Log.d(MovieDetailActivity.class.getSimpleName(), "Network");
-            loadMovie(mDetailViewModel);
+            if (!mIsFavourite) {
+                loadMovieDetailsFromNetwork(detailViewModel);
+            } else {
+                loadMovieDetailsFromCache();
+            }
         }
     }
 
-    private void loadMovie(DetailViewModel mDetailViewModel) {
+    private void loadMovieDetailsFromCache() {
+        detailViewModel.getFav(mMovieId).observe(this, new Observer<Movie>() {
+            @Override
+            public void onChanged(@Nullable Movie movie) {
+                if (movie != null) {
+                    mMovie = movie;
+                    complete(mMovie);
+                }
+            }
+        });
+    }
+
+    private void setupToolBar() {
+        setSupportActionBar(mToolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+    }
+
+    private void checkIfFavourite(int movieId) {
+        detailViewModel.getFav(movieId).observe(this, new Observer<Movie>() {
+            @Override
+            public void onChanged(@Nullable Movie movie) {
+                if (movie != null) {
+                    ivFavourites.setImageDrawable(getDrawable(R.drawable.ic_favorite_true));
+                } else {
+                    ivFavourites.setImageDrawable(getDrawable(R.drawable.ic_favorite_false));
+                }
+            }
+        });
+    }
+
+    private void favOperations(@NonNull final Movie movies) {
+//        detailViewModel.getFav(movies.getMovieId()).observe(this, new Observer<Movie>() {
+//            @Override
+//            public void onChanged(@Nullable Movie movie) {
+//                detailViewModel.favouriteMovie(movie);
+//            }
+//        });
+        Log.d("Movie", String.valueOf(movies));
+        detailViewModel.favouriteMovie(movies);
+    }
+
+
+    private void loadMovieDetailsFromNetwork(DetailViewModel mDetailViewModel) {
         new MovieDetailsAsyncTask(mDetailViewModel, "en-US", this).execute(mMovieId);
     }
 
@@ -240,7 +296,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     }
 
     @Override
-    public void complete(Movie movie) {
+    public void complete(final Movie movie) {
         setStatusBarColorFromBackdrop(BACKDROP_BASE_URL + movie.getBackdrop());
         Picasso.with(MovieDetailActivity.this)
                 .load(BACKDROP_BASE_URL + movie.getBackdrop())
@@ -253,5 +309,11 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
         setupTrailers(movie.getTrailers());
         setupReviews(movie.getReviews());
         mMovie = movie;
+        ivFavourites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                favOperations(movie);
+            }
+        });
     }
 }

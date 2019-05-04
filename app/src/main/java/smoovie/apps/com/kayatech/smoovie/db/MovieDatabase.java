@@ -9,7 +9,7 @@ import android.util.Log;
 import smoovie.apps.com.kayatech.smoovie.db.dao.IFavouriteMovieDao;
 import smoovie.apps.com.kayatech.smoovie.model.Movie;
 
-@Database(entities = {Movie.class}, version = 3, exportSchema = false)
+@Database(entities = {Movie.class}, version = 4, exportSchema = false)
 public abstract class MovieDatabase extends RoomDatabase {
 
     private static final String TAG = MovieDatabase.class.getSimpleName();

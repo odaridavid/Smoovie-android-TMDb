@@ -28,7 +28,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     private IMovieClickHandler mIMovieClickHandler;
     private List<Movie> favouriteMovie;
 
-    public MoviesAdapter(List<MovieNetworkLite> movies, List<Movie> favMovies, IMovieClickHandler IMovieClickHandler) {
+    public MoviesAdapter(List<MovieNetworkLite> movies,
+                         List<Movie> favMovies,
+                         IMovieClickHandler IMovieClickHandler) {
+
         this.mMovieList = movies;
         mIMovieClickHandler = IMovieClickHandler;
         favouriteMovie = favMovies;
@@ -54,13 +57,16 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
 
     @Override
     public int getItemCount() {
-        return (mMovieList == null) ? 0 : mMovieList.size();
+        if (mMovieList != null)
+            return mMovieList.size();
+        else
+            return favouriteMovie.size();
     }
 
 
     public class MoviesViewHolder extends RecyclerView.ViewHolder {
 
-        MovieNetworkLite movie;
+        IMovie movie;
         @BindView(R.id.iv_poster_image)
         SmooviePosterImageView mPosterImage;
         @BindView(R.id.tv_rating_cardlabel)
@@ -69,13 +75,23 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         MoviesViewHolder(final View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    movie = mMovieList.get(getAdapterPosition());
-                    mIMovieClickHandler.viewMovieDetails(movie, mPosterImage);
-                }
-            });
+            if (mMovieList != null)
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        movie = mMovieList.get(getAdapterPosition());
+                        mIMovieClickHandler.viewMovieDetails(movie, mPosterImage, false);
+                    }
+                });
+            else
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        movie = favouriteMovie.get(getAdapterPosition());
+                        mIMovieClickHandler.viewMovieDetails(movie, mPosterImage, true);
+                    }
+                });
+
         }
 
         private void bind(IMovie movie) {
@@ -91,6 +107,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     }
 
     public interface IMovieClickHandler {
-        void viewMovieDetails(MovieNetworkLite movie, SmooviePosterImageView view);
+        void viewMovieDetails(IMovie movie, SmooviePosterImageView view, boolean isFavourite);
     }
+
 }
