@@ -2,10 +2,15 @@ package smoovie.apps.com.kayatech.smoovie.util;
 
 public final class Constants {
 
-    public static final String KEY_MOVIE = "movie";
-    public static final String KEY_MOVIE_REVIEWS = "reviews";
-    public static final String KEY_MOVIE_VIDEOS = "videos";
-    public static final String KEY_MOVIE_REVIEW_PAGE = "page";
-    public static final String MOVIE_ID = "movie_id";
-    public static final String MOVIE_ID_ROOM_DB = "movie_id_db";
+    public static String LANGUAGE = "en-US";
+
+    public static final String TMDB_BASE_URL = "https://api.themoviedb.org/3/";
+    public static final String POSTER_BASE_URL = "http://image.tmdb.org/t/p/w185";
+    public static final String BACKDROP_BASE_URL = "http://image.tmdb.org/t/p/w780";
+    public static final String YOUTUBE_TRAILER_BASE_URL = "http://www.youtube.com/watch?v=%s";
+    //    Intent
+    public static final String KEY_MOVIE_ID = "movie";
+    public static final String KEY_MOVIE_POSTER = "movie_poster";
+    public static final String KEY_MOVIE_IS_FAVOURITE = "favourite";
+
 }

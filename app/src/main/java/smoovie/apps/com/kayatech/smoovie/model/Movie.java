@@ -4,17 +4,17 @@ package smoovie.apps.com.kayatech.smoovie.model;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
 
-@Entity(tableName = "favourite_movie")
+import java.util.List;
+
+@Entity(tableName = "favourite_movie", primaryKeys = {"movie_id"})
 @Parcel(Parcel.Serialization.BEAN)
-public class Movie {
-    //model class to map json data to pojo
-    //Movie GET Class objects from tmdb
+public class Movie implements IMovie {
+
     @ColumnInfo(name = "movie_title")
     @SerializedName("original_title")
     private String movieTitle;
@@ -39,13 +39,18 @@ public class Movie {
     @SerializedName("backdrop_path")
     private String backdrop;
 
-    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "movie_id")
     @SerializedName("id")
     private int movieId;
 
-
     @ColumnInfo(name = "favourite")
     private boolean isFavourite;
+
+    @Ignore
+    private List<Reviews> mReviews;
+
+    @Ignore
+    private List<Trailers> mTrailers;
 
     @Ignore
     public Movie() {
@@ -73,12 +78,24 @@ public class Movie {
         this.isFavourite = isFavourite;
     }
 
-    public boolean isFavourite() {
-        return isFavourite;
+    public List<Reviews> getReviews() {
+        return mReviews;
     }
 
-    public void isFavourite(boolean isFavourite) {
-        this.isFavourite = isFavourite;
+    public void setReviews(List<Reviews> reviews) {
+        mReviews = reviews;
+    }
+
+    public List<Trailers> getTrailers() {
+        return mTrailers;
+    }
+
+    public void setTrailers(List<Trailers> trailers) {
+        mTrailers = trailers;
+    }
+
+    public boolean isFavourite() {
+        return isFavourite;
     }
 
     public String getMovieTitle() {
@@ -93,10 +110,12 @@ public class Movie {
         return movieReleaseDate;
     }
 
+    @Override
     public String getMoviePoster() {
         return moviePoster;
     }
 
+    @Override
     public float getVoterAverage() {
         return voterAverage;
     }
@@ -105,11 +124,35 @@ public class Movie {
         return backdrop;
     }
 
+    @Override
     public int getMovieId() {
         return movieId;
     }
 
-    public void setMovieId(int movieId) {
-        this.movieId = movieId;
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "movieTitle='" + movieTitle + '\'' +
+                ", movieReleaseDate='" + movieReleaseDate + '\'' +
+                ", voterAverage=" + voterAverage +
+                ", movieId=" + movieId +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object vo) {
+        if (this == vo) return true;
+        if (vo == null || getClass() != vo.getClass()) return false;
+        Movie vvMovie = (Movie) vo;
+        return getMovieId() == vvMovie.getMovieId() &&
+                getMovieTitle().equals(vvMovie.getMovieTitle());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = String.valueOf(getMovieId()).hashCode();
+        result = 31 * result + getMovieTitle().hashCode();
+        return result;
     }
 }

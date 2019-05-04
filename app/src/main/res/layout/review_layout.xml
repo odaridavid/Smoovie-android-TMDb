@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/DetailViewMarginStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    app:contentPadding="@dimen/size_small">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_reviews_author"
+            style="@style/DetailViewMarginStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="parent"
+            tools:text="@string/movie_author_reviews_dummy_text" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_marginStart="@dimen/size_small"
+            android:layout_marginEnd="@dimen/size_small"
+            android:layout_marginBottom="@dimen/size_small"
+            android:background="@color/colorAccent" />
+
+        <TextView
+            android:id="@+id/tv_reviews_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_default"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_reviews_author"
+            tools:text="@string/movie_content_reviews_dummy_text" />
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView>

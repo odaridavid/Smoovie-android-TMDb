@@ -5,73 +5,62 @@
     android:id="@+id/coordinator_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.MainActivity">
+    tools:context=".ui.main.MainActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/action_toolbar_main"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:elevation="@dimen/size_small"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="?actionBarSize"
+        android:fitsSystemWindows="true">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_movies"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_main"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            app:layout_collapseMode="pin"
+            app:titleTextColor="@color/colorWhite" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/size_extra_large"
-        android:layoutAnimation="@anim/layout_animation_main"
-        android:scrollbars="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/action_toolbar_main" />
+        android:orientation="vertical"
+        app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
-    <ProgressBar
-        android:id="@+id/pb_getmovie_progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_movies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:layoutAnimation="@anim/layout_animation_main"
+            android:scrollbars="vertical" />
 
-    <TextView
-        android:id="@+id/tv_error_message_display"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:padding="@dimen/size_medium"
-        android:text="@string/error_network_message"
-        android:textSize="15sp"
-        android:visibility="invisible" />
-
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center">
-
-        <ImageView
-            android:id="@+id/iv_favcon_view_default"
-            android:layout_width="@dimen/video_width"
-            android:layout_height="@dimen/video_width"
-            android:layout_gravity="center"
-            android:contentDescription="@string/label_content_description"
-            android:src="@drawable/ic_favorite_true"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <ProgressBar
+            android:id="@+id/progressbar_movies_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
 
         <TextView
-            android:id="@+id/tv_fav_default"
+            android:id="@+id/text_view_info_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:text="@string/error_network_message"
+            android:textAlignment="center"
+            android:textSize="15sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/text_view_favourites_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
             android:text="@string/default_favs"
-            android:textSize="18sp"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/iv_favcon_view_default" />
-    </android.support.constraint.ConstraintLayout>
-
-
+            android:textAlignment="center"
+            android:textSize="15sp"
+            android:visibility="gone" />
+    </FrameLayout>
 </android.support.design.widget.CoordinatorLayout>

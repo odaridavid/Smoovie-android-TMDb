@@ -12,7 +12,6 @@ import okhttp3.Response;
 public class LoggingInterceptor implements Interceptor {
     private final String TAG = LoggingInterceptor.class.getSimpleName();
 
-    //logs the outgoing request and the incoming response.
     @Override
     public Response intercept(@NonNull Interceptor.Chain chain) throws IOException {
         Request request = chain.request();

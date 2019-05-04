@@ -3,7 +3,7 @@
 
     <!--Main Menu Sort By-->
     <string name="action_sort_most_popular">Most Popular</string>
-    <string name="action_sort_high_ratings">High Ratings</string>
+    <string name="action_sort_top_rated">Top Rated</string>
     <string name="action_sort_upcoming">Upcoming</string>
     <string name="action_sort_favourites">Favourites</string>
 
