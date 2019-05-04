@@ -5,12 +5,9 @@ import android.os.AsyncTask;
 import java.util.List;
 
 import smoovie.apps.com.kayatech.smoovie.model.Category;
-import smoovie.apps.com.kayatech.smoovie.model.Movie;
 import smoovie.apps.com.kayatech.smoovie.model.MovieNetworkLite;
 import smoovie.apps.com.kayatech.smoovie.ui.main.callbacks.MovieListCallBack;
 import smoovie.apps.com.kayatech.smoovie.ui.main.viewmodel.MainViewModel;
-
-import static smoovie.apps.com.kayatech.smoovie.util.Constants.LANGUAGE;
 
 /**
  * Created By blackcoder
@@ -38,7 +35,7 @@ public final class MovieListAsync extends AsyncTask<Void, Void, List<MovieNetwor
 //                TODO Load Language From Preferences
 //                TODO Add Pagination on Scrolling page to page
 //                TODO Sort By Category
-        return mMainViewModel.getMovies(mCategory, LANGUAGE, 1);
+        return mMainViewModel.getMovies(mCategory, 1);
     }
 
     @Override

@@ -16,14 +16,12 @@ import smoovie.apps.com.kayatech.smoovie.ui.detail.viewmodel.DetailViewModel;
 public final class MovieDetailsAsyncTask extends AsyncTask<Integer, Void, Movie> {
 
     private DetailViewModel mDetailViewModel;
-    private String lang;
     private MovieDetailsCallBack mMovieDetailsCallBack;
     private List<Trailers> trailers;
     private List<Reviews> reviews;
 
-    public MovieDetailsAsyncTask(DetailViewModel detailViewModel, String language, MovieDetailsCallBack movieDetailsCallBack) {
+    public MovieDetailsAsyncTask(DetailViewModel detailViewModel, MovieDetailsCallBack movieDetailsCallBack) {
         mDetailViewModel = detailViewModel;
-        lang = language;
         mMovieDetailsCallBack = movieDetailsCallBack;
         trailers = null;
         reviews = null;
@@ -37,9 +35,9 @@ public final class MovieDetailsAsyncTask extends AsyncTask<Integer, Void, Movie>
 
     @Override
     protected Movie doInBackground(Integer... integers) {
-        Movie vMovie = mDetailViewModel.getMovieDetails(integers[0], lang);
-        reviews = mDetailViewModel.getMovieReviewsResponse(integers[0], lang).getReviews();
-        trailers = mDetailViewModel.getMovieTrailersResponse(integers[0], lang).getTrailers();
+        Movie vMovie = mDetailViewModel.getMovieDetails(integers[0]);
+        reviews = mDetailViewModel.getMovieReviewsResponse(integers[0]).getReviews();
+        trailers = mDetailViewModel.getMovieTrailersResponse(integers[0]).getTrailers();
         vMovie.setReviews(reviews);
         vMovie.setTrailers(trailers);
         return vMovie;

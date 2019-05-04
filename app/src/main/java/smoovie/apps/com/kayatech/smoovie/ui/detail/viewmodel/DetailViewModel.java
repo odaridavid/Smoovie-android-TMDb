@@ -19,19 +19,19 @@ public final class DetailViewModel extends ViewModel {
         mMoviesRepository = moviesRepository;
     }
 
-    public Movie getMovieDetails(int movieId, String language) {
+    public Movie getMovieDetails(int movieId) {
         return mMoviesRepository
-                .getMovieDetails(movieId, language);
+                .getMovieDetails(movieId);
     }
 
-    public MovieTrailerResponse getMovieTrailersResponse(int movieId, String language) {
+    public MovieTrailerResponse getMovieTrailersResponse(int movieId) {
         return mMoviesRepository
-                .getMovieTrailers(movieId, language);
+                .getMovieTrailers(movieId);
     }
 
-    public MovieReviewResponse getMovieReviewsResponse(int movieId, String language) {
+    public MovieReviewResponse getMovieReviewsResponse(int movieId) {
         return mMoviesRepository
-                .getMovieReviews(movieId, language);
+                .getMovieReviews(movieId);
     }
 
     public void favouriteMovie(Movie movie) {

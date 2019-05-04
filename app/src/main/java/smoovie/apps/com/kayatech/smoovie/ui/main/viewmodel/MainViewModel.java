@@ -22,9 +22,9 @@ public final class MainViewModel extends ViewModel {
         mMoviesRepository = moviesRepository;
     }
 
-    public List<MovieNetworkLite> getMovies(Category category, String language, int page) {
+    public List<MovieNetworkLite> getMovies(Category category, int page) {
         MovieListResponse vMovieListResponse = mMoviesRepository
-                .getMovies(category, language, page);
+                .getMovies(category, page);
         return page <= vMovieListResponse.getTotalPages() ? vMovieListResponse.getMoviesResult() : null;
     }
 

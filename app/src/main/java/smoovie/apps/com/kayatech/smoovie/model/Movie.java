@@ -129,9 +129,6 @@ public class Movie implements IMovie {
         return movieId;
     }
 
-    void setMovieId(int movieId) {
-        this.movieId = movieId;
-    }
 
     @Override
     public String toString() {

@@ -33,18 +33,21 @@ public final class MoviesRepository {
     private final String TAG = MoviesRepository.class.getSimpleName();
     private MovieReviewResponse mMovieReviewResponse;
     private MovieTrailerResponse mMMovieTrailerResponse;
+    private String language;
 
 
-    private MoviesRepository(MovieApiServices movieApiServices, IFavouriteMovieDao movieDao, AppExecutors threadAppExecutors) {
+    private MoviesRepository(MovieApiServices movieApiServices, IFavouriteMovieDao movieDao, AppExecutors threadAppExecutors, String language) {
         mMovieApiServices = movieApiServices;
         mMovieDao = movieDao;
         mThreadAppExecutors = threadAppExecutors;
+        this.language = language;
+
     }
 
-    public synchronized static MoviesRepository getInstance(IFavouriteMovieDao movieDao, MovieApiServices movieApiServices, AppExecutors threadAppExecutors) {
+    public synchronized static MoviesRepository getInstance(IFavouriteMovieDao movieDao, MovieApiServices movieApiServices, AppExecutors threadAppExecutors, String language) {
         if (sMoviesRepository == null) {
             synchronized (LOCK) {
-                sMoviesRepository = new MoviesRepository(movieApiServices, movieDao, threadAppExecutors);
+                sMoviesRepository = new MoviesRepository(movieApiServices, movieDao, threadAppExecutors, language);
             }
         }
         return sMoviesRepository;
@@ -73,7 +76,7 @@ public final class MoviesRepository {
         });
     }
 
-    public MovieListResponse getMovies(Category category, final String language, final int page) {
+    public MovieListResponse getMovies(Category category, final int page) {
         switch (category) {
             case POPULAR:
                 try {
@@ -112,7 +115,7 @@ public final class MoviesRepository {
         return mMovieListResponse != null ? mMovieListResponse : new MovieListResponse();
     }
 
-    public Movie getMovieDetails(final int movieId, final String language) {
+    public Movie getMovieDetails(final int movieId) {
         try {
             mMovie = mMovieApiServices
                     .getMovie(movieId, BuildConfig.API_KEY, language)
@@ -129,7 +132,7 @@ public final class MoviesRepository {
         return mMovie;
     }
 
-    public MovieReviewResponse getMovieReviews(final int movieId, final String language) {
+    public MovieReviewResponse getMovieReviews(final int movieId) {
         try {
             mMovieReviewResponse = mMovieApiServices
                     .getMovieReviews(movieId, BuildConfig.API_KEY, language)
@@ -142,7 +145,7 @@ public final class MoviesRepository {
         return mMovieReviewResponse != null ? mMovieReviewResponse : new MovieReviewResponse();
     }
 
-    public MovieTrailerResponse getMovieTrailers(final int movieId, final String language) {
+    public MovieTrailerResponse getMovieTrailers(final int movieId) {
         try {
             mMMovieTrailerResponse = mMovieApiServices
                     .getMovieTrailers(movieId, BuildConfig.API_KEY, language)

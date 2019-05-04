@@ -4,6 +4,7 @@ package smoovie.apps.com.kayatech.smoovie.ui.main;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -13,7 +14,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,7 +50,7 @@ import static smoovie.apps.com.kayatech.smoovie.util.Constants.KEY_MOVIE_IS_FAVO
 import static smoovie.apps.com.kayatech.smoovie.util.Constants.KEY_MOVIE_POSTER;
 
 public class MainActivity extends AppCompatActivity implements MovieListCallBack, FavouriteMoviesCallback,
-        MoviesAdapter.IMovieClickHandler {
+        MoviesAdapter.IMovieClickHandler, SharedPreferences.OnSharedPreferenceChangeListener {
 
 //    TODO 1.(Main Activity) - Shared Preferences Sync with language Selection
 //    TODO 2.(Main Activity) - Endless Scrolling,Pagination
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements MovieListCallBack
         ButterKnife.bind(this);
         Toolbar vTbMain = findViewById(R.id.toolbar_main);
         setSupportActionBar(vTbMain);
-        MainViewModelFactory vMainViewModelFactory = InjectorUtils.provideMainViewModelFactory(this);
+        MainViewModelFactory vMainViewModelFactory = InjectorUtils.provideMainViewModelFactory(this, this);
         mMainViewModel = ViewModelProviders.of(this, vMainViewModelFactory).get(MainViewModel.class);
 
         if (savedInstanceState != null && savedInstanceState.containsKey(KEY_MOVIE_LIST_PERSISTENCE)) {
@@ -98,7 +98,6 @@ public class MainActivity extends AppCompatActivity implements MovieListCallBack
 
     private void bindFavouriteMovies(List<Movie> favouriteMovies) {
         if (favouriteMovies.isEmpty()) {
-            Log.d("Empty", "");
             removeMessageInfo(tvInfoMessage);
             showDefaultFavMessage();
         } else {
@@ -233,4 +232,13 @@ public class MainActivity extends AppCompatActivity implements MovieListCallBack
         startActivity(vIntent, options.toBundle());
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(getString(R.string.pref_language_key))) {
+//            FIXME Change Language of request
+            String language = sharedPreferences.getString(key, getResources().getString(R.string.pref_language_val_english));
+            Language.setUpLocale(language, this);
+            new MovieListAsync(mMainViewModel, Category.UPCOMING, this).execute();
+        }
+    }
 }

@@ -3,6 +3,7 @@ package smoovie.apps.com.kayatech.smoovie.ui.detail;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -57,7 +58,7 @@ import static smoovie.apps.com.kayatech.smoovie.util.Constants.YOUTUBE_TRAILER_B
 import static smoovie.apps.com.kayatech.smoovie.util.PaletteExtractorUtil.getBitmapFromUrl;
 import static smoovie.apps.com.kayatech.smoovie.util.PaletteExtractorUtil.getDarkVibrantColor;
 
-public class MovieDetailActivity extends AppCompatActivity implements MovieDetailsCallBack {
+public class MovieDetailActivity extends AppCompatActivity implements MovieDetailsCallBack, SharedPreferences.OnSharedPreferenceChangeListener {
     private final String KEY_MOVIE_PERSISTENCE = "movie";
 
 //    TODO 1.(Detail Activity) - Build Material Designed UI,Refactor Existing UI,Add Shimmer Effect
@@ -111,7 +112,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
             mIsFavourite = intent.getBooleanExtra(KEY_MOVIE_IS_FAVOURITE, false);
         }
         posterImageTransition();
-        DetailViewModelFactory vDetailViewModelFactory = InjectorUtils.provideDetailViewModelFactory(this);
+        DetailViewModelFactory vDetailViewModelFactory = InjectorUtils.provideDetailViewModelFactory(this,this);
         detailViewModel = ViewModelProviders.of(this, vDetailViewModelFactory).get(DetailViewModel.class);
         checkIfFavourite(mMovieId);
         if (savedInstanceState != null) {
@@ -166,7 +167,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
 
 
     private void loadMovieDetailsFromNetwork(DetailViewModel mDetailViewModel) {
-        new MovieDetailsAsyncTask(mDetailViewModel, "en-US", this).execute(mMovieId);
+        new MovieDetailsAsyncTask(mDetailViewModel,  this).execute(mMovieId);
     }
 
     private void posterImageTransition() {
@@ -304,5 +305,10 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
                 favOperations(movie);
             }
         });
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
     }
 }

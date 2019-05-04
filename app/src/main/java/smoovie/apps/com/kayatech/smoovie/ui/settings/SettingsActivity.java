@@ -1,4 +1,4 @@
-package smoovie.apps.com.kayatech.smoovie.view;
+package smoovie.apps.com.kayatech.smoovie.ui.settings;
 
 
 import android.content.SharedPreferences;
@@ -19,21 +19,17 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        //butterknife not working when it comes to setting back button
         Toolbar toolbarSettingsPage = findViewById(R.id.action_toolbar_settings);
         setSupportActionBar(toolbarSettingsPage);
-
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        // When the home button is pressed, take the user back to the VisualizerActivity
         if (id == android.R.id.home) {
             NavUtils.navigateUpFromSameTask(this);
         }
